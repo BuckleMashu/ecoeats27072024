@@ -1,8 +1,11 @@
-################################################################################################################################################
+########################################################################################
 IGNORE EVERYTHING BELOW HERE. HERES HOW I START THIS
  LITERALLY, GO TO TERMINAL, 'cd' TO THIS FOLDER, THEN 'npx react-native start'
  then, OPEN YOUR ANDROID STUDIO, RUNS THE FOLDER'S ANDROID FILES AND LET IT WORK
-################################################################################################################################################
+
+ heres what i installed:
+ npm install --save react-native-sqlite-storage @react-navigation/native @react-navigation/stack react-native-screens react-native-safe-area-context react-native-gesture-handler sqlite3 mysql @react-navigation/bottom-tabs @expo/vector-icons 
+########################################################################################
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started
