@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './src/screens/HomeScreen';
 import DetailsScreen from './src/screens/DetailsScreen';
 import ViewDataScreen from './src/screens/ViewDataScreen';
+import SharingScreen from './src/screens/SharingScreen';
 
 //navigaton bar
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -16,6 +17,7 @@ export type RootStackParamList = {
   Home: undefined;
   Details: undefined;
   ViewData: undefined;
+  Sharing: undefined;
 };
 
 //const Stack = createStackNavigator<RootStackParamList>();
@@ -37,6 +39,23 @@ const App = () => {
         tabBarActiveBackgroundColor: '#1a1919',
       }}
       >
+      <Tab.Screen
+        name="Sharing"
+        component={SharingScreen}
+        // options={{
+        //   tabBarLabel: 'Home',
+        //   tabBarIcon: () => (
+        //     <Entypo name="home" size={24} color="black" />
+        //   ),
+        // }}
+        options={{
+          tabBarLabel: 'Sharing',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="home" color={color} size={size} />
+          ),
+          title: 'Sharing', 
+        }}
+      />
       <Tab.Screen
         name="Home"
         component={HomeScreen}
