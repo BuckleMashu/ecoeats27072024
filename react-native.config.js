@@ -1,5 +1,4 @@
 module.exports = {
-    assets: ['./node_modules/react-native-vector-icons/MaterialCommunityIcons'],
     dependencies: {
       "react-native-sqlite-storage": {
         platforms: {
@@ -11,5 +10,6 @@ module.exports = {
           }
         }
       }
-    }
+    },
+    assets: ['./node_modules/react-native-vector-icons/MaterialCommunityIcons'],
   };
