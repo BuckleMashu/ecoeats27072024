@@ -4,10 +4,10 @@ export type ToDoItem = {
 };
 
 export type share_page = {
-    id: number;
+    share_Id: number;
     type: number;
     title: string;
-    picture: string;
     tags: string;
     address: string;
+    picture: string;
 }

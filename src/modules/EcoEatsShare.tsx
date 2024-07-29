@@ -4,20 +4,21 @@ import {
   StyleSheet,
   Text,
   View,
-  Image
+  Image,
+  TouchableOpacity,
 } from 'react-native';
 import { share_page } from '../models';
 export const ShareComponent: React.FC<{
   share: share_page;
   picture:any;
-}> = ({ share: {title,address} , picture}) => {
+}> = ({ share: {title,address,share_Id} , picture}) => {
   // const displayImg = {uri:`../images/${picture}`};
   return (
     <View style={styles.todoContainer}>
       <View style={styles.todoTextContainer}>
         <Text
           style={styles.sectionTitle}>
-          {title}, {address} 
+          {title}, {address} , {String(share_Id)}
         </Text>
       </View>
       <Image source={picture}/>

@@ -9,7 +9,8 @@ import {
   TextInput,
   useColorScheme,
   View,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
@@ -106,7 +107,11 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
             <View>
                 {shareEntity.map((post) =>(
                   //this lines say it got error BUT IT DOESNT. DONT LISTEN TO THE AI
-                    <ShareComponent key={post.id} share={post} picture={localImages[post.picture]}/>
+                  <TouchableOpacity key={post.share_Id} onPress={() => navigation.navigate('Request',{post})}>
+                    <View>
+                      <ShareComponent key={post.share_Id} share={post} picture={localImages[post.picture]}/>
+                    </View>
+                  </TouchableOpacity>
                 ))}
             </View>
         </ScrollView>
