@@ -106,7 +106,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
             <Text>{shareType},{searchQuery}</Text>
             <View>
                 {shareEntity.map((post) =>(
-                  //this lines say it got error BUT IT DOESNT. DONT LISTEN TO THE AI
+                  //this lines say it got error BUT IT DOESNT. IT WORKS. DONT LISTEN TO THE AI
                   <TouchableOpacity key={post.share_Id} onPress={() => navigation.navigate('Request',{post})}>
                     <View>
                       <ShareComponent key={post.share_Id} share={post} picture={localImages[post.picture]}/>
