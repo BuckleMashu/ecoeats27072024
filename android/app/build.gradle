@@ -49,6 +49,13 @@ react {
     //
     //   The list of flags to pass to the Hermes compiler. By default is "-O", "-output-source-map"
     // hermesFlags = ["-O", "-output-source-map"]
+
+    //testting
+    // extraPackagerArgs = ["--entry-file", "index.js"]
+    // beforeBundleCommand = { def cmd ->
+    //     // Run your npm command here
+    //     ["npm", "run", "generate-image-imports"].execute().waitFor()
+    //     cmd}
 }
 
 /**
@@ -103,6 +110,17 @@ android {
         }
     }
 }
+
+task generateImageImports(type: Exec) {
+    workingDir '../../'  // Adjust this path to point to your project root
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine 'cmd', '/c', 'npm run generate-image-imports'
+    } else {
+        commandLine 'npm', 'run', 'generate-image-imports'
+    }
+}
+
+preBuild.dependsOn generateImageImports
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin

@@ -237,7 +237,7 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 
-import { ToDoItemComponent } from '../dbHelp/ToDoItem';
+import { ToDoItemComponent } from '../modules/ToDoItem';
 import { ToDoItem } from '../models';
 import { getDBConnection, getTodoItems, saveTodoItems, createTable, deleteTodoItem } from '../../db-service';
 
