@@ -7,7 +7,7 @@ export type share_page = {
     id: number;
     type: number;
     title: string;
-    picture: any;
+    picture: string;
     tags: string;
     address: string;
 }

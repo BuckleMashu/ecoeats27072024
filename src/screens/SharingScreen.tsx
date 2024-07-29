@@ -105,6 +105,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
             <Text>{shareType},{searchQuery}</Text>
             <View>
                 {shareEntity.map((post) =>(
+                  //this lines say it got error BUT IT DOESNT. DONT LISTEN TO THE AI
                     <ShareComponent key={post.id} share={post} picture={localImages[post.picture]}/>
                 ))}
             </View>
