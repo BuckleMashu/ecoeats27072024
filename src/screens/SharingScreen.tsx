@@ -34,13 +34,11 @@ type Props = {
 
 const SharingScreen: React.FC<Props> = ({ navigation }) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [searchQuery, setSearchQuery] = useState("");
-  const [newsearchQuery, setNewSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [newsearchQuery, setNewSearchQuery] = React.useState("");
   const [shareEntity, setShareEntity] = React.useState<share_page[]>([]);
-  const [newShareEntity, setNewShareEntity] = React.useState<share_page>();
   let db;
   const [shareType, setShareType] = useState(0);
-  const [imagePaths, setImagePaths] = useState([]);
 
 // Import images
 // const imageMap = {

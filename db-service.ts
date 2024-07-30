@@ -1,5 +1,5 @@
 import { enablePromise, openDatabase, SQLiteDatabase } from 'react-native-sqlite-storage';
-import { ToDoItem,share_page } from './src/models';
+import { ToDoItem,share_page,request_page } from './src/models';
 var SQLite = require('react-native-sqlite-storage');
 
 const tableName = 'todoData';
@@ -32,6 +32,33 @@ export const getSharePage = async(db: SQLiteDatabase, type:number, keyword:strin
   }catch(error){
     console.error(error);
     throw Error('Failed to get share pages items');
+  }
+};
+
+export const getRequestPage = async(db:SQLiteDatabase, id:number):Promise<request_page> => {
+  try{
+    const [results] = await db.executeSql(`SELECT * FROM Request WHERE share_Id=?`, [id]);
+    if(results.rows.length > 0){
+      const item = results.rows.item(0);
+      if(item.expiration === undefined){
+        item.expiration = '';
+      }
+      if(item.description === undefined){
+        item.description = '';
+      }
+      const requestPageItem: request_page = {
+        share_Id: item.share_Id,
+        user_Id: item.user_Id,
+        expiration: item.expiration,
+        description: item.description
+      };
+      return requestPageItem;
+    }else{
+      throw new Error('No request page found');
+    }
+  }catch(error){
+    console.error(error);
+    throw Error('Failed to get request page items');
   }
 };
 
