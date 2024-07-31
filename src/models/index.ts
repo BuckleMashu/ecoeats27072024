@@ -18,3 +18,5 @@ export type request_page = {
     expiration: string;
     description: string;
 };
+
+//add new variable for each respective datatable below

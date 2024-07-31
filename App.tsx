@@ -84,6 +84,7 @@ const Tab = createBottomTabNavigator();
 
 // export default App;
 
+//Add the pages to be displayed on the 
 function MainTabNavigator() {
   return (
     <Tab.Navigator
@@ -115,10 +116,10 @@ function MainTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="ViewData"
-        component={ViewDataScreen}
+        name="Details"
+        component={DetailsScreen}
         options={{
-          tabBarLabel: 'View Data',
+          tabBarLabel: 'Details',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="database" color={color} size={size} />
           ),
@@ -128,6 +129,7 @@ function MainTabNavigator() {
   );
 }
 
+//Add pages that want to be navigated to but dont want to be displayed on the bottom nav bar
 const App = () => {
   return (
     <NavigationContainer>

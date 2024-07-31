@@ -13,3 +13,4 @@ module.exports = {
     },
     assets: ['./node_modules/react-native-vector-icons/MaterialCommunityIcons'],
   };
+  //only additions of dependencies or assets, dont remove anything

@@ -20,3 +20,4 @@ export default {
 fs.writeFileSync(outputFile, content);
 
 console.log('Image imports generated successfully!');
+//DONT TOUCH THIS FILE AT ALL

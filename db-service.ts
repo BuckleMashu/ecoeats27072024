@@ -12,6 +12,7 @@ export const getEcoEatsDBConnection = async() =>{
   }, () => { },);
 }
 
+//Share and Explore related stuffs
 export const getSharePage = async(db: SQLiteDatabase, type:number, keyword:string): Promise<share_page[]> =>{
   try{
     const sharePageItems: share_page[] = [];
@@ -24,7 +25,6 @@ export const getSharePage = async(db: SQLiteDatabase, type:number, keyword:strin
     const results = await db.executeSql(query);
     results.forEach(result => {
       for (let index = 0; index < result.rows.length; index++) {
-        // result.rows.item(index).picture =  {uri:`file://${result.rows.item(index).picture}`};
         sharePageItems.push(result.rows.item(index))
       }
     });
@@ -69,8 +69,26 @@ export const saveNewShareItem = async(db: SQLiteDatabase, shareItem:share_page) 
   return db.executeSql(insertQuery);
 };
 
-//-----------------------------TESTING STUFF-----------------------------------
-//everytime you edit the db externally, you need to uninstall first then reinstall it.
+
+//Profile page related stuff
+
+
+
+//Deals page related stuff
+
+
+
+//Explore page related stuff
+
+
+
+//login and register related stuff
+
+
+
+
+//-----------------------------TESTING STUFF---IGNORE--------------------------------
+//everytime you edit the db externally, you need to uninstall the app first then reinstall it for it to notice the changes.
 export const getDBConnection = async () => {
   return SQLite.openDatabase({
     name: 'todo-data.db', createFromLocation: '~www/todo-data.db', },() => { },);

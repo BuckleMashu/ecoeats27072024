@@ -111,6 +111,7 @@ android {
     }
 }
 
+//To map each image in the images folder to a static url.----------------
 task generateImageImports(type: Exec) {
     workingDir '../../'  // Adjust this path to point to your project root
     if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
@@ -119,8 +120,9 @@ task generateImageImports(type: Exec) {
         commandLine 'npm', 'run', 'generate-image-imports'
     }
 }
-
 preBuild.dependsOn generateImageImports
+//-------------------------------------------------------------------------
+
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
