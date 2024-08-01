@@ -49,7 +49,6 @@ export const getRequestPage = async(db:SQLiteDatabase, id:number):Promise<reques
       const requestPageItem: request_page = {
         share_Id: item.share_Id,
         user_Id: item.user_Id,
-        expiration: item.expiration,
         description: item.description
       };
       return requestPageItem;

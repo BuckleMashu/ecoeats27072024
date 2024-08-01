@@ -10,12 +10,12 @@ export type share_page = {
     tags: string;
     address: string;
     picture: string;
+    expiration: string;
 };
 
 export type request_page = {
     share_Id: number;
     user_Id: number;
-    expiration: string;
     description: string;
 };
 

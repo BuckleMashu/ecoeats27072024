@@ -59,7 +59,7 @@ const RequestScreen = ({ route,navigation } : Props) => {
       <Text>REQUEST PAGE FOR ITEM SHARE{String(post.share_Id)}</Text>
       <Text>{post.title}</Text>
       <Image source={localImages[post.picture]}/>
-      <Text>{requestEntity?.expiration}</Text>
+      <Text>{post.expiration}</Text>
       <Text>{requestEntity?.description}</Text>
       {/* Render other post details as needed */}
       <Button

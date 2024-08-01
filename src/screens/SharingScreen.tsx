@@ -11,7 +11,8 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Pressable
+  Pressable,
+  Dimensions
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
@@ -32,6 +33,9 @@ type SharingScreenNavigationProp = StackNavigationProp<
 type Props = {
   navigation: SharingScreenNavigationProp;
 };
+
+const { width } = Dimensions.get('window');
+const columnWidth = width / 2;
 
 const SharingScreen: React.FC<Props> = ({ navigation }) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -72,11 +76,12 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
     setSearchQuery(newsearchQuery);
     setNewSearchQuery("");
   }
+  
   return (
     <SafeAreaView >
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
         <ScrollView contentInsetAdjustmentBehavior="automatic">
-            <View style={styles.container}>
+            <View style={styles.container} >
                 <View style={styles.typeButtonsBoth}>
                     {/* <Button
                         title="Foods"
@@ -104,17 +109,23 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
                       {({pressed})=>(<Text style={[styles.searchButtonText, pressed && styles.buttonBoldText]}>Search</Text>)}
                     </Pressable>
                 </View>
-            </View>
-            <Text>{shareType},{searchQuery}</Text>
-            <View>
+                <View style={styles.postContainer}>
                 {shareEntity.map((post) =>(
                   //this lines say it got error BUT IT DOESNT. IT WORKS. DONT LISTEN TO THE AI
-                  <TouchableOpacity key={post.share_Id} onPress={() => navigation.navigate('Request',{post})}>
+                  <TouchableOpacity key={post.share_Id} onPress={() => navigation.navigate('Request',{post})} style={styles.itemContainer}>
                     <View>
                       <ShareComponent key={post.share_Id} share={post} picture={localImages[post.picture]}/>
                     </View>
                   </TouchableOpacity>
                 ))}
+                    {/* <FlatList
+                      data={shareEntity}
+                      renderItem={ShareComponent}
+                      keyExtractor={(share) => item.share_Id.toString()}
+                      numColumns={2}
+                      columnWrapperStyle={styles.row}
+                    /> */}
+                </View>
             </View>
         </ScrollView>
     </SafeAreaView>
@@ -126,9 +137,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
 //"D:\work and non-game-related software\sim y2s2\agile\final project app\ecoeats27072024\src\screens\images\share1.png"
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
+    backgroundColor: 'rgb(250,250,250)'
   },
   typeButtonsBoth:{
     flexDirection: 'row',
@@ -142,7 +151,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonPressed:{
-    backgroundColor: 'black',
+    backgroundColor: 'gray',
   },
   buttonText:{
     color: 'black',
@@ -188,8 +197,20 @@ const styles = StyleSheet.create({
   },
   buttonBoldText:{
     color: 'white',
-  }
-
+  },
+  postContainer:{
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-evenly',
+    // backgroundColor:'blue',
+    paddingLeft: 10,
+    paddingBottom: 10,
+    paddingRight: 10,
+  },
+  itemContainer:{
+    width: columnWidth - 15, // Adjust for padding/margin
+  },
 });
 
 export default SharingScreen;
