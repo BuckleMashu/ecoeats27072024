@@ -10,7 +10,8 @@ import {
   useColorScheme,
   View,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Pressable
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
@@ -76,29 +77,32 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
         <ScrollView contentInsetAdjustmentBehavior="automatic">
             <View style={styles.container}>
-                <View>
-                    <Button
+                <View style={styles.typeButtonsBoth}>
+                    {/* <Button
                         title="Foods"
                         onPress={() => setShareType(0)}
-                    />
-                    <Button
+                    /> */}
+                    <TouchableOpacity style={[styles.button, shareType == 0 && styles.buttonPressed,]} onPress={() => setShareType(0)}>
+                      <Text style={[styles.buttonText, shareType == 0 && styles.boldText]}>Foods</Text>
+                    </TouchableOpacity>
+                    {/* <Button
                         title="Items"
                         onPress={() => setShareType(1)}
-                    />
-                </View>
-                <View>
-                <TextInput value={newsearchQuery} onChangeText={setNewSearchQuery} />
-                    {/* <Searchbar
-                        placeholder="Search"
-                        onChangeText={updateSearchResult}
-                        value={newsearchQuery}
                     /> */}
-                <Button
-                    onPress={updateSearchResult}
-                    title="Search"
-                    color="#841584"
-                    accessibilityLabel="updateSearch"
-                />
+                    <TouchableOpacity style={[styles.button, shareType == 1 && styles.buttonPressed,]} onPress={() => setShareType(1)}>
+                      <Text style={[styles.buttonText, shareType == 1 && styles.boldText]}>Items</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.search}>
+                  <TextInput style={styles.searchInput} value={newsearchQuery} onChangeText={setNewSearchQuery} />
+                      {/* <Searchbar
+                          placeholder="Search"
+                          onChangeText={updateSearchResult}
+                          value={newsearchQuery}
+                      /> */}
+                    <Pressable style={({pressed})=>[styles.searchButton, pressed && styles.searchButtonPressed,]} onPress={() => updateSearchResult}>
+                      {({pressed})=>(<Text style={[styles.searchButtonText, pressed && styles.buttonBoldText]}>Search</Text>)}
+                    </Pressable>
                 </View>
             </View>
             <Text>{shareType},{searchQuery}</Text>
@@ -126,6 +130,66 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     // alignItems: 'center',
   },
+  typeButtonsBoth:{
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    width: '100%',
+  },
+  button:{
+    width: '50%',
+    backgroundColor: 'white',
+    padding: 10,
+    alignItems: 'center',
+  },
+  buttonPressed:{
+    backgroundColor: 'black',
+  },
+  buttonText:{
+    color: 'black',
+    fontSize: 16,
+  },
+  boldText:{
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: 20,
+  },
+  search:{
+    flexDirection:'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+  },
+  searchInput:{
+    width:'80%',
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 7,  // This creates the rounded corners
+    paddingHorizontal: 10,
+    fontSize: 16,
+    backgroundColor: 'white',
+  },
+  searchButton:{
+    width:'17.5%',
+    height:40,
+    backgroundColor: 'white',
+    borderWidth: 3,
+    borderRadius: 7,  // This creates the rounded corners
+    borderColor: 'lightgray',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  searchButtonPressed:{
+    backgroundColor: 'black',
+  },
+  searchButtonText:{
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  buttonBoldText:{
+    color: 'white',
+  }
+
 });
 
 export default SharingScreen;
