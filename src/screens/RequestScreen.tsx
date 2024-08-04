@@ -22,6 +22,8 @@ import { request_page,user } from '../models';
 
 import { getEcoEatsDBConnection, getRequestPage, getUserDetails} from '../../db-service';
 import localImages from '../imageImports';
+import { Picker } from '@react-native-picker/picker';
+import dateNtime from '../requestDateTimePicker';
 
 type RequestScreenRouteProp = RouteProp<
    RootStackParamList, 
@@ -45,7 +47,16 @@ const RequestScreen = ({ route,navigation } : Props) => {
   const [userPicture, setUserPF] = React.useState<string>();
   const [userName, setUserName] = React.useState<string>();
   const [modalVisible, setModalVisible] = useState(false);
-  const [inputValue, setInputValue] = useState('');
+  // const [inputValue, setInputValue] = useState('');
+  const [modalDayValue, setModalDayValue] = useState<string>("01");
+  const [modalMonthValue, setModalMonthValue] = useState<string>("01");
+  const [modalHourValue, setModalHourValue] = useState<string>("00");
+  const [modalMinuteValue, setModalMinuteValue] = useState<string>("00");
+
+  const [dayOptions,setDayOptions] = useState<string[]>([]);
+  const [monthOptions,setMonthOptions] = useState<string[]>([]);
+  const [hourOptions,setHourOptions] = useState<string[]>([]);
+  const [minuteOptions,setMinuteOptions] = useState<string[]>([]);
   let db;
   const loadDataCallback = useCallback(async (id:number) =>{
     try{
@@ -75,6 +86,10 @@ const RequestScreen = ({ route,navigation } : Props) => {
 
   useEffect(()=>{
     loadDataCallback(post.share_Id);
+    setDayOptions(dateNtime[0]);
+    setMonthOptions(dateNtime[1]);
+    setHourOptions(dateNtime[2]);
+    setMinuteOptions(dateNtime[3]);
   },[loadDataCallback]);
 
   return (
@@ -119,14 +134,61 @@ const RequestScreen = ({ route,navigation } : Props) => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        <View>
-          <View>
-            <Text>Enter your input</Text>
-            <TextInput
-              placeholder="Type here..."
-              value={inputValue}
-              onChangeText={setInputValue}
-            />
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text>Enter Meeting Date</Text>
+            <Text>DD/MM</Text>
+            <View style={styles.modalPicker}>
+              <Picker
+                selectedValue={modalDayValue}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) => setModalDayValue(itemValue)}
+              >
+                {dayOptions.map((date)=>(
+                  <Picker.Item style={styles.pickerOption} label={date} value={date} key={date}/>
+                ))}
+                {/* <Picker.Item label="01" value= "01" />
+                <Picker.Item label="JavaScript" value="javascript" />
+                <Picker.Item label="Python" value="python" />
+                <Picker.Item label="C++" value="cpp" /> */}
+              </Picker>
+              <Text>/</Text>
+              <Picker
+                selectedValue={modalMonthValue}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) => setModalMonthValue(itemValue)}
+              >
+                {monthOptions.map((month)=>(
+                  <Picker.Item style={styles.pickerOption} label={month} value={month} key={month}/>
+                ))}
+                {/* <Picker.Item label="Java" value="java" />
+                <Picker.Item label="JavaScript" value="javascript" />
+                <Picker.Item label="Python" value="python" />
+                <Picker.Item label="C++" value="cpp" /> */}
+              </Picker>
+            </View>
+            <Text>Enter Meeting Time</Text>
+            <View style={styles.modalPicker}>
+              <Picker
+                selectedValue={modalHourValue}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) => setModalHourValue(itemValue)}
+              >
+                {hourOptions.map((hour)=>(
+                  <Picker.Item style={styles.pickerOption} label={hour} value={hour} key={hour}/>
+                ))}
+              </Picker>
+              <Text>:</Text>
+              <Picker
+                selectedValue={modalMinuteValue}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) => setModalMinuteValue(itemValue)}
+              >
+                {minuteOptions.map((minute)=>(
+                  <Picker.Item style={styles.pickerOption} label={minute} value={minute} key={minute}/>
+                ))}
+              </Picker>
+            </View>
             <View>
               <Button title="Submit" onPress={handleRequestModal} />
               <Button title="Cancel" onPress={() => setModalVisible(false)} />
@@ -218,6 +280,36 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  modalOverlay:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent:{
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+    width:screenWidth*0.7,
+    height: screenHeight*0.5,
+  },
+  modalPicker:{
+    flexDirection:'row',
+    // backgroundColor:'gray',
+    alignItems: 'center',
+    alignSelf:'flex-start',
+    width:screenWidth*0.3,
+    padding:0,
+  },
+  pickerOption:{
+    fontSize:20,
+    fontWeight: 'bold',
+  },
+  picker:{
+    width: '100%',
+    height: 50,
+  }
 });
 
 export default RequestScreen;
