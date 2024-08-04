@@ -16,13 +16,16 @@ export const ShareComponent: React.FC<{
 }> = ({ share: {title,address,share_Id,expiration} , picture}) => {
   return (
     <View style={styles.todoContainer}>
+      <Image style={styles.image} source={picture}/>
       <View style={styles.todoTextContainer}>
         <Text
           style={styles.sectionTitle}>
-          {title}, {expiration}
+          {title}
         </Text>
+        {expiration != 'none' && (
+          <Text style={styles.expiration}>Expiry: {expiration}</Text>
+        )}
       </View>
-      <Image style={styles.image} source={picture}/>
     </View>
   );
 };
@@ -37,11 +40,15 @@ const styles = StyleSheet.create({
   },
   todoTextContainer: {
     justifyContent: 'center',
-    flexDirection: 'row',
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: '400',
+    fontSize: 16,
+    fontWeight: 'bold',
+    overflow: 'hidden',
+  },
+  expiration:{
+    fontSize:16,
+    textDecorationLine:'underline',
   },
   image:{
     width: screenWidth*0.4,

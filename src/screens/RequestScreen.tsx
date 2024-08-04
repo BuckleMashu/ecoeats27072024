@@ -82,7 +82,10 @@ const RequestScreen = ({ route,navigation } : Props) => {
               <Image style={styles.pf} source={localImages[userPicture] || require('../images/missing.png')}/>
               <View style={styles.titleNexpiration}>
                 <Text style={styles.title}>{post.title}</Text>
-                <Text style={styles.expiration}>Expiration date: {post.expiration}</Text>
+                {post.expiration != 'none' && (
+                  <Text style={styles.expiration}>Expiry: {post.expiration}</Text>
+                )}
+                {/* <Text style={styles.expiration}>Expiry: {post.expiration}</Text> */}
               </View>
             </View>
             <TouchableOpacity>
