@@ -19,4 +19,20 @@ export type request_page = {
     description: string;
 };
 
+export type user = {
+    user_Id: number;
+    name: string;
+    birthday: string;
+    email: string;
+    phone_Number: number;
+    address: string;
+    followers: string;
+    following: string;
+    redeemed_Coupons: string
+    bio: string;
+    pf: string;
+    share_Posts: string;
+    explore_Posts: string;
+}
+
 //add new variable for each respective datatable below

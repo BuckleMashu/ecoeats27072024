@@ -74,7 +74,6 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
 
   const updateSearchResult = async () =>{
     setSearchQuery(newsearchQuery);
-    setNewSearchQuery("");
   }
   
   return (
@@ -105,7 +104,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
                           onChangeText={updateSearchResult}
                           value={newsearchQuery}
                       /> */}
-                    <Pressable style={({pressed})=>[styles.searchButton, pressed && styles.searchButtonPressed,]} onPress={() => updateSearchResult}>
+                    <Pressable style={({pressed})=>[styles.searchButton, pressed && styles.searchButtonPressed,]} onPress={() => updateSearchResult()}>
                       {({pressed})=>(<Text style={[styles.searchButtonText, pressed && styles.buttonBoldText]}>Search</Text>)}
                     </Pressable>
                 </View>
@@ -137,7 +136,8 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
 //"D:\work and non-game-related software\sim y2s2\agile\final project app\ecoeats27072024\src\screens\images\share1.png"
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'rgb(250,250,250)'
+    backgroundColor: 'rgb(250,250,250)',
+    flex:1,
   },
   typeButtonsBoth:{
     flexDirection: 'row',
