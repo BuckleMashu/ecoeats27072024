@@ -11,7 +11,8 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  Modal
 } from 'react-native';
 
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -43,6 +44,8 @@ const RequestScreen = ({ route,navigation } : Props) => {
   const [requestEntity, setRequestEntity] = React.useState<request_page>();
   const [userPicture, setUserPF] = React.useState<string>();
   const [userName, setUserName] = React.useState<string>();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [inputValue, setInputValue] = useState('');
   let db;
   const loadDataCallback = useCallback(async (id:number) =>{
     try{
@@ -56,6 +59,10 @@ const RequestScreen = ({ route,navigation } : Props) => {
         console.error(error);
     }
   },[]);
+
+  const handleRequestModal = () => {
+    setModalVisible(false);
+  };
   // const profilePicture = useCallback(async (id:number) =>{
   //   try{
   //       db = await getEcoEatsDBConnection();
@@ -100,12 +107,35 @@ const RequestScreen = ({ route,navigation } : Props) => {
         <TouchableOpacity style={styles.endButton}>
           <Text style={styles.endButtonText}>Chat</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.endButton}>
+        <TouchableOpacity style={styles.endButton} onPress={() => setModalVisible(true)}>
           <Text style={styles.endButtonText}>Request</Text>
         </TouchableOpacity>      
         </View>
       </View>
+      
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View>
+          <View>
+            <Text>Enter your input</Text>
+            <TextInput
+              placeholder="Type here..."
+              value={inputValue}
+              onChangeText={setInputValue}
+            />
+            <View>
+              <Button title="Submit" onPress={handleRequestModal} />
+              <Button title="Cancel" onPress={() => setModalVisible(false)} />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
+    
   );
 };
 
