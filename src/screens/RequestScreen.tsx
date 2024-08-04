@@ -81,12 +81,13 @@ const RequestScreen = ({ route,navigation } : Props) => {
             <View style={styles.middleDetails}>
               <Image style={styles.pf} source={localImages[userPicture] || require('../images/missing.png')}/>
               <View style={styles.titleNexpiration}>
-                <Text>{post.title}</Text>
-                <Text>Expiration date: {post.expiration}</Text>
+                <Text style={styles.title}>{post.title}</Text>
+                <Text style={styles.expiration}>Expiration date: {post.expiration}</Text>
               </View>
             </View>
             <TouchableOpacity>
-              <Text>{userName}</Text>
+            {/* onPress={() => navigation.navigate('Request',{post})} */}
+              <Text style={styles.username}>{userName}</Text>
             </TouchableOpacity>
             <Text style={styles.description}>{requestEntity?.description}</Text>
             {/* Render other post details as needed */}
@@ -124,14 +125,26 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   mainImage:{
-    width: screenWidth*0.4,
-    height:screenWidth*0.4,
+    width: screenWidth*0.9,
+    height:screenWidth*0.9,
+    borderColor:'black',
+    borderWidth:2,
+    borderRadius: screenWidth*0.1,
+    overflow:'hidden',
   },
   pf:{
     width: screenWidth*0.1,
     height:screenWidth*0.1,
     borderRadius:100,
     overflow:'hidden',
+  },
+  title:{
+    fontWeight: 'bold',
+    fontSize:16,
+  },
+  expiration:{
+    textDecorationLine:'underline',
+    fontSize:16,
   },
   middleDetails:{
     flexDirection: 'row',
@@ -143,8 +156,14 @@ const styles = StyleSheet.create({
   titleNexpiration:{
     paddingLeft:screenWidth*0.05,
   },
+  username:{
+    fontWeight: 'bold',
+    fontStyle:'italic',
+    fontSize:20,
+  },
   description:{
-
+    padding:10,
+    fontSize:16,
   },
   chatNrequest:{
     flexDirection: 'row',

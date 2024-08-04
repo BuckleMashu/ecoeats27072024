@@ -72,9 +72,9 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
     loadDataCallback(shareType,searchQuery);
   },[loadDataCallback,shareType,searchQuery]);
 
-  const updateSearchResult = async () =>{
-    setSearchQuery(newsearchQuery);
-  }
+  // const updateSearchResult = async () =>{
+  //   setSearchQuery(newsearchQuery);
+  // }
   
   return (
     <SafeAreaView >
@@ -98,15 +98,15 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.search}>
-                  <TextInput style={styles.searchInput} value={newsearchQuery} onChangeText={setNewSearchQuery} />
-                      {/* <Searchbar
+                  {/* <TextInput style={styles.searchInput} value={searchQuery} onChangeText={setSearchQuery} /> */}
+                      <Searchbar
                           placeholder="Search"
-                          onChangeText={updateSearchResult}
-                          value={newsearchQuery}
-                      /> */}
-                    <Pressable style={({pressed})=>[styles.searchButton, pressed && styles.searchButtonPressed,]} onPress={() => updateSearchResult()}>
+                          onChangeText={setSearchQuery}
+                          value={searchQuery}
+                      />
+                    {/* <Pressable style={({pressed})=>[styles.searchButton, pressed && styles.searchButtonPressed,]} onPress={() => updateSearchResult()}>
                       {({pressed})=>(<Text style={[styles.searchButtonText, pressed && styles.buttonBoldText]}>Search</Text>)}
-                    </Pressable>
+                    </Pressable> */}
                 </View>
                 <View style={styles.postContainer}>
                 {shareEntity.map((post) =>(
