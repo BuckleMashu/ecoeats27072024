@@ -99,7 +99,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
                 </View>
                 <View style={styles.search}>
                   {/* <TextInput style={styles.searchInput} value={searchQuery} onChangeText={setSearchQuery} /> */}
-                      <Searchbar
+                      <Searchbar style={styles.searchbar}
                           placeholder="Search"
                           onChangeText={setSearchQuery}
                           value={searchQuery}
@@ -163,9 +163,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   search:{
+    paddingTop:5,
     flexDirection:'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
+  },
+  searchbar:{
+    width: width*0.95,
+    borderRadius:width*0.05,
+    borderColor:'gray',
+    borderWidth: 1.5,
+    backgroundColor:'white',
+    opacity:0.6,
   },
   searchInput:{
     width:'80%',
