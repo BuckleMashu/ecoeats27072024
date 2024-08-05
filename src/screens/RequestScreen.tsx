@@ -116,15 +116,17 @@ const RequestScreen = ({ route,navigation } : Props) => {
             </TouchableOpacity>
             <Text style={styles.description}>{requestEntity?.description}</Text>
             {/* Render other post details as needed */}
+            <Text style={styles.username}>Meeting Location:</Text>
+            <Text style={styles.location}>{post.address}</Text>
           </View>
         </ScrollView>
         <View style={styles.chatNrequest}>
-        <TouchableOpacity style={styles.endButton}>
-          <Text style={styles.endButtonText}>Chat</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.endButton} onPress={() => setModalVisible(true)}>
-          <Text style={styles.endButtonText}>Request</Text>
-        </TouchableOpacity>      
+          <TouchableOpacity style={styles.endButton}>
+            <Text style={styles.endButtonText}>Chat</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.endButton} onPress={() => setModalVisible(true)}>
+            <Text style={styles.endButtonText}>Request</Text>
+          </TouchableOpacity>      
         </View>
       </View>
       
@@ -136,8 +138,8 @@ const RequestScreen = ({ route,navigation } : Props) => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text>Enter Meeting Date</Text>
-            <Text>DD/MM</Text>
+            <Text style={styles.modalText}>Enter Meeting Date</Text>
+            <Text style={styles.modalText}>DD/MM</Text>
             <View style={styles.modalPicker}>
               <Picker
                 selectedValue={modalDayValue}
@@ -152,7 +154,7 @@ const RequestScreen = ({ route,navigation } : Props) => {
                 <Picker.Item label="Python" value="python" />
                 <Picker.Item label="C++" value="cpp" /> */}
               </Picker>
-              <Text>/</Text>
+              <Text style={styles.pickerText}>/</Text>
               <Picker
                 selectedValue={modalMonthValue}
                 style={styles.picker}
@@ -167,7 +169,8 @@ const RequestScreen = ({ route,navigation } : Props) => {
                 <Picker.Item label="C++" value="cpp" /> */}
               </Picker>
             </View>
-            <Text>Enter Meeting Time</Text>
+            <Text style={styles.modalText}>Enter Meeting Time</Text>
+            <Text style={styles.modalText}>Hour/Minute</Text>
             <View style={styles.modalPicker}>
               <Picker
                 selectedValue={modalHourValue}
@@ -178,7 +181,7 @@ const RequestScreen = ({ route,navigation } : Props) => {
                   <Picker.Item style={styles.pickerOption} label={hour} value={hour} key={hour}/>
                 ))}
               </Picker>
-              <Text>:</Text>
+              <Text style={styles.pickerText}>:</Text>
               <Picker
                 selectedValue={modalMinuteValue}
                 style={styles.picker}
@@ -189,9 +192,15 @@ const RequestScreen = ({ route,navigation } : Props) => {
                 ))}
               </Picker>
             </View>
-            <View>
-              <Button title="Submit" onPress={handleRequestModal} />
-              <Button title="Cancel" onPress={() => setModalVisible(false)} />
+            <View style={styles.submitNcancle}>
+              {/* <Button style={styles.modalButton} title="Submit" onPress={handleRequestModal} />
+              <Button style={styles.modalButton} title="Cancel" onPress={() => setModalVisible(false)} /> */}
+              <TouchableOpacity style={styles.modalButton} onPress={handleRequestModal}>
+                <Text style={styles.modalButtonText}>Submit</Text>
+              </TouchableOpacity>   
+              <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+                <Text style={styles.modalButtonText}>Cancel</Text>
+              </TouchableOpacity>   
             </View>
           </View>
         </View>
@@ -222,7 +231,7 @@ const styles = StyleSheet.create({
   mainImage:{
     width: screenWidth*0.9,
     height:screenWidth*0.9,
-    borderColor:'black',
+    // borderColor:'black',
     borderWidth:2,
     borderRadius: screenWidth*0.1,
     overflow:'hidden',
@@ -260,22 +269,31 @@ const styles = StyleSheet.create({
     padding:10,
     fontSize:16,
   },
+  location:{
+    fontSize:24,
+    fontStyle:'italic',
+    textDecorationLine:'underline',
+  },
   chatNrequest:{
     flexDirection: 'row',
     alignSelf:'flex-end',
     position:'absolute',
     bottom:10,
     padding:10,
+    gap:10,
     // borderTopWidth:1,
   },
   endButton:{
-    backgroundColor: '#841584',
+    backgroundColor: 'white',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 10,
+    borderColor: 'black',
+    borderWidth: 2,
+    opacity: 0.8,
   },
   endButtonText: {
-    color: 'white',
+    color: 'black',
     textAlign: 'center',
     fontSize: 16,
     fontWeight: 'bold',
@@ -299,16 +317,44 @@ const styles = StyleSheet.create({
     // backgroundColor:'gray',
     alignItems: 'center',
     alignSelf:'flex-start',
-    width:screenWidth*0.3,
-    padding:0,
+    // width:screenWidth*0.3,
+    // marginLeft:10,
+  },
+  modalText:{
+    fontSize:20,
   },
   pickerOption:{
     fontSize:20,
     fontWeight: 'bold',
   },
+  pickerText:{
+    fontSize:30,
+    fontWeight: 'bold',
+  },
   picker:{
-    width: '100%',
+    width: '50%',
     height: 50,
+  },
+  submitNcancle:{
+    padding:10,
+    justifyContent: 'space-between',
+    margin:10,
+    height:screenHeight*0.15,
+  },
+  modalButton:{
+    // backgroundColor: 'black',
+    borderColor: 'black',
+    borderWidth: 2,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  modalButtonText:{ 
+    fontSize:14,
+    fontWeight: 'bold',
   }
 });
 
