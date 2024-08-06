@@ -8,12 +8,13 @@ import ViewDataScreen from './src/screens/ViewDataScreen';
 import SharingScreen from './src/screens/SharingScreen';
 import RequestScreen from './src/screens/RequestScreen';
 
+import UserScreen from './src/screens/UserScreen';
+
 //navigaton bar
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Button,StyleSheet,Text,View,} from 'react-native';
-import { share_page } from './src/models';
+import { share_page,userD } from './src/models';
 
 export type RootStackParamList = {
   MainTabs: undefined;
@@ -22,6 +23,7 @@ export type RootStackParamList = {
   ViewData: undefined;
   Sharing: undefined;
   Request: {post:share_page};
+  User:{userID: any};
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -88,7 +90,7 @@ const Tab = createBottomTabNavigator();
 function MainTabNavigator() {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Sharing"
       screenOptions={{
         tabBarActiveTintColor: '#f5f5f5',
         tabBarInactiveTintColor: '#2e2e2e',
@@ -101,7 +103,7 @@ function MainTabNavigator() {
         options={{
           tabBarLabel: 'Sharing',
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="share" color={color} size={size} />
+            <Icon name="info-circle" color={color} size={size} />
           ),
         }}
       />
@@ -111,7 +113,7 @@ function MainTabNavigator() {
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
+            <Icon name="home" color={color} size={size} />
           ),
         }}
       />
@@ -121,7 +123,18 @@ function MainTabNavigator() {
         options={{
           tabBarLabel: 'Details',
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="database" color={color} size={size} />
+            <Icon name="database" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="User"
+        component={UserScreen}
+        initialParams={{ userID: 1 }}
+        options={{
+          tabBarLabel: 'User',
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="database" color={color} size={size} />
           ),
         }}
       />
@@ -141,6 +154,7 @@ const App = () => {
         />
         <Stack.Screen name="Details" component={DetailsScreen} />
         <Stack.Screen name="Request" component={RequestScreen} />
+        <Stack.Screen name="User" component={UserScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

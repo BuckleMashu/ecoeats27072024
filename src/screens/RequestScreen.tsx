@@ -18,7 +18,7 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
-import { request_page,user } from '../models';
+import { request_page,userD } from '../models';
 
 import { getEcoEatsDBConnection, getRequestPage, getUserDetails} from '../../db-service';
 import localImages from '../imageImports';
@@ -46,6 +46,7 @@ const RequestScreen = ({ route,navigation } : Props) => {
   const [requestEntity, setRequestEntity] = React.useState<request_page>();
   const [userPicture, setUserPF] = React.useState<string>();
   const [userName, setUserName] = React.useState<string>();
+  const [userID, setUserID] = React.useState<number>();
   const [modalVisible, setModalVisible] = useState(false);
   // const [inputValue, setInputValue] = useState('');
   const [modalDayValue, setModalDayValue] = useState<string>("01");
@@ -62,6 +63,7 @@ const RequestScreen = ({ route,navigation } : Props) => {
     try{
         db = await getEcoEatsDBConnection();
         const result1 = await getRequestPage(db,id);
+        setUserID(result1.user_Id);
         setRequestEntity(result1);
         const result2 = await getUserDetails(db,result1.user_Id);
         setUserPF(result2.pf);
@@ -110,7 +112,7 @@ const RequestScreen = ({ route,navigation } : Props) => {
                 {/* <Text style={styles.expiration}>Expiry: {post.expiration}</Text> */}
               </View>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('User',{userID})}>
             {/* onPress={() => navigation.navigate('Request',{post})} */}
               <Text style={styles.username}>{userName}</Text>
             </TouchableOpacity>

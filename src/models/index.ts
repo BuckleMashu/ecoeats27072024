@@ -19,7 +19,7 @@ export type request_page = {
     description: string;
 };
 
-export type user = {
+export type userD = {
     user_Id: number;
     name: string;
     birthday: string;

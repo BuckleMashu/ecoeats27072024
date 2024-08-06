@@ -53,7 +53,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
   const loadDataCallback = useCallback(async (type:number, searchR:string) =>{
     try{
         db = await getEcoEatsDBConnection();
-        const result = await getSharePage(db,type,searchR);
+        const result = await getSharePage(db,type,searchR,undefined);
         setShareEntity(result);
     } catch(error){
         console.error(error);
@@ -113,7 +113,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
                   //this lines say it got error BUT IT DOESNT. IT WORKS. DONT LISTEN TO THE AI
                   <TouchableOpacity key={post.share_Id} onPress={() => navigation.navigate('Request',{post})} style={styles.itemContainer}>
                     <View>
-                      <ShareComponent key={post.share_Id} share={post} picture={localImages[post.picture]}/>
+                      <ShareComponent key={post.share_Id} share={post} picture={localImages[post.picture] || require('../images/missing.png')}/>
                     </View>
                   </TouchableOpacity>
                 ))}

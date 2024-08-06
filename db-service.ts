@@ -1,5 +1,5 @@
 import { enablePromise, openDatabase, SQLiteDatabase } from 'react-native-sqlite-storage';
-import { ToDoItem,share_page,request_page,user } from './src/models';
+import { ToDoItem,share_page,request_page,userD } from './src/models';
 var SQLite = require('react-native-sqlite-storage');
 
 const tableName = 'todoData';
@@ -13,7 +13,7 @@ export const getEcoEatsDBConnection = async() =>{
 }
 
 //Share and Explore related stuffs
-export const getSharePage = async(db: SQLiteDatabase, type:number, keyword:string): Promise<share_page[]> =>{
+export const getSharePage = async(db: SQLiteDatabase, type:number | undefined, keyword:string , id:string | undefined): Promise<share_page[]> =>{
   try{
     const sharePageItems: share_page[] = [];
     let query;
@@ -21,6 +21,10 @@ export const getSharePage = async(db: SQLiteDatabase, type:number, keyword:strin
       query = `SELECT * FROM Share WHERE type=${type}`;
     }else{
       query = `SELECT * FROM Share WHERE type=${type} AND title LIKE '%${keyword}%'`;
+    }
+
+    if(id){
+      query = `SELECT * FROM Share WHERE share_id IN (${id})`;
     }
     const results = await db.executeSql(query);
     results.forEach(result => {
@@ -58,29 +62,29 @@ export const getRequestPage = async(db:SQLiteDatabase, id:number):Promise<reques
   }
 };
 
-export const getUserDetails = async(db:SQLiteDatabase, id:number): Promise<user> =>{
+export const getUserDetails = async(db:SQLiteDatabase, id:number): Promise<userD> =>{
   try{
     const [results] = await db.executeSql(`SELECT * FROM User WHERE user_id =?`,[id]);
     if(results.rows.length>0){
       const userP = results.rows.item(0);
-      const userProfile: user = {
+      const userProfile: userD = {
         user_Id: userP.user_id,
         name: userP.name,
         birthday: userP.birthday,
         email: userP.email,
-        phone_Number: userP.phone_number,
+        phone_Number: userP.phone_Number,
         address: userP.address,
         followers: userP.followers,
         following: userP.following,
-        redeemed_Coupons: userP.redeemed_coupons,
+        redeemed_Coupons: userP.redeemed_Coupons,
         bio: userP.bio,
         pf: userP.pf,
-        share_Posts: userP.share_posts,
-        explore_Posts: userP.explore_posts
+        share_Posts: userP.share_Posts,
+        explore_Posts: userP.explore_Posts
       };
       return userProfile;
     }else{
-      throw new Error('No request page found');
+      throw new Error('No user found');
     }
   }catch(error){
     console.error(error);

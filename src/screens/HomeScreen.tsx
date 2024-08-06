@@ -3,6 +3,8 @@ import { View, Text, Button, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
 type HomeScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Home'
@@ -24,6 +26,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         title="Go to dataviewing"
         onPress={() => navigation.navigate('ViewData')}
       />
+      <Icon name="home" size={30} color="#900" />
     </View>
   );
 };
