@@ -109,19 +109,19 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
               <Image style={styles.profileImg} source={localImages[profile?.pf] || require('../images/missing.png')}/>
               <Text style={styles.profileName}>{profile?.name}</Text>
               <TouchableOpacity style={styles.editPf}>
-                <Text>Edit profile image</Text>
+                <Text style={styles.editPfText}>Edit profile image</Text>
               </TouchableOpacity>  
             </View>
             <View style={styles.PFF}>
-              <View styles={styles.PFFsection}>
+              <View style={styles.PFFsection}>
                 <Text style={styles.PFFtext}>Posts</Text>
                 <Text style={styles.PFFvalue}>{explore.length + share.length}</Text>
               </View>
-              <View styles={styles.PFFsection}>
+              <View style={styles.PFFsection}>
                 <Text style={styles.PFFtext}>Followers</Text>
                 <Text style={styles.PFFvalue}>{follower.length}</Text>
               </View>
-              <View styles={styles.PFFsection}>
+              <View style={styles.PFFsection}>
                 <Text style={styles.PFFtext}>Following</Text>
                 <Text style={styles.PFFvalue}>{following.length}</Text>
               </View>
@@ -141,7 +141,7 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
                 <Text style={styles.SSSLtext}>💾</Text>
               </TouchableOpacity>  
               <TouchableOpacity style={styles.SSSLbutton}>
-                <Text style={styles.SSSLtextHeart}>𖹭</Text>
+                <Text style={styles.SSSLtext}>🖤</Text>
               </TouchableOpacity>   
             </View>
           </View>
@@ -210,12 +210,32 @@ const styles = StyleSheet.create({
     overflow:'hidden',
   },
 
+  profileName:{
+    fontSize:16,
+    fontWeight:'bold',
+  },
+
+  editPfText:{
+    color:'lightblue',
+  }, 
+
   PFF:{
     // width: '50%',
     // padding:'2%',
     flexDirection:'row',
     paddingRight:'10%',
     gap:10,
+  },
+
+  PFFsection:{
+    flexDirection:'column',
+    justifyContent: 'center',
+    alignItems:'center',
+  },
+
+  PFFtext:{
+    fontSize:16,
+    fontWeight:'bold',
   },
 
   shareSearchSaveLike:{
@@ -236,15 +256,19 @@ const styles = StyleSheet.create({
     width:'50%',
     flexDirection:'row',
     justifyContent: 'flex-end',
+    gap:10,
   },
 
   SSSLtext:{
-    
+    padding:'0.5%',
+    fontSize:20,
   },
 
-  SSSLtextHeart:{
-    // fontSize:20,
-  },
+  // SSSLtextHeart:{
+  //   padding:0,
+  //   margin:0,
+  //   fontSize:20,
+  // },
 
   typeButtonsBoth:{
     flexDirection: 'row',
