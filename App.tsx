@@ -2,95 +2,46 @@ import 'react-native-gesture-handler';
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from './src/screens/HomeScreen';
+import ExploreScreen from './src/screens/ExploreScreen';
 import DetailsScreen from './src/screens/DetailsScreen';
 import ViewDataScreen from './src/screens/ViewDataScreen';
 import SharingScreen from './src/screens/SharingScreen';
 import RequestScreen from './src/screens/RequestScreen';
+import AddDealScreen from './src/screens/AddDealScreen';  
+import DealDetailsScreen from './src/screens/DealDetailsScreen';  
+import AddExplorePostScreen from './src/screens/AddExplorePostScreen'; 
 
 import UserScreen from './src/screens/UserScreen';
 
-//navigaton bar
+// Navigation bar
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {Button,StyleSheet,Text,View,} from 'react-native';
-import { share_page,userD } from './src/models';
+import { share_page, userD, deal_page, explore_page } from './src/models'; // Import all necessary models
+import ExploreDetailsScreen from './src/screens/ExploreDetailsScreen';
 
 export type RootStackParamList = {
   MainTabs: undefined;
-  Home: undefined;
+  Explore: undefined;
   Details: undefined;
   ViewData: undefined;
   Sharing: undefined;
-  Request: {post:share_page};
-  User:{userID: any};
+  Request: { post: share_page };
+  User: { userID: any };
+  AddDeal: undefined;
+  DealDetails: { deal: deal_page }; 
+  AddExplorePost: undefined; 
+  ExploreDetails: { explore: explore_page }; 
+
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
-// const App = () => {
-//   return (
-//     <NavigationContainer>
-//     <Stack.Navigator 
-//     // initialRouteName='MainTabs'
-//     >
-//       <Stack.Screen name="MainTabs" component={TabBar} options={{headerShown:false}}/>
-//       <Stack.Screen name="Home" component={HomeScreen} />
-//       <Stack.Screen name="Details" component={DetailsScreen} />
-//       <Stack.Screen name="ViewData" component={ViewDataScreen} />
-//       <Stack.Screen name="Request" component={RequestScreen}/>
-//     </Stack.Navigator>
-//     </NavigationContainer>
-//   );
-// };
-
-// const TabBar = () =>{
-//   return(
-//         <Tab.Navigator
-//         initialRouteName="Home"
-//         screenOptions={{
-//           tabBarActiveTintColor: '#f5f5f5',
-//           tabBarInactiveTintColor: '#2e2e2e',
-//           tabBarActiveBackgroundColor: '#1a1919',
-//         }}
-//         >
-//         <Tab.Screen
-//           name="Sharing"
-//           component={SharingScreen}
-//           options={{
-//             tabBarLabel: 'Sharing',
-//             tabBarIcon: ({ color, size }) => (
-//               <MaterialCommunityIcons name="home" color={color} size={size} />
-//             ),
-//             title: 'Sharing', 
-//           }}
-//         />
-//         <Tab.Screen
-//           name="Home"
-//           component={HomeScreen}
-//           options={{
-//             tabBarLabel: 'Home',
-//             tabBarIcon: ({ color, size }) => (
-//               <MaterialCommunityIcons name="home" color={color} size={size} />
-//             ),
-//           }}
-//         />
-//         <Tab.Screen
-//           name="ViewData"
-//           component={ViewDataScreen}
-//         />
-//       </Tab.Navigator>
-//   )
-// }
-
-// export default App;
-
-//Add the pages to be displayed on the 
+// Main Tab Navigator
 function MainTabNavigator() {
   return (
     <Tab.Navigator
-      initialRouteName="Sharing"
+      initialRouteName="Explore"
       screenOptions={{
         tabBarActiveTintColor: '#f5f5f5',
         tabBarInactiveTintColor: '#2e2e2e',
@@ -108,12 +59,12 @@ function MainTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="Explore"
+        component={ExploreScreen}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Explore',
           tabBarIcon: ({ color, size }) => (
-            <Icon name="home" color={color} size={size} />
+            <Icon name="compass" color={color} size={size} />
           ),
         }}
       />
@@ -134,7 +85,7 @@ function MainTabNavigator() {
         options={{
           tabBarLabel: 'User',
           tabBarIcon: ({ color, size }) => (
-            <Icon name="database" color={color} size={size} />
+            <Icon name="user" color={color} size={size} />
           ),
         }}
       />
@@ -142,7 +93,7 @@ function MainTabNavigator() {
   );
 }
 
-//Add pages that want to be navigated to but dont want to be displayed on the bottom nav bar
+// Main App Component
 const App = () => {
   return (
     <NavigationContainer>
@@ -152,9 +103,15 @@ const App = () => {
           component={MainTabNavigator} 
           options={{ headerShown: false }}
         />
+        <Stack.Screen name="Explore" component={ExploreScreen} />
         <Stack.Screen name="Details" component={DetailsScreen} />
         <Stack.Screen name="Request" component={RequestScreen} />
-        <Stack.Screen name="User" component={UserScreen}/>
+        <Stack.Screen name="User" component={UserScreen} />
+        <Stack.Screen name="AddDeal" component={AddDealScreen} />
+        <Stack.Screen name="DealDetails" component={DealDetailsScreen} />
+        <Stack.Screen name="AddExplorePost" component={AddExplorePostScreen} />
+        <Stack.Screen name="ExploreDetails" component={ExploreDetailsScreen} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

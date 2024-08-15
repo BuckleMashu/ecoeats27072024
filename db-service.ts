@@ -1,16 +1,20 @@
 import { enablePromise, openDatabase, SQLiteDatabase } from 'react-native-sqlite-storage';
-import { ToDoItem,share_page,request_page,userD } from './src/models';
+import { ToDoItem,explore_page, share_page,request_page,userD, deal_page,comment } from './src/models';
+
 var SQLite = require('react-native-sqlite-storage');
 
 const tableName = 'todoData';
 
 enablePromise(true);
 //------------------------------ECOEATSSTUFF----------------------------------
-export const getEcoEatsDBConnection = async() =>{
+
+export const getEcoEatsDBConnection = async() => {
   return SQLite.openDatabase({
-    name: 'ecoeats.db', createFromLocation: '~www/ecoeats.db',
+    name: 'ecoeats.db',
+    createFromLocation: '~www/ecoeats.db',
   }, () => { },);
-}
+};
+
 
 //Share and Explore related stuffs
 export const getSharePage = async(db: SQLiteDatabase, type:number | undefined, keyword:string , id:string | undefined): Promise<share_page[]> =>{
@@ -106,10 +110,149 @@ export const saveNewShareItem = async(db: SQLiteDatabase, shareItem:share_page) 
 
 //Deals page related stuff
 
+// Fetch deals from the database
+export const getDealsPage = async(db: SQLiteDatabase, keyword: string): Promise<deal_page[]> => {
+  try {
+    const deals: deal_page[] = [];
+    let query = `SELECT * FROM Deals`;
+
+    if (keyword) {
+      query += ` WHERE title LIKE '%${keyword}%' OR description LIKE '%${keyword}%'`;
+    }
+
+    const results = await db.executeSql(query);
+    results.forEach(result => {
+      for (let index = 0; index < result.rows.length; index++) {
+        deals.push(result.rows.item(index));
+      }
+    });
+
+    return deals;
+  } catch (error) {
+    console.error(error);
+    throw Error('Failed to get deals');
+  }
+};
+
+// Insert a new deal
+export const saveNewDeal = async(db: SQLiteDatabase, deal: deal_page) => {
+  const insertQuery = `
+    INSERT INTO Deals (title, description, picture, date_created) 
+    VALUES ('${deal.title}', '${deal.description}', '${deal.picture}', '${deal.date_created}')
+  `;
+
+  return db.executeSql(insertQuery);
+};
+
+export const updateDeal = async(db: SQLiteDatabase, deal: deal_page) => {
+  const updateQuery = `
+    UPDATE Deals 
+    SET title = '${deal.title}', 
+        description = '${deal.description}', 
+        picture = '${deal.picture}'
+    WHERE deal_Id = ${deal.deal_Id}
+  `;
+
+  return db.executeSql(updateQuery);
+};
+
+export const deleteDeal = async(db: SQLiteDatabase, deal_Id: number) => {
+  const deleteQuery = `DELETE FROM Deals WHERE deal_Id = ${deal_Id}`;
+
+  return db.executeSql(deleteQuery);
+};
+
+export const getCommentsForDeal = async(db: SQLiteDatabase, dealId: number): Promise<comment[]> => {
+  try {
+    const comments: comment[] = [];
+    const query = `SELECT * FROM Comments WHERE deal_Id = ?`;
+    const results = await db.executeSql(query, [dealId]);
+    results.forEach(result => {
+      for (let index = 0; index < result.rows.length; index++) {
+        comments.push(result.rows.item(index));
+      }
+    });
+    return comments;
+  } catch (error) {
+    console.error('Failed to get comments', error);
+    throw Error('Failed to get comments');
+  }
+};
+
 
 
 //Explore page related stuff
+export const getExplorePage = async(db: SQLiteDatabase, keyword: string): Promise<explore_page[]> => {
+  try {
+    const explores: explore_page[] = [];
+    let query = `SELECT * FROM Explores`;
 
+    if (keyword) {
+      query += ` WHERE title LIKE '%${keyword}%' OR description LIKE '%${keyword}%'`;
+    }
+
+    const results = await db.executeSql(query);
+    results.forEach(result => {
+      for (let index = 0; index < result.rows.length; index++) {
+        explores.push(result.rows.item(index));
+      }
+    });
+
+    return explores;
+  } catch (error) {
+    console.error(error);
+    throw Error('Failed to get explores');
+  }
+};
+
+export const saveNewExplore = async(db: SQLiteDatabase, explore: explore_page) => {
+  const insertQuery = `
+    INSERT INTO Explores (title, description, picture, date_created) 
+    VALUES ('${explore.title}', '${explore.description}', '${explore.picture}', '${explore.date_created}')
+  `;
+
+  return db.executeSql(insertQuery);
+};
+
+// In db-service.ts
+
+export const getCommentsForExplore = async (
+  db: SQLiteDatabase,
+  exploreId: number
+): Promise<comment[]> => {
+  try {
+    const comments: comment[] = [];
+    const results = await db.executeSql(
+      `SELECT * FROM Comments WHERE explore_Id = ?`,
+      [exploreId]
+    );
+    results.forEach(result => {
+      for (let index = 0; index < result.rows.length; index++) {
+        comments.push(result.rows.item(index));
+      }
+    });
+    return comments;
+  } catch (error) {
+    console.error('Failed to get comments', error);
+    throw Error('Failed to get comments');
+  }
+};
+
+// Make sure to also add the saveNewComment function if it doesn't exist:
+export const saveNewComment = async (
+  db: SQLiteDatabase,
+  comment: comment
+) => {
+  const insertQuery = `
+    INSERT INTO Comments (explore_Id, user_Name, comment_Text)
+    VALUES (?, ?, ?)
+  `;
+  await db.executeSql(insertQuery, [
+    comment.explore_Id,
+    comment.user_Name,
+    comment.comment_Text,
+  ]);
+};
 
 
 //login and register related stuff
@@ -168,3 +311,4 @@ export const deleteTable = async (db: SQLiteDatabase) => {
 
   await db.executeSql(query);
 };
+
