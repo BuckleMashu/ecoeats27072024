@@ -39,8 +39,8 @@ type Props = {
   route: RequestScreenRouteProp; 
 };
 
-const { width } = Dimensions.get('window');
-const columnWidth = width / 2;
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const columnWidth = screenWidth / 2;
 
 const UserScreen: React.FC<Props> = ({ route,navigation }) => {
   const { userID } = route.params;
@@ -104,21 +104,46 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
   
         <ScrollView contentContainerStyle={styles.scroll} contentInsetAdjustmentBehavior="automatic">
-          <Text>{userID}</Text>
-          <View>
-            <Image source={localImages[profile?.pf] || require('../images/missing.png')}/>
-            <View>
-              <Text>{profile?.name}</Text>
-              <View>
-                <Text>Posts: {explore.length + share.length}</Text>
-                <Text>Followers: {follower.length}</Text>
-                <Text>Following: {following.length}</Text>
+          <View style={styles.headerSec}>
+            <View style= {styles.profileImgSec}>
+              <Image style={styles.profileImg} source={localImages[profile?.pf] || require('../images/missing.png')}/>
+              <Text style={styles.profileName}>{profile?.name}</Text>
+              <TouchableOpacity style={styles.editPf}>
+                <Text>Edit profile image</Text>
+              </TouchableOpacity>  
+            </View>
+            <View style={styles.PFF}>
+              <View styles={styles.PFFsection}>
+                <Text style={styles.PFFtext}>Posts</Text>
+                <Text style={styles.PFFvalue}>{explore.length + share.length}</Text>
+              </View>
+              <View styles={styles.PFFsection}>
+                <Text style={styles.PFFtext}>Followers</Text>
+                <Text style={styles.PFFvalue}>{follower.length}</Text>
+              </View>
+              <View styles={styles.PFFsection}>
+                <Text style={styles.PFFtext}>Following</Text>
+                <Text style={styles.PFFvalue}>{following.length}</Text>
               </View>
             </View>
           </View>
-            {/* adds a button to change profile picture here */}
-          <View>
-            {/* This section is for the share, save, like, and search button */}
+          <View style={styles.shareSearchSaveLike}>
+            <View style={styles.shareSearch}>
+              <TouchableOpacity style={styles.SSSLbutton}>
+                <Text style={styles.SSSLtext}>🔗</Text>
+              </TouchableOpacity> 
+              <TouchableOpacity style={styles.SSSLbutton}>
+                <Text style={styles.SSSLtext}>🔎</Text>
+              </TouchableOpacity> 
+            </View> 
+            <View style={styles.saveLike}>
+              <TouchableOpacity style={styles.SSSLbutton}>
+                <Text style={styles.SSSLtext}>💾</Text>
+              </TouchableOpacity>  
+              <TouchableOpacity style={styles.SSSLbutton}>
+                <Text style={styles.SSSLtextHeart}>𖹭</Text>
+              </TouchableOpacity>   
+            </View>
           </View>
           <View>
             <View style={styles.typeButtonsBoth}>
@@ -161,6 +186,66 @@ const styles = StyleSheet.create({
   scroll:{
       paddingBottom: 40,
   },
+
+  headerSec:{
+    width:'100%',
+    backgroundColor: 'white',
+    flexDirection:'row',
+    // marginLeft:'auto',
+    // marginRight: 'auto',
+    justifyContent: 'space-between',
+    // marginLeft:screenWidth/3,
+  },
+
+  profileImgSec:{
+    flexDirection:'column',
+    // width:'50%',
+    paddingLeft:'10%',
+    // alignItems:"flex-start",
+  },
+  profileImg:{
+    width: screenWidth*0.2,
+    height:screenWidth*0.2,
+    borderRadius:100,
+    overflow:'hidden',
+  },
+
+  PFF:{
+    // width: '50%',
+    // padding:'2%',
+    flexDirection:'row',
+    paddingRight:'10%',
+    gap:10,
+  },
+
+  shareSearchSaveLike:{
+    width:'100%',
+    flexDirection:'row',
+    backgroundColor: 'white',
+    marginTop:2,
+    marginBottom:2,
+  },
+
+  shareSearch:{
+    width:'50%',
+    flexDirection:'row',
+    justifyContent: 'flex-start',
+  },
+
+  saveLike:{
+    width:'50%',
+    flexDirection:'row',
+    justifyContent: 'flex-end',
+  },
+
+  SSSLtext:{
+    
+  },
+
+  SSSLtextHeart:{
+    // fontSize:20,
+  },
+
   typeButtonsBoth:{
     flexDirection: 'row',
     justifyContent: 'space-evenly',
