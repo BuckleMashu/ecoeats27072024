@@ -106,7 +106,7 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
         <ScrollView contentContainerStyle={styles.scroll} contentInsetAdjustmentBehavior="automatic">
           <View style={styles.headerSec}>
             <View style= {styles.profileImgSec}>
-              <Image style={styles.profileImg} source={localImages[profile?.pf] || require('../images/missing.png')}/>
+              <Image style={styles.profileImg} source={{uri:profile?.pf || 'https://i.imgur.com/50exbMa.png'}}/>
               <Text style={styles.profileName}>{profile?.name}</Text>
               <TouchableOpacity style={styles.editPf}>
                 <Text style={styles.editPfText}>Edit profile image</Text>
@@ -161,7 +161,7 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
                 {shareEntity.map((post) =>(
                   <TouchableOpacity key={post.share_Id} onPress={() => navigation.navigate('Request',{post})} style={styles.itemContainer}>
                     <View>
-                      <ShareComponent key={post.share_Id} share={post} picture={localImages[post.picture]}/>
+                      <ShareComponent key={post.share_Id} share={post} picture={post.picture}/>
                     </View>
                   </TouchableOpacity>
                 ))}

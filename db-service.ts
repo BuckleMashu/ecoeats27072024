@@ -96,11 +96,33 @@ export const getUserDetails = async(db:SQLiteDatabase, id:number): Promise<userD
   }
 }
 
-export const saveNewShareItem = async(db: SQLiteDatabase, shareItem:share_page) => {
-  const insertQuery = `INSERT INTO Share (type,title,tags,address,picture) VALUES` + 
-  `(${shareItem.type}, '${shareItem.title}', '${shareItem.tags}', '${shareItem.address}', '${shareItem.picture}')`;
+export const saveNewRequestItem = async (db: SQLiteDatabase, requestPart: request_page) => {
+  try {
+    const insertRequestQuery = `INSERT INTO "main"."Request" (user_Id, description) VALUES (?, ?)`;
+    return db.executeSql(insertRequestQuery, [requestPart.user_Id, requestPart.description]);
+  } catch (error) {
+    console.error('Error saving request item:', error);
+    throw error;
+  }
+};
 
-  return db.executeSql(insertQuery);
+export const getLastestRequestItem =  async(db:SQLiteDatabase) =>{
+  try{
+    const getShareIdQuery = `SELECT share_Id FROM Request ORDER BY share_Id DESC LIMIT 1`;
+    return Number(db.executeSql(getShareIdQuery));
+  }catch(error){
+
+  }
+}
+
+export const saveNewShareItem = async (db: SQLiteDatabase, shareItem: share_page, id: number) => {
+  try {
+    const insertShareQuery = `INSERT INTO "main"."Share" (share_Id, type, title, tags, address, picture, expiration) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    return db.executeSql(insertShareQuery, [id, shareItem.type, shareItem.title, shareItem.tags, shareItem.address, shareItem.picture, shareItem.expiration]);
+  } catch (error) {
+    console.error('Error saving share item:', error);
+    throw error;
+  }
 };
 
 

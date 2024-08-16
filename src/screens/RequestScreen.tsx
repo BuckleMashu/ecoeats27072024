@@ -59,6 +59,9 @@ const RequestScreen = ({ route,navigation } : Props) => {
   const [hourOptions,setHourOptions] = useState<string[]>([]);
   const [minuteOptions,setMinuteOptions] = useState<string[]>([]);
   let db;
+
+  const [imageUri, setImageUri] = useState('');
+
   const loadDataCallback = useCallback(async (id:number) =>{
     try{
         db = await getEcoEatsDBConnection();
@@ -92,6 +95,7 @@ const RequestScreen = ({ route,navigation } : Props) => {
     setMonthOptions(dateNtime[1]);
     setHourOptions(dateNtime[2]);
     setMinuteOptions(dateNtime[3]);
+    
   },[loadDataCallback]);
 
   return (
@@ -101,9 +105,9 @@ const RequestScreen = ({ route,navigation } : Props) => {
         <ScrollView contentContainerStyle={styles.scroll} contentInsetAdjustmentBehavior="automatic">
           <View style={styles.container}>
             {/* <Text>REQUEST PAGE FOR ITEM SHARE{String(post.share_Id)}</Text> */}
-            <Image style={styles.mainImage} source={localImages[post.picture] || require('../images/missing.png')}/>
+            <Image style={styles.mainImage} source={{uri:post.picture || 'https://i.imgur.com/50exbMa.png'}}/>
             <View style={styles.middleDetails}>
-              <Image style={styles.pf} source={localImages[userPicture] || require('../images/missing.png')}/>
+              <Image style={styles.pf} source={{uri:userPicture || 'https://i.imgur.com/50exbMa.png'}}/>
               <View style={styles.titleNexpiration}>
                 <Text style={styles.title}>{post.title}</Text>
                 {post.expiration != 'none' && (

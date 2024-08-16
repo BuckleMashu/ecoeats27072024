@@ -44,6 +44,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
   const [shareEntity, setShareEntity] = React.useState<share_page[]>([]);
   let db;
   const [shareType, setShareType] = useState(0);
+  const [currentUserId, setCurrentUserId] = React.useState<number>(1);
 
 // Import images
 // const imageMap = {
@@ -77,7 +78,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
   // }
   
   return (
-    <SafeAreaView >
+    <SafeAreaView style={styles.safeArea}>
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
         <ScrollView contentInsetAdjustmentBehavior="automatic">
             <View style={styles.container} >
@@ -113,7 +114,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
                   //this lines say it got error BUT IT DOESNT. IT WORKS. DONT LISTEN TO THE AI
                   <TouchableOpacity key={post.share_Id} onPress={() => navigation.navigate('Request',{post})} style={styles.itemContainer}>
                     <View>
-                      <ShareComponent key={post.share_Id} share={post} picture={localImages[post.picture] || require('../images/missing.png')}/>
+                      <ShareComponent key={post.share_Id} share={post} picture={post.picture || 'https://i.imgur.com/50exbMa.png'}/>
                     </View>
                   </TouchableOpacity>
                 ))}
@@ -127,6 +128,9 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
                 </View>
             </View>
         </ScrollView>
+        <TouchableOpacity style={styles.addShareButton} onPress={() => navigation.navigate('AddShare',{currentUserId})}>
+            <Text style={styles.addShareButtonText}>ADD</Text>
+        </TouchableOpacity>  
     </SafeAreaView>
   );
 };
@@ -135,6 +139,9 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
 // require('../screens/images/')
 //"D:\work and non-game-related software\sim y2s2\agile\final project app\ecoeats27072024\src\screens\images\share1.png"
 const styles = StyleSheet.create({
+  safeArea:{
+    flex:1
+  },
   container: {
     backgroundColor: 'rgb(250,250,250)',
     flex:1,
@@ -219,6 +226,24 @@ const styles = StyleSheet.create({
   },
   itemContainer:{
     width: columnWidth - 15, // Adjust for padding/margin
+  },
+  addShareButton:{
+    position:'absolute',
+    right:10,
+    bottom:10,
+    backgroundColor: 'white',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    borderColor: 'black',
+    borderWidth: 2,
+    opacity: 0.8,
+  },
+  addShareButtonText: {
+    color: 'black',
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

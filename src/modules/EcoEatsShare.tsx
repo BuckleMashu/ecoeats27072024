@@ -16,7 +16,7 @@ export const ShareComponent: React.FC<{
 }> = ({ share: {title,address,share_Id,expiration} , picture}) => {
   return (
     <View style={styles.todoContainer}>
-      <Image style={styles.image} source={picture}/>
+      <Image style={styles.image} source={{uri:picture}}/>
       <View style={styles.todoTextContainer}>
         <Text
           style={styles.sectionTitle}>
