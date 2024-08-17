@@ -19,6 +19,8 @@ import { Searchbar } from 'react-native-paper';
 
 import localImages from '../imageImports';
 
+import { useIsFocused } from '@react-navigation/native';
+
 type ExploreScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Explore'
@@ -46,9 +48,12 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
     }
   }, []);
 
+  const isFocused = useIsFocused();
   useEffect(() => {
-    loadDataCallback(searchQuery);
-  }, [loadDataCallback, searchQuery]);
+    if(isFocused){
+      loadDataCallback(searchQuery);
+    }
+  }, [loadDataCallback, searchQuery,isFocused]);
 
   return (
     <SafeAreaView>

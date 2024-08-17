@@ -51,27 +51,28 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
   const [title, setTitle] = React.useState<string>('');
   const [description, setDescription] = React.useState<string>('');
   const [address, setAdress] = React.useState<string>('');
-  const [tags, setTags] = React.useState<string>('');
+  const [tags, setTags] = React.useState<string|null>(null);
 //   const [pictureName, setPictureName] = React.useState<string>('kokomi');
 
   const [imageUrl, setImageUrl] = React.useState<string>('https://i.imgur.com/50exbMa.png');
 
   const [expiration, setExpiration] = React.useState<string>('');
-  const [itemType, setItemType] = React.useState<number>(2);
+  const [itemType, setItemType] = React.useState<number>(0);
   let db;
   const [shareDetails, setShareDetails] = React.useState<share_page>();
   const [requestDetails, setRequestDetails] = React.useState<request_page>();
 
 
-  const loadDataCallback = useCallback(async (shareInsert:share_page, requestInsert:request_page) =>{
+  const loadDataCallback = useCallback(async (user_Id:number,description:string,itemType:number,title:string,tags:string,address:string,picture:string,expiration:string) =>{
     try{
+        console.log(user_Id,description,itemType,title,tags,address,picture,expiration);
         db = await getEcoEatsDBConnection();
-        await saveNewRequestItem(db,requestInsert);
-        const shareIdnew = await getLastestRequestItem(db);
-        if(shareIdnew){
-            await saveNewShareItem(db,shareInsert,shareIdnew);
-        }
-        navigation.push('Sharing');
+        const shareIdnew = await saveNewRequestItem(db,user_Id,description);
+        console.log(shareIdnew);
+        console.log(shareIdnew[0]["insertId"]);
+        console.log(await saveNewShareItem(db,itemType,title,tags,address,picture,expiration,shareIdnew[0]["insertId"]));
+
+        navigation.navigate('MainTabs', {screen: 'Sharing'});
     } catch(error){
         console.error(error);
     }
@@ -110,17 +111,14 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
   };
 
   const handleItemSubmit = () =>{
-    const uploadedImageUrl = uploadImageToImgur(selectedImageUri);
-    if(uploadedImageUrl){
-      setImageUrl(uploadedImageUrl[0]);
-      setImageUId(uploadedImageUrl[1]);
-    }
-    returnSharePageFormat(itemType,title,tags,address,imageUrl,expiration);
-    returnRequestPageFormat(currentUserID,description);
-    if(shareDetails && requestDetails){
-        loadDataCallback(shareDetails, requestDetails);
-    }
-    navigation.push('Sharing');
+    // const uploadedImageUrl = uploadImageToImgur(selectedImageUri);
+    // if(uploadedImageUrl){
+    //   setImageUrl(uploadedImageUrl[0]);
+    //   setImageUId(uploadedImageUrl[1]);
+    // }
+    // returnSharePageFormat(itemType,title,tags,address,selectedImageUri,expiration);
+    // returnRequestPageFormat(currentUserID,description);
+    loadDataCallback(currentUserID,description,itemType,title,tags,address,selectedImageUri,expiration);
   };
 
   //image testing----------------------------------------------------------------
@@ -144,27 +142,6 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
       }
     });
   };
-
-//   const saveImage = async (uri: string) => {
-//     try {
-//       const fileName = pictureName ? `${pictureName}.png` : `IMG_${Date.now()}.png`; // Use custom name or timestamp
-//       const documentDir = `${RNFS.DocumentDirectoryPath}/${fileName}`; // Path in DocumentDirectoryPath
-//       const rootDir = `${RNFS.ExternalDirectoryPath}/src/images/${fileName}`; // Path in root directory
-
-//       // Copy the file to the DocumentDirectoryPath
-//       await RNFS.copyFile(uri, documentDir);
-//       console.log('Image saved to DocumentDirectoryPath: ', documentDir);
-
-//       // Move the file to the root directory (ExternalDirectoryPath)
-//     //   console.log(rootDir);
-//     //   await RNFS.moveFile(documentDir, rootDir);
-//     //   console.log('Image moved to root directory: ', rootDir);
-
-//       setImageUri(`file://${documentDir}`); // Set the new path as the image URI
-//     } catch (error) {
-//       console.log('Error saving/moving image: ', error);
-//     }
-//   };
   //----------------------------------------------------------------
 
   useEffect(()=>{
@@ -191,7 +168,7 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
                 </View>
                 <View>
                     <Text>Tags, if any:</Text>
-                    <TextInput value={tags} onChangeText={setTags} />
+                    <TextInput value={tags ? tags : ""} onChangeText={setTags} />
                 </View>
                 <View>
                     {itemType == 0 ? (

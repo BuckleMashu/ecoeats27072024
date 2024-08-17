@@ -25,6 +25,8 @@ import { Searchbar } from 'react-native-paper';
 
 import localImages from '../imageImports';
 
+import { useIsFocused } from '@react-navigation/native';
+
 type SharingScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Sharing'
@@ -68,10 +70,13 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
   //   }
   //   setImagePaths(paths);
   // },[]);
+  const isFocused = useIsFocused();
 
   useEffect(()=>{
-    loadDataCallback(shareType,searchQuery);
-  },[loadDataCallback,shareType,searchQuery]);
+    if(isFocused){
+        loadDataCallback(shareType,searchQuery);
+    }
+  },[loadDataCallback,shareType,searchQuery,isFocused]);
 
   // const updateSearchResult = async () =>{
   //   setSearchQuery(newsearchQuery);

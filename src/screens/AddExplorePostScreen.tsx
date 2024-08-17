@@ -37,7 +37,7 @@ const AddExplorePostScreen: React.FC<Props> = ({ navigation }) => {
     };
 
     await saveNewExplore(db, newExplore);
-    navigation.push('Explore'); // Navigate back to Explore page to show the posts
+    navigation.navigate('MainTabs', {screen: 'Explore'}); // Navigate back to Explore page to show the posts
   };
 
   return (

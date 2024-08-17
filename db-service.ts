@@ -1,43 +1,118 @@
 import { enablePromise, openDatabase, SQLiteDatabase } from 'react-native-sqlite-storage';
-import { ToDoItem,explore_page, share_page,request_page,userD, deal_page,comment } from './src/models';
-
-var SQLite = require('react-native-sqlite-storage');
-
-const tableName = 'todoData';
+import { ToDoItem, explore_page, share_page, request_page, userD, deal_page, comment } from './src/models';
+import RNFS from 'react-native-fs';
 
 enablePromise(true);
+
 //------------------------------ECOEATSSTUFF----------------------------------
 
-export const getEcoEatsDBConnection = async() => {
-  return SQLite.openDatabase({
-    name: 'ecoeats.db',
-    createFromLocation: '~www/ecoeats.db',
-  }, () => { },);
+const dbName = 'ecoeats.db';
+const internalDbPath = `${RNFS.DocumentDirectoryPath}/${dbName}`;
+
+// Function to copy the database from assets to internal storage
+export const copyDatabase = async () => {
+  try {
+    const dbExists = await RNFS.exists(internalDbPath);
+    console.log('Internal DB Path:', internalDbPath); // Log the internal DB path
+    console.log('Exists:', dbExists);
+    if (dbExists) {
+      await RNFS.unlink(internalDbPath); // Delete the existing database
+      console.log('Old database deleted from internal storage');
+    }
+
+    await RNFS.copyFileAssets(`www/${dbName}`, internalDbPath);
+    console.log('Database copied to internal storage');
+    console.log(internalDbPath);
+  } catch (error) {
+    console.error('Error copying database: ', error);
+    throw error;
+  }
 };
 
+// Function to get the database connection
+export const getEcoEatsDBConnection = async (): Promise<SQLiteDatabase> => {
+  const dbPath = `${RNFS.DocumentDirectoryPath}/${dbName}`;
+  console.log('Connecting to database at:', dbPath);
+  return openDatabase({
+    name: dbName,
+    // createFromLocation: '~www/ecoeats.db',
+    location: 'default', // Ensure it uses the correct location
+  });
+};
 
-//Share and Explore related stuffs
-export const getSharePage = async(db: SQLiteDatabase, type:number | undefined, keyword:string , id:string | undefined): Promise<share_page[]> =>{
-  try{
+const listTables = async (db: SQLiteDatabase) => {
+  try {
+    const query = 'SELECT name FROM sqlite_master WHERE type="table"';
+    const results = await db.executeSql(query);
+
+    if (results.length > 0) {
+      const tables = [];
+      for (let i = 0; i < results[0].rows.length; i++) {
+        tables.push(results[0].rows.item(i).name);
+      }
+      console.log('Tables in the database:', tables);
+      return tables;
+    } else {
+      console.log('No tables found in the database');
+      return [];
+    }
+  } catch (error) {
+    console.error('Error fetching tables:', error);
+    throw error;
+  }
+};
+
+const checkTables = async () => {
+  const db = await getEcoEatsDBConnection(); // Open the database
+  const tables = await listTables(db);       // List the tables
+
+  if (tables.length === 0) {
+    console.log('No tables found in the database.');
+  } else {
+    console.log('Tables in the database:', tables);
+  }
+};
+
+// Share and Explore related functions
+export const getSharePage = async (
+  db: SQLiteDatabase,
+  type: number | undefined,
+  keyword: string,
+  id: string | undefined
+): Promise<share_page[]> => {
+  try {
+    // let query = 'SELECT name FROM sqlite_master WHERE type="table"';
+    // const Testresults = await db.executeSql(query);
+
+    // if (Testresults.length > 0) {
+    //   const tables = [];
+    //   for (let i = 0; i < Testresults[0].rows.length; i++) {
+    //     tables.push(Testresults[0].rows.item(i).name);
+    //   }
+    //   console.log('Tables in the database:', tables);
+    // };
+    // checkTables();
     const sharePageItems: share_page[] = [];
     let query;
-    if(keyword === ""){
+    if (keyword === '') {
       query = `SELECT * FROM Share WHERE type=${type}`;
-    }else{
+    } else {
       query = `SELECT * FROM Share WHERE type=${type} AND title LIKE '%${keyword}%'`;
     }
 
-    if(id){
+    if (id) {
       query = `SELECT * FROM Share WHERE share_id IN (${id})`;
     }
+
     const results = await db.executeSql(query);
     results.forEach(result => {
       for (let index = 0; index < result.rows.length; index++) {
-        sharePageItems.push(result.rows.item(index))
+        sharePageItems.push(result.rows.item(index));
       }
     });
+
     return sharePageItems;
-  }catch(error){
+  } catch (error) {
     console.error(error);
     throw Error('Failed to get share pages items');
   }
@@ -96,10 +171,11 @@ export const getUserDetails = async(db:SQLiteDatabase, id:number): Promise<userD
   }
 }
 
-export const saveNewRequestItem = async (db: SQLiteDatabase, requestPart: request_page) => {
+export const saveNewRequestItem = async (db: SQLiteDatabase, user_Id:number,description:string) => {
   try {
-    const insertRequestQuery = `INSERT INTO "main"."Request" (user_Id, description) VALUES (?, ?)`;
-    return db.executeSql(insertRequestQuery, [requestPart.user_Id, requestPart.description]);
+    const insertRequestQuery = `INSERT INTO Request (user_Id, description) VALUES (${user_Id}, "${description}")`;
+    console.log(insertRequestQuery);
+    return db.executeSql(insertRequestQuery);
   } catch (error) {
     console.error('Error saving request item:', error);
     throw error;
@@ -111,14 +187,14 @@ export const getLastestRequestItem =  async(db:SQLiteDatabase) =>{
     const getShareIdQuery = `SELECT share_Id FROM Request ORDER BY share_Id DESC LIMIT 1`;
     return Number(db.executeSql(getShareIdQuery));
   }catch(error){
-
+    console.log('Failed to get latest request item');
   }
 }
 
-export const saveNewShareItem = async (db: SQLiteDatabase, shareItem: share_page, id: number) => {
+export const saveNewShareItem = async (db: SQLiteDatabase, type:number, title:string,tags:string|null,address:string,picture:string,expiration:string, id: number) => {
   try {
     const insertShareQuery = `INSERT INTO "main"."Share" (share_Id, type, title, tags, address, picture, expiration) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-    return db.executeSql(insertShareQuery, [id, shareItem.type, shareItem.title, shareItem.tags, shareItem.address, shareItem.picture, shareItem.expiration]);
+    return db.executeSql(insertShareQuery, [id,type, title, tags, address, picture,expiration]);
   } catch (error) {
     console.error('Error saving share item:', error);
     throw error;
@@ -284,53 +360,53 @@ export const saveNewComment = async (
 
 //-----------------------------TESTING STUFF---IGNORE--------------------------------
 //everytime you edit the db externally, you need to uninstall the app first then reinstall it for it to notice the changes.
-export const getDBConnection = async () => {
-  return SQLite.openDatabase({
-    name: 'todo-data.db', createFromLocation: '~www/todo-data.db', },() => { },);
-};
+// export const getDBConnection = async () => {
+//   return SQLite.openDatabase({
+//     name: 'todo-data.db', createFromLocation: '~www/todo-data.db', },() => { },);
+// };
 
-export const createTable = async (db: SQLiteDatabase) => {
-  // create table if not exists
-  const query = `CREATE TABLE IF NOT EXISTS ${tableName}(
-        value TEXT NOT NULL
-    );`;
+// export const createTable = async (db: SQLiteDatabase) => {
+//   // create table if not exists
+//   const query = `CREATE TABLE IF NOT EXISTS ${tableName}(
+//         value TEXT NOT NULL
+//     );`;
 
-  await db.executeSql(query);
-};
+//   await db.executeSql(query);
+// };
 
-export const getTodoItems = async (db: SQLiteDatabase): Promise<ToDoItem[]> => {
-  try {
-    const todoItems: ToDoItem[] = [];
-    const results = await db.executeSql(`SELECT rowid as id,value FROM ${tableName}`);
-    results.forEach(result => {
-      for (let index = 0; index < result.rows.length; index++) {
-        // result.rows.item(index)["picture"] =  require('./src/images/share1.png');
-        todoItems.push(result.rows.item(index))
-      }
-    });
-    return todoItems;
-  } catch (error) {
-    console.error(error);
-    throw Error('Failed to get todoItems !!!');
-  }
-};
+// export const getTodoItems = async (db: SQLiteDatabase): Promise<ToDoItem[]> => {
+//   try {
+//     const todoItems: ToDoItem[] = [];
+//     const results = await db.executeSql(`SELECT rowid as id,value FROM ${tableName}`);
+//     results.forEach(result => {
+//       for (let index = 0; index < result.rows.length; index++) {
+//         // result.rows.item(index)["picture"] =  require('./src/images/share1.png');
+//         todoItems.push(result.rows.item(index))
+//       }
+//     });
+//     return todoItems;
+//   } catch (error) {
+//     console.error(error);
+//     throw Error('Failed to get todoItems !!!');
+//   }
+// };
 
-export const saveTodoItems = async (db: SQLiteDatabase, todoItems: ToDoItem[]) => {
-  const insertQuery =
-    `INSERT OR REPLACE INTO ${tableName}(rowid, value) values` +
-    todoItems.map(i => `(${i.id}, '${i.value}')`).join(',');
+// export const saveTodoItems = async (db: SQLiteDatabase, todoItems: ToDoItem[]) => {
+//   const insertQuery =
+//     `INSERT OR REPLACE INTO ${tableName}(rowid, value) values` +
+//     todoItems.map(i => `(${i.id}, '${i.value}')`).join(',');
 
-  return db.executeSql(insertQuery);
-};
+//   return db.executeSql(insertQuery);
+// };
 
-export const deleteTodoItem = async (db: SQLiteDatabase, id: number) => {
-  const deleteQuery = `DELETE from ${tableName} where rowid = ${id}`;
-  await db.executeSql(deleteQuery);
-};
+// export const deleteTodoItem = async (db: SQLiteDatabase, id: number) => {
+//   const deleteQuery = `DELETE from ${tableName} where rowid = ${id}`;
+//   await db.executeSql(deleteQuery);
+// };
 
-export const deleteTable = async (db: SQLiteDatabase) => {
-  const query = `drop table ${tableName}`;
+// export const deleteTable = async (db: SQLiteDatabase) => {
+//   const query = `drop table ${tableName}`;
 
-  await db.executeSql(query);
-};
+//   await db.executeSql(query);
+// };
 

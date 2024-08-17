@@ -20,9 +20,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { share_page, userD, deal_page, explore_page } from './src/models'; // Import all necessary models
 import ExploreDetailsScreen from './src/screens/ExploreDetailsScreen';
 
-//image importer testing
-import RNFS from 'react-native-fs';
-import localImages from './src/imageImports';
+import { copyDatabase } from './db-service'
 
 
 export type RootStackParamList = {
@@ -130,27 +128,9 @@ function MainTabNavigator() {
 
 // Main App Component
 const App = () => {
-  // useEffect(() => {
-  //   // Call the function to copy images when the app initializes
-  //   const copyImage = async () => {
-  //     try {
-  //       // Source path (adjust according to your actual paths)
-  //       const sourcePath = localImages['share1.png']; // Ensure this is accessible or bundled correctly
-  //       const destinationPath = RNFS.DocumentDirectoryPath + '/share1.png';
-
-  //       // If you have the image in the assets folder, you need to use the file URI or remote URL
-  //       // Typically you would handle this with a bundle or a server URL
-
-  //       // For local assets, you'd use a different strategy
-  //       // Here, we're simulating the idea of copying an image at build time or from a URL
-  //       // Use the correct method for copying from assets or another source
-  //       await RNFS.copyFile(sourcePath, destinationPath);
-
-  //       console.log('Image copied successfully:', destinationPath);
-  //     } catch (error) {
-  //       console.error('Error copying image:', error);
-  //     }
-  //   };
+  useEffect(() => {
+      copyDatabase();
+    });
 
   //   copyImage();
   // }, []); // The empty dependency array ensures this runs only once

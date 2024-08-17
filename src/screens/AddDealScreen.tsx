@@ -37,7 +37,7 @@ const AddDealScreen: React.FC<Props> = ({ navigation }) => {
     };
 
     await saveNewDeal(db, newDeal);
-    navigation.push('Details');
+    navigation.navigate('MainTabs', {screen: 'Details'});
   };
 
   return (
