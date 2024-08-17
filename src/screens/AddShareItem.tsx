@@ -18,7 +18,7 @@ import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
 
 import { share_page, request_page } from '../models';
-import { getEcoEatsDBConnection, saveNewShareItem, saveNewRequestItem, getLastestRequestItem} from '../../db-service';
+import { getEcoEatsDBConnection, saveNewShareItem, saveNewRequestItem, getLastestRequestItem, updateUserSharePosts} from '../../db-service';
 
 import { launchImageLibrary } from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
@@ -45,7 +45,7 @@ const { width } = Dimensions.get('window');
 const columnWidth = width / 2;
 
 const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
-  const { currentUserID } = route.params;
+  const { currentUserId } = route.params;
   const isDarkMode = useColorScheme() === 'dark';
 //   const [shareEntity, setShareEntity] = React.useState<share_page[]>([]);
   const [title, setTitle] = React.useState<string>('');
@@ -71,6 +71,7 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
         console.log(shareIdnew);
         console.log(shareIdnew[0]["insertId"]);
         console.log(await saveNewShareItem(db,itemType,title,tags,address,picture,expiration,shareIdnew[0]["insertId"]));
+        await updateUserSharePosts(db,shareIdnew[0]["insertId"],user_Id);
 
         navigation.navigate('MainTabs', {screen: 'Sharing'});
     } catch(error){
@@ -118,7 +119,7 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
     // }
     // returnSharePageFormat(itemType,title,tags,address,selectedImageUri,expiration);
     // returnRequestPageFormat(currentUserID,description);
-    loadDataCallback(currentUserID,description,itemType,title,tags,address,selectedImageUri,expiration);
+    loadDataCallback(currentUserId,description,itemType,title,tags,address,selectedImageUri,expiration);
   };
 
   //image testing----------------------------------------------------------------
@@ -145,6 +146,7 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
   //----------------------------------------------------------------
 
   useEffect(()=>{
+    console.log(currentUserId);
     setImageUrl('https://i.imgur.com/50exbMa.png');
   },[]);
 

@@ -35,7 +35,7 @@ export type RootStackParamList = {
   DealDetails: { deal: deal_page }; 
   AddExplorePost: undefined; 
   ExploreDetails: { explore: explore_page }; 
-  AddShare: {currentUserID: any}
+  AddShare: {currentUserId: any}
 };
 
 const Stack = createStackNavigator<RootStackParamList>();

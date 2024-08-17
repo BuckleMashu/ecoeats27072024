@@ -22,8 +22,10 @@ import { userD,share_page } from '../models';
 
 import { ShareComponent } from '../modules/EcoEatsShare';
 import { getEcoEatsDBConnection, getUserDetails, getSharePage} from '../../db-service';
-import localImages from '../imageImports';
+// import localImages from '../imageImports';
 import { Picker } from '@react-native-picker/picker';
+
+import { useIsFocused } from '@react-navigation/native';
 
 type RequestScreenRouteProp = RouteProp<
    RootStackParamList, 
@@ -73,6 +75,7 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
   const loadShareCallback = useCallback(async (id:string) =>{
     try{
       db = await getEcoEatsDBConnection();
+      console.log(id);
       const result = await getSharePage(db,undefined,"",id);
       setShareEntity(result);
     } catch(error){
@@ -95,9 +98,13 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
     }
   },[]);
 
+  const isFocused = useIsFocused();
+
   useEffect(()=>{
-    loadDataCallback(userID);
-  },[loadDataCallback]);
+    if(isFocused){
+      loadDataCallback(userID);
+    }
+  },[loadDataCallback,isFocused]);
 
   return (
     <SafeAreaView style={styles.safeArea}>

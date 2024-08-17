@@ -75,6 +75,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
   useEffect(()=>{
     if(isFocused){
         loadDataCallback(shareType,searchQuery);
+        console.log(currentUserId);
     }
   },[loadDataCallback,shareType,searchQuery,isFocused]);
 

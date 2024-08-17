@@ -81,17 +81,6 @@ export const getSharePage = async (
   id: string | undefined
 ): Promise<share_page[]> => {
   try {
-    // let query = 'SELECT name FROM sqlite_master WHERE type="table"';
-    // const Testresults = await db.executeSql(query);
-
-    // if (Testresults.length > 0) {
-    //   const tables = [];
-    //   for (let i = 0; i < Testresults[0].rows.length; i++) {
-    //     tables.push(Testresults[0].rows.item(i).name);
-    //   }
-    //   console.log('Tables in the database:', tables);
-    // };
-    // checkTables();
     const sharePageItems: share_page[] = [];
     let query;
     if (keyword === '') {
@@ -100,7 +89,7 @@ export const getSharePage = async (
       query = `SELECT * FROM Share WHERE type=${type} AND title LIKE '%${keyword}%'`;
     }
 
-    if (id) {
+    if (id && type === undefined && keyword==="") {
       query = `SELECT * FROM Share WHERE share_id IN (${id})`;
     }
 
@@ -110,7 +99,6 @@ export const getSharePage = async (
         sharePageItems.push(result.rows.item(index));
       }
     });
-
     return sharePageItems;
   } catch (error) {
     console.error(error);
@@ -193,7 +181,7 @@ export const getLastestRequestItem =  async(db:SQLiteDatabase) =>{
 
 export const saveNewShareItem = async (db: SQLiteDatabase, type:number, title:string,tags:string|null,address:string,picture:string,expiration:string, id: number) => {
   try {
-    const insertShareQuery = `INSERT INTO "main"."Share" (share_Id, type, title, tags, address, picture, expiration) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    const insertShareQuery = `INSERT INTO Share (share_Id, type, title, tags, address, picture, expiration) VALUES (?, ?, ?, ?, ?, ?, ?)`;
     return db.executeSql(insertShareQuery, [id,type, title, tags, address, picture,expiration]);
   } catch (error) {
     console.error('Error saving share item:', error);
@@ -201,7 +189,17 @@ export const saveNewShareItem = async (db: SQLiteDatabase, type:number, title:st
   }
 };
 
-
+export const updateUserSharePosts = async (db: SQLiteDatabase, share_Id:number, user_Id:number) => {
+  try{
+    let query = `SELECT * FROM User WHERE user_Id = ${user_Id}`;
+    let [output] = await db.executeSql(query);
+    let newSharePosts = output.rows.item(0).share_Posts.concat(",",share_Id);
+    query = `UPDATE User SET share_Posts = '${newSharePosts}' WHERE user_Id = ${user_Id}`;
+    return db.executeSql(query);
+  }catch(error){
+    console.log('Failed to update user share posts');
+  }
+};
 //Profile page related stuff
 
 
