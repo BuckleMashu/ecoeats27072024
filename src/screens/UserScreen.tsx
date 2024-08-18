@@ -21,9 +21,10 @@ import { RootStackParamList } from '../../App';
 import { userD,share_page } from '../models';
 
 import { ShareComponent } from '../modules/EcoEatsShare';
-import { getEcoEatsDBConnection, getUserDetails, getSharePage} from '../../db-service';
+import { getEcoEatsDBConnection, getUserDetails, getSharePage, updateProfilePicture} from '../../db-service';
 // import localImages from '../imageImports';
 import { Picker } from '@react-native-picker/picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 import { useIsFocused } from '@react-navigation/native';
 
@@ -56,6 +57,9 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
   const [following, setFollowing] = React.useState<number[]>([]);
 
   const [postType, setPostType] = useState(true); //share = 0, explore = 1
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImageUri, setSelectedImageUId] = useState<string | null>(null);
 
   let db;
 
@@ -98,13 +102,43 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
     }
   },[]);
 
+  const pickImage = () => {
+    // if(imageUrl != 'https://i.imgur.com/50exbMa.png'){
+    //     deleteImageFromImgur(imageId);
+    // }
+    launchImageLibrary({ mediaType: 'photo' }, async (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.errorCode) {
+        console.log('ImagePicker Error:', response.errorMessage);
+      } else {
+        if (response.assets && response.assets[0].uri) {
+          const uri = response.assets[0].uri;
+          setSelectedImageUId(uri);
+        }
+      }
+    });
+  };
+
+  const handleRequestModal = (async() => {
+    setModalVisible(false);
+    db = await getEcoEatsDBConnection();
+    await updateProfilePicture(db,userID,selectedImageUri);
+    navigation.navigate('MainTabs', {screen: 'User',   params: {userID: 1}});
+  });
+
+  const cancelPfChange = () => {
+    setModalVisible(false);
+  };
+
   const isFocused = useIsFocused();
 
   useEffect(()=>{
     if(isFocused){
       loadDataCallback(userID);
     }
-  },[loadDataCallback,isFocused]);
+    setSelectedImageUId('https://i.imgur.com/50exbMa.png');
+  },[loadDataCallback,isFocused,modalVisible]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -115,7 +149,7 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
             <View style= {styles.profileImgSec}>
               <Image style={styles.profileImg} source={{uri:profile?.pf || 'https://i.imgur.com/50exbMa.png'}}/>
               <Text style={styles.profileName}>{profile?.name}</Text>
-              <TouchableOpacity style={styles.editPf}>
+              <TouchableOpacity style={styles.editPf} onPress={() => setModalVisible(true)}>
                 <Text style={styles.editPfText}>Edit profile image</Text>
               </TouchableOpacity>  
             </View>
@@ -181,6 +215,26 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
           </View>
         </ScrollView>
     
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}>
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <View>
+                  <Text>New Profile Image</Text>
+                  <TouchableOpacity onPress={cancelPfChange}>
+                    <Text>X</Text>
+                  </TouchableOpacity>
+                </View>
+                <Image source={{ uri: selectedImageUri || 'https://i.imgur.com/50exbMa.png'}} style={styles.newPfImage}/>
+                <Button title="Pick an Image" onPress={pickImage} />
+                <Button title="Save" onPress={handleRequestModal} />
+
+              </View>
+            </View>
+        </Modal>
     </SafeAreaView>
     
   );
@@ -243,6 +297,15 @@ const styles = StyleSheet.create({
   PFFtext:{
     fontSize:16,
     fontWeight:'bold',
+  },
+
+  PFFvalue:{
+    fontSize:18,
+    fontWeight:'bold',
+  },
+
+  SSSLbutton:{
+    padding:2,
   },
 
   shareSearchSaveLike:{
@@ -312,6 +375,26 @@ const styles = StyleSheet.create({
   },
   itemContainer:{
     width: columnWidth - 15, // Adjust for padding/margin
+  },
+  modalOverlay:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent:{
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+    width:screenWidth*0.7,
+    height: screenHeight*0.5,
+  },
+
+  newPfImage:{
+    width:'75%',
+    height: '75%',
+    resizeMode: 'contain',
   },
 });
 
