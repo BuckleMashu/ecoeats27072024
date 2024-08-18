@@ -10,6 +10,7 @@ import RequestScreen from './src/screens/RequestScreen';
 import AddDealScreen from './src/screens/AddDealScreen';  
 import DealDetailsScreen from './src/screens/DealDetailsScreen';  
 import AddExplorePostScreen from './src/screens/AddExplorePostScreen'; 
+import LoginScreen from './src/screens/LoginScreen'; 
 
 import UserScreen from './src/screens/UserScreen';
 
@@ -97,7 +98,12 @@ function MainTabNavigator() {
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen 
+          name="Login" 
+          component={LoginScreen} 
+          options={{ headerShown: false }}  // Hide the header for the login screen
+        />
         <Stack.Screen 
           name="MainTabs" 
           component={MainTabNavigator} 
