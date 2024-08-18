@@ -222,16 +222,18 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
           onRequestClose={() => setModalVisible(false)}>
             <View style={styles.modalOverlay}>
               <View style={styles.modalContent}>
-                <View>
-                  <Text>New Profile Image</Text>
+                <View style={styles.modalPfHeader}>
+                  <Text style={styles.modalHeaderText}>New Profile Image</Text>
                   <TouchableOpacity onPress={cancelPfChange}>
-                    <Text>X</Text>
+                    <Text style={styles.modalHeaderTextCancel}>X</Text>
                   </TouchableOpacity>
                 </View>
                 <Image source={{ uri: selectedImageUri || 'https://i.imgur.com/50exbMa.png'}} style={styles.newPfImage}/>
                 <Button title="Pick an Image" onPress={pickImage} />
-                <Button title="Save" onPress={handleRequestModal} />
-
+                {/* <Button  title="Save" onPress={handleRequestModal} /> */}
+                <TouchableOpacity onPress={handleRequestModal} style={styles.pfSaveButton}>
+                    <Text style={styles.modalHeaderTextSave}>Save</Text>
+                </TouchableOpacity>
               </View>
             </View>
         </Modal>
@@ -388,13 +390,46 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     width:screenWidth*0.7,
-    height: screenHeight*0.5,
+    height: screenHeight*0.7,
+  },
+
+  modalHeaderText:{
+    fontSize: 18,
+    fontWeight:'bold',
+  },
+
+  modalHeaderTextCancel:{
+    fontSize: 18,
+    fontWeight:'bold',
+    color:'red',
+  },
+
+  modalPfHeader:{
+    flexDirection:'row',
+    gap:80,
+    justifyContent:'space-between',
   },
 
   newPfImage:{
     width:'75%',
     height: '75%',
     resizeMode: 'contain',
+  },
+
+  pfSaveButton:{
+    borderColor:'rgba(0,0,0,0.9)',
+    borderWidth:2,
+    borderRadius:5,
+    backgroundColor:'rgba(0,0,0,0.5)',
+    width: '30%',
+  },
+
+  modalHeaderTextSave:{
+    padding:5,
+    fontSize: 18,
+    fontWeight:'bold',
+    color:'white',
+    margin:'auto',
   },
 });
 
