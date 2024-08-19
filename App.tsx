@@ -41,35 +41,6 @@ export type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
-// export const copyImagesToDocumentDirectory = async () => {
-
-// Define the paths
-// const projectRootImageDir = `${RNFS.MainBundlePath}/src/images`; // Update as needed
-// const documentImageDir = `${RNFS.DocumentDirectoryPath}/images`;
-
-// Function to copy images from the root to the document directory
-// const copyImagesToDocumentDirectory = async () => {
-//   try {
-//     // Ensure the document directory exists
-//     await RNFS.mkdir(documentImageDir);
-
-//     // List all image files in the project root directory
-//     const rootFiles = await RNFS.readDir(projectRootImageDir);
-//     const imageFiles = rootFiles.filter(file => /\.(jpg|jpeg|png|gif)$/i.test(file.name));
-
-//     // Copy each image to the document directory
-//     for (const file of imageFiles) {
-//       const sourcePath = file.path;
-//       const destPath = `${documentImageDir}/${file.name}`;
-//       await RNFS.copyFile(sourcePath, destPath);
-//     }
-
-//     console.log('Images copied successfully');
-//   } catch (error) {
-//     console.error('Error copying images:', error);
-//   }
-// };
-
 // Main Tab Navigator
 function MainTabNavigator() {
   return (
