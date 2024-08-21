@@ -202,6 +202,15 @@ export const updateUserSharePosts = async (db: SQLiteDatabase, share_Id:number, 
 };
 //Profile page related stuff
 
+export const updateProfilePicture = async(db:SQLiteDatabase, user_Id:number,picture:any) =>{
+  try{
+    const query = `UPDATE User SET pf = "${picture}" WHERE user_Id = ${user_Id}`;
+    console.log(query);
+    return db.executeSql(query);
+  }catch(error){
+    console.log('Failed to update user profile picture');
+  }
+};
 
 
 //Deals page related stuff
