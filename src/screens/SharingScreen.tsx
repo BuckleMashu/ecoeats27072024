@@ -94,7 +94,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
                         onPress={() => setShareType(0)}
                     /> */}
                     <TouchableOpacity style={[styles.button, shareType == 0 && styles.buttonPressed,]} onPress={() => setShareType(0)}>
-                      <Text style={[styles.buttonText, shareType == 0 && styles.boldText]}>Foods</Text>
+                      <Text style={[styles.buttonText, shareType == 0 && styles.boldText]}>Food</Text>
                     </TouchableOpacity>
                     {/* <Button
                         title="Items"

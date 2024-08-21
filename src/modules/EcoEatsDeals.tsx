@@ -12,11 +12,14 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 export const DealComponent: React.FC<{
   deal: deal_page;
-  picture: any;
+  picture: string | null;
 }> = ({ deal: { title, description, deal_Id }, picture }) => {
   return (
     <View style={styles.dealContainer}>
-      <Image style={styles.image} source={picture} />
+      <Image 
+        style={styles.image} 
+        source={picture ? { uri: picture } : require('../images/missing.png')} 
+      />
       <View style={styles.dealTextContainer}>
         <Text style={styles.sectionTitle}>
           {title}
@@ -40,6 +43,7 @@ const styles = StyleSheet.create({
   },
   dealTextContainer: {
     justifyContent: 'center',
+    marginTop: 10,
   },
   sectionTitle: {
     fontSize: 16,
@@ -55,5 +59,6 @@ const styles = StyleSheet.create({
     width: screenWidth * 0.4,
     height: screenHeight * 0.2,
     borderRadius: 10,
+    resizeMode: 'cover',  // Ensure the image covers the area properly
   },
 });

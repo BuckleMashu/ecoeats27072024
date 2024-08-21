@@ -275,6 +275,28 @@ export const getCommentsForDeal = async(db: SQLiteDatabase, dealId: number): Pro
   }
 };
 
+export const getRedeemedState = async (db: SQLiteDatabase, dealId: number): Promise<boolean> => {
+  try {
+    const [result] = await db.executeSql('SELECT isRedeemed FROM Deals WHERE deal_Id = ?', [dealId]);
+    if (result.rows.length > 0) {
+      return result.rows.item(0).isRedeemed === 1;
+    }
+    return false;
+  } catch (error) {
+    console.error('Failed to get redeemed state', error);
+    throw Error('Failed to get redeemed state');
+  }
+};
+
+export const saveRedeemedState = async (db: SQLiteDatabase, dealId: number, redeemed: boolean) => {
+  try {
+    await db.executeSql('UPDATE Deals SET isRedeemed = ? WHERE deal_Id = ?', [redeemed ? 1 : 0, dealId]);
+  } catch (error) {
+    console.error('Failed to save redeemed state', error);
+    throw Error('Failed to save redeemed state');
+  }
+};
+
 
 
 //Explore page related stuff

@@ -9,6 +9,7 @@ import {
   View,
   TouchableOpacity,
   Dimensions,
+  Image, // Import Image component
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
@@ -52,7 +53,7 @@ const DetailsScreen: React.FC<Props> = ({ navigation }) => {
 
   const isFocused = useIsFocused();
   useEffect(() => {
-    if(isFocused) {
+    if (isFocused) {
       loadDataCallback(searchQuery);
     }
   }, [loadDataCallback, searchQuery, isFocused]);
@@ -83,15 +84,11 @@ const DetailsScreen: React.FC<Props> = ({ navigation }) => {
                 onPress={() => navigation.navigate('DealDetails', { deal })}
                 style={styles.itemContainer}
               >
-                <View>
-                  <DealComponent
-                    key={deal.deal_Id}
-                    deal={deal}
-                    picture={
-                      localImages[deal.picture] || require('../images/missing.png')
-                    }
-                  />
-                </View>
+                <DealComponent
+                  key={deal.deal_Id}
+                  deal={deal}
+                  picture={deal.picture}
+                />
               </TouchableOpacity>
             ))}
           </View>
@@ -147,6 +144,12 @@ const styles = StyleSheet.create({
   plusButtonText: {
     color: 'white',
     fontSize: 30,
+  },
+  image: {
+    width: columnWidth - 15,
+    height: columnWidth - 15,
+    borderRadius: 10,
+    marginBottom: 10,
   },
 });
 
