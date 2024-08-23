@@ -19,7 +19,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   const handleLogin = () => {
     if (username === 'admin' && password === 'admin') {
-      navigation.replace('User', { userID: 1 });  // Pass userID when navigating
+      navigation.navigate('User', { userID: 1 });  // Pass userID when navigating
     } else {
       setError('Invalid username or password');
     }
