@@ -152,10 +152,10 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
 
   
   return (
-    <SafeAreaView >
+    <SafeAreaView style={styles.safeArea}>
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-        <ScrollView contentInsetAdjustmentBehavior="automatic">
-            <View>
+        <ScrollView contentContainerStyle={styles.scroll} contentInsetAdjustmentBehavior="automatic">
+            <View style={styles.all}>
                 <View>
                     <Text>Title:</Text>
                     <TextInput value={title} onChangeText={setTitle} />
@@ -213,6 +213,17 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
 };
 
 const styles = StyleSheet.create({
+  safeArea:{
+    flex:1
+},
+scroll:{
+    paddingBottom: 40,
+},
+all:{
+  flexDirection: 'column',
+  margin: 'auto',
+  width: '80%',
+},
     image: {
         width: 300,
         height: 300,

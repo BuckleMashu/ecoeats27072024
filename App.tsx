@@ -123,7 +123,6 @@ const App = () => {
         <Stack.Screen name="DealDetails" component={DealDetailsScreen} />
         <Stack.Screen name="AddExplorePost" component={AddExplorePostScreen} />
         <Stack.Screen name="ExploreDetails" component={ExploreDetailsScreen} />
-
       </Stack.Navigator>
     </NavigationContainer>
   );
