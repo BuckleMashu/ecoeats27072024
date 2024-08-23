@@ -11,7 +11,7 @@ import {
   Dimensions,
 } from 'react-native';
 
-import { StackNavigationProp, StackActions } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
 import { userD, share_page } from '../models';
@@ -88,13 +88,6 @@ const UserScreen: React.FC<Props> = ({ route, navigation }) => {
     }
   }, [userID, loadDataCallback]);
 
-  // Logout Functionality
-  const handleLogout = () => {
-    navigation.dispatch(
-      navigation.navigate('Login')  // Reset stack and go back to the login screen
-    );
-  };
-
   // Error handling if userID is missing
   if (!userID) {
     return (
@@ -110,10 +103,6 @@ const UserScreen: React.FC<Props> = ({ route, navigation }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" />
-      {/* Logout Button positioned in the top right corner */}
-      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-        <Text style={styles.logoutButtonText}>Logout</Text>
-      </TouchableOpacity>
       <ScrollView contentContainerStyle={styles.scroll} contentInsetAdjustmentBehavior="automatic">
         <View style={styles.headerSec}>
           <View style={styles.profileImgSec}>
@@ -227,19 +216,6 @@ const styles = StyleSheet.create({
     height: screenWidth * 0.2,
     borderRadius: 100,
     overflow: 'hidden',
-  },
-  logoutButton: {
-    position: 'absolute',  // Positioning the button absolutely
-    top: 60,
-    right: 10,
-    backgroundColor: 'red',
-    padding: 10,
-    borderRadius: 5,
-    zIndex: 10,  // Ensures the button stays on top
-  },
-  logoutButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
   },
   PFF: {
     flexDirection: 'row',
