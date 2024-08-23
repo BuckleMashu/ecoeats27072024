@@ -10,13 +10,12 @@ import RequestScreen from './src/screens/RequestScreen';
 import AddDealScreen from './src/screens/AddDealScreen';  
 import DealDetailsScreen from './src/screens/DealDetailsScreen';  
 import AddExplorePostScreen from './src/screens/AddExplorePostScreen'; 
-
+import LoginScreen from './src/screens/LoginScreen'; 
 import UserScreen from './src/screens/UserScreen';
 
-// Navigation bar
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { share_page, userD, deal_page, explore_page } from './src/models'; // Import all necessary models
+import { share_page, deal_page, explore_page } from './src/models'; 
 import ExploreDetailsScreen from './src/screens/ExploreDetailsScreen';
 
 export type RootStackParamList = {
@@ -31,7 +30,7 @@ export type RootStackParamList = {
   DealDetails: { deal: deal_page }; 
   AddExplorePost: undefined; 
   ExploreDetails: { explore: explore_page }; 
-
+  Login: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -79,9 +78,8 @@ function MainTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="User"
-        component={UserScreen}
-        initialParams={{ userID: 1 }}
+        name="UserStack" // Creating a stack within the tab for the User flow
+        component={UserStackNavigator}
         options={{
           tabBarLabel: 'User',
           tabBarIcon: ({ color, size }) => (
@@ -93,11 +91,29 @@ function MainTabNavigator() {
   );
 }
 
+// User Stack Navigator
+const UserStackNavigator = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="Login" 
+        component={LoginScreen} 
+        options={{ headerShown: false }}  // Show login first
+      />
+      <Stack.Screen 
+        name="User" 
+        component={UserScreen} 
+        options={{ headerShown: false }}  // After login, show User screen
+      />
+    </Stack.Navigator>
+  );
+};
+
 // Main App Component
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="MainTabs">
         <Stack.Screen 
           name="MainTabs" 
           component={MainTabNavigator} 
@@ -106,12 +122,10 @@ const App = () => {
         <Stack.Screen name="Explore" component={ExploreScreen} />
         <Stack.Screen name="Details" component={DetailsScreen} />
         <Stack.Screen name="Request" component={RequestScreen} />
-        <Stack.Screen name="User" component={UserScreen} />
         <Stack.Screen name="AddDeal" component={AddDealScreen} />
         <Stack.Screen name="DealDetails" component={DealDetailsScreen} />
         <Stack.Screen name="AddExplorePost" component={AddExplorePostScreen} />
         <Stack.Screen name="ExploreDetails" component={ExploreDetailsScreen} />
-
       </Stack.Navigator>
     </NavigationContainer>
   );

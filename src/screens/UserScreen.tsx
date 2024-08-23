@@ -1,286 +1,280 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  TextInput,
-  useColorScheme,
   View,
   Image,
   TouchableOpacity,
   Dimensions,
-  Modal
 } from 'react-native';
 
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
-import { userD,share_page } from '../models';
+import { userD, share_page } from '../models';
 
 import { ShareComponent } from '../modules/EcoEatsShare';
-import { getEcoEatsDBConnection, getUserDetails, getSharePage} from '../../db-service';
+import { getEcoEatsDBConnection, getUserDetails, getSharePage } from '../../db-service';
 import localImages from '../imageImports';
-import { Picker } from '@react-native-picker/picker';
 
-type RequestScreenRouteProp = RouteProp<
-   RootStackParamList, 
-   'User'
->;
-type RequestScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'User'
->;
+type RequestScreenRouteProp = RouteProp<RootStackParamList, 'User'>;
+type RequestScreenNavigationProp = StackNavigationProp<RootStackParamList, 'User'>;
 
 type Props = {
   navigation: RequestScreenNavigationProp;
-  route: RequestScreenRouteProp; 
+  route: RequestScreenRouteProp;
 };
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
 const columnWidth = screenWidth / 2;
 
-const UserScreen: React.FC<Props> = ({ route,navigation }) => {
-  const { userID } = route.params;
-  const isDarkMode = useColorScheme() === 'dark';
-  const [profile, setProfile] = React.useState<userD>();
-  const [shareEntity, setShareEntity] = React.useState<share_page[]>([]);
+const UserScreen: React.FC<Props> = ({ route, navigation }) => {
+  const { userID } = route.params || {};  // Ensure userID is fetched from route params safely
+  const [profile, setProfile] = useState<userD | null>(null);  // Safeguard with null state
+  const [shareEntity, setShareEntity] = useState<share_page[]>([]);
 
-  const [explore, setExplore] = React.useState<number[]>([]);
-  const [share, setShare] = React.useState<number[]>([]);
-  const [follower, setFollower] = React.useState<number[]>([]);
-  const [following, setFollowing] = React.useState<number[]>([]);
+  const [explore, setExplore] = useState<number[]>([]);
+  const [share, setShare] = useState<number[]>([]);
+  const [follower, setFollower] = useState<number[]>([]);
+  const [following, setFollowing] = useState<number[]>([]);
 
-  const [postType, setPostType] = useState(true); //share = 0, explore = 1
-
+  const [postType, setPostType] = useState(true);  // share = 0, explore = 1
   let db;
 
-  const processTextToNumberArray = (text:string) => {
-    if(text){
-      let temp = text.split(",");
-      let output : any[] = [];
-      temp.forEach((post)=>{
+  const processTextToNumberArray = (text: string) => {
+    if (text) {
+      let temp = text.split(',');
+      let output: any[] = [];
+      temp.forEach((post) => {
         output.push(Number(post));
       });
       return output;
-    }else{
+    } else {
       return [];
     }
   };
 
-  const loadShareCallback = useCallback(async (id:string) =>{
-    try{
+  const loadShareCallback = useCallback(async (id: string) => {
+    try {
       db = await getEcoEatsDBConnection();
-      const result = await getSharePage(db,undefined,"",id);
+      const result = await getSharePage(db, undefined, '', id);
       setShareEntity(result);
-    } catch(error){
+    } catch (error) {
       console.error(error);
     }
-  },[]);
+  }, []);
 
-  const loadDataCallback = useCallback(async (id:number) =>{
-    try{
-        db = await getEcoEatsDBConnection();
-        const result = await getUserDetails(db,id);
-        setProfile(result);
-        setExplore(processTextToNumberArray(result.explore_Posts));
-        setShare(processTextToNumberArray(result.share_Posts));
-        setFollower(processTextToNumberArray(result.followers));
-        setFollowing(processTextToNumberArray(result.following));
-        loadShareCallback(result.share_Posts);
-    } catch(error){
-        console.error(error);
+  const loadDataCallback = useCallback(async (id: number) => {
+    try {
+      db = await getEcoEatsDBConnection();
+      const result = await getUserDetails(db, id);
+      setProfile(result);
+      setExplore(processTextToNumberArray(result.explore_Posts));
+      setShare(processTextToNumberArray(result.share_Posts));
+      setFollower(processTextToNumberArray(result.followers));
+      setFollowing(processTextToNumberArray(result.following));
+      loadShareCallback(result.share_Posts);
+    } catch (error) {
+      console.error(error);
     }
-  },[]);
+  }, [loadShareCallback]);
 
-  useEffect(()=>{
-    loadDataCallback(userID);
-  },[loadDataCallback]);
+  useEffect(() => {
+    if (userID) {
+      loadDataCallback(userID);
+    }
+  }, [userID, loadDataCallback]);
+
+  // Error handling if userID is missing
+  if (!userID) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <StatusBar barStyle="dark-content" />
+        <View style={styles.centeredContainer}>
+          <Text style={styles.errorText}>Error: Missing userID. Please log in again.</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-  
-        <ScrollView contentContainerStyle={styles.scroll} contentInsetAdjustmentBehavior="automatic">
-          <View style={styles.headerSec}>
-            <View style= {styles.profileImgSec}>
-              <Image style={styles.profileImg} source={localImages[profile?.pf] || require('../images/missing.png')}/>
-              <Text style={styles.profileName}>{profile?.name}</Text>
-              <TouchableOpacity style={styles.editPf}>
-                <Text>Edit profile image</Text>
-              </TouchableOpacity>  
+      <StatusBar barStyle="dark-content" />
+      <ScrollView contentContainerStyle={styles.scroll} contentInsetAdjustmentBehavior="automatic">
+        <View style={styles.headerSec}>
+          <View style={styles.profileImgSec}>
+            <Image style={styles.profileImg} source={localImages[profile?.pf] || require('../images/missing.png')} />
+            <Text style={styles.profileName}>{profile?.name}</Text>
+            <TouchableOpacity style={styles.editPf}>
+              <Text>Edit profile image</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.PFF}>
+            <View styles={styles.PFFsection}>
+              <Text style={styles.PFFtext}>Posts</Text>
+              <Text style={styles.PFFvalue}>{explore.length + share.length}</Text>
             </View>
-            <View style={styles.PFF}>
-              <View styles={styles.PFFsection}>
-                <Text style={styles.PFFtext}>Posts</Text>
-                <Text style={styles.PFFvalue}>{explore.length + share.length}</Text>
-              </View>
-              <View styles={styles.PFFsection}>
-                <Text style={styles.PFFtext}>Followers</Text>
-                <Text style={styles.PFFvalue}>{follower.length}</Text>
-              </View>
-              <View styles={styles.PFFsection}>
-                <Text style={styles.PFFtext}>Following</Text>
-                <Text style={styles.PFFvalue}>{following.length}</Text>
-              </View>
+            <View styles={styles.PFFsection}>
+              <Text style={styles.PFFtext}>Followers</Text>
+              <Text style={styles.PFFvalue}>{follower.length}</Text>
+            </View>
+            <View styles={styles.PFFsection}>
+              <Text style={styles.PFFtext}>Following</Text>
+              <Text style={styles.PFFvalue}>{following.length}</Text>
             </View>
           </View>
-          <View style={styles.shareSearchSaveLike}>
-            <View style={styles.shareSearch}>
-              <TouchableOpacity style={styles.SSSLbutton}>
-                <Text style={styles.SSSLtext}>🔗</Text>
-              </TouchableOpacity> 
-              <TouchableOpacity style={styles.SSSLbutton}>
-                <Text style={styles.SSSLtext}>🔎</Text>
-              </TouchableOpacity> 
-            </View> 
-            <View style={styles.saveLike}>
-              <TouchableOpacity style={styles.SSSLbutton}>
-                <Text style={styles.SSSLtext}>💾</Text>
-              </TouchableOpacity>  
-              <TouchableOpacity style={styles.SSSLbutton}>
-                <Text style={styles.SSSLtextHeart}>𖹭</Text>
-              </TouchableOpacity>   
+        </View>
+        <View style={styles.shareSearchSaveLike}>
+          <View style={styles.shareSearch}>
+            <TouchableOpacity style={styles.SSSLbutton}>
+              <Text style={styles.SSSLtext}>🔗</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.SSSLbutton}>
+              <Text style={styles.SSSLtext}>🔎</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.saveLike}>
+            <TouchableOpacity style={styles.SSSLbutton}>
+              <Text style={styles.SSSLtext}>💾</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.SSSLbutton}>
+              <Text style={styles.SSSLtextHeart}>𖹭</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View>
+          <View style={styles.typeButtonsBoth}>
+            <TouchableOpacity
+              style={[styles.button, postType && styles.buttonPressed]}
+              onPress={() => setPostType(true)}
+            >
+              <Text style={[styles.buttonText, postType && styles.boldText]}>Share Posts</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, !postType && styles.buttonPressed]}
+              onPress={() => setPostType(false)}
+            >
+              <Text style={[styles.buttonText, !postType && styles.boldText]}>Explore Posts</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View>
+          {postType ? (
+            <View style={styles.postContainer}>
+              {shareEntity.map((post) => (
+                <TouchableOpacity
+                  key={post.share_Id}
+                  onPress={() => navigation.navigate('Request', { post })}
+                  style={styles.itemContainer}
+                >
+                  <ShareComponent key={post.share_Id} share={post} picture={localImages[post.picture]} />
+                </TouchableOpacity>
+              ))}
             </View>
-          </View>
-          <View>
-            <View style={styles.typeButtonsBoth}>
-              <TouchableOpacity style={[styles.button, postType && styles.buttonPressed,]} onPress={() => setPostType(true)}>
-                  <Text style={[styles.buttonText, postType && styles.boldText]}>Share Posts</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, !postType && styles.buttonPressed,]} onPress={() => setPostType(false)}>
-                <Text style={[styles.buttonText, !postType && styles.boldText]}>Explore Posts</Text>
-              </TouchableOpacity>
+          ) : (
+            <View style={styles.postContainer}>
+              <Text>No Explore Posts Available</Text>
             </View>
-          </View>
-          <View>
-            {postType === true?(
-              <View style={styles.postContainer}>
-                {shareEntity.map((post) =>(
-                  <TouchableOpacity key={post.share_Id} onPress={() => navigation.navigate('Request',{post})} style={styles.itemContainer}>
-                    <View>
-                      <ShareComponent key={post.share_Id} share={post} picture={localImages[post.picture]}/>
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            ):(
-              <View style={styles.postContainer}>
-                <Text>Skibidi</Text>
-              </View>
-            )}
-          </View>
-        </ScrollView>
-    
+          )}
+        </View>
+      </ScrollView>
     </SafeAreaView>
-    
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea:{
-      flex:1
+  safeArea: {
+    flex: 1,
   },
-  scroll:{
-      paddingBottom: 40,
+  scroll: {
+    paddingBottom: 40,
   },
-
-  headerSec:{
-    width:'100%',
+  centeredContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    fontSize: 18,
+    color: 'red',
+  },
+  headerSec: {
+    width: '100%',
     backgroundColor: 'white',
-    flexDirection:'row',
-    // marginLeft:'auto',
-    // marginRight: 'auto',
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    // marginLeft:screenWidth/3,
   },
-
-  profileImgSec:{
-    flexDirection:'column',
-    // width:'50%',
-    paddingLeft:'10%',
-    // alignItems:"flex-start",
+  profileImgSec: {
+    flexDirection: 'column',
+    paddingLeft: '10%',
   },
-  profileImg:{
-    width: screenWidth*0.2,
-    height:screenWidth*0.2,
-    borderRadius:100,
-    overflow:'hidden',
+  profileImg: {
+    width: screenWidth * 0.2,
+    height: screenWidth * 0.2,
+    borderRadius: 100,
+    overflow: 'hidden',
   },
-
-  PFF:{
-    // width: '50%',
-    // padding:'2%',
-    flexDirection:'row',
-    paddingRight:'10%',
-    gap:10,
+  PFF: {
+    flexDirection: 'row',
+    paddingRight: '10%',
+    gap: 10,
   },
-
-  shareSearchSaveLike:{
-    width:'100%',
-    flexDirection:'row',
+  shareSearchSaveLike: {
+    width: '100%',
+    flexDirection: 'row',
     backgroundColor: 'white',
-    marginTop:2,
-    marginBottom:2,
+    marginTop: 2,
+    marginBottom: 2,
   },
-
-  shareSearch:{
-    width:'50%',
-    flexDirection:'row',
+  shareSearch: {
+    width: '50%',
+    flexDirection: 'row',
     justifyContent: 'flex-start',
   },
-
-  saveLike:{
-    width:'50%',
-    flexDirection:'row',
+  saveLike: {
+    width: '50%',
+    flexDirection: 'row',
     justifyContent: 'flex-end',
   },
-
-  SSSLtext:{
-    
-  },
-
-  SSSLtextHeart:{
-    // fontSize:20,
-  },
-
-  typeButtonsBoth:{
+  SSSLtext: {},
+  SSSLtextHeart: {},
+  typeButtonsBoth: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     width: '100%',
   },
-  button:{
+  button: {
     width: '50%',
     backgroundColor: 'white',
     padding: 10,
     alignItems: 'center',
   },
-  buttonText:{
+  buttonText: {
     color: 'black',
     fontSize: 16,
   },
-  boldText:{
+  boldText: {
     fontWeight: 'bold',
     color: 'white',
     fontSize: 20,
   },
-  buttonPressed:{
+  buttonPressed: {
     backgroundColor: 'gray',
   },
-  postContainer:{
+  postContainer: {
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
-    // backgroundColor:'blue',
     paddingLeft: 10,
     paddingBottom: 10,
     paddingRight: 10,
   },
-  itemContainer:{
-    width: columnWidth - 15, // Adjust for padding/margin
+  itemContainer: {
+    width: columnWidth - 15,
   },
 });
 
