@@ -256,7 +256,13 @@ export const saveNewComment = async (
 
 
 //login and register related stuff
+export const checkLoginDetails = async(db: SQLiteDatabase, username:string, password:string) =>{
+  try{
+    const profileQuery = `SELECT * FROM `;
+  }catch(error){
 
+  }
+};
 
 
 
