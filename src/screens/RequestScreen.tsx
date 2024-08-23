@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState,useContext } from 'react';
 import {
   Button,
   SafeAreaView,
@@ -25,6 +25,8 @@ import localImages from '../imageImports';
 import { Picker } from '@react-native-picker/picker';
 import dateNtime from '../requestDateTimePicker';
 
+import { UserContext } from '../../UserContext';
+
 type RequestScreenRouteProp = RouteProp<
    RootStackParamList, 
    'Request'
@@ -42,6 +44,7 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const RequestScreen = ({ route,navigation } : Props) => {
   const { post } = route.params;
+  const { userId } = useContext(UserContext);
   const isDarkMode = useColorScheme() === 'dark';
   const [requestEntity, setRequestEntity] = React.useState<request_page>();
   const [userPicture, setUserPF] = React.useState<string>();
@@ -95,7 +98,7 @@ const RequestScreen = ({ route,navigation } : Props) => {
     setMonthOptions(dateNtime[1]);
     setHourOptions(dateNtime[2]);
     setMinuteOptions(dateNtime[3]);
-    
+    console.log(userId);
   },[loadDataCallback]);
 
   return (
@@ -130,9 +133,15 @@ const RequestScreen = ({ route,navigation } : Props) => {
           <TouchableOpacity style={styles.endButton}>
             <Text style={styles.endButtonText}>Chat</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.endButton} onPress={() => setModalVisible(true)}>
-            <Text style={styles.endButtonText}>Request</Text>
-          </TouchableOpacity>      
+          {userId ? (          
+            <TouchableOpacity style={styles.endButton} onPress={() => setModalVisible(true)}>
+              <Text style={styles.endButtonText}>Request</Text>
+            </TouchableOpacity>  
+          ):(
+            <TouchableOpacity style={styles.endButton} onPress={() => navigation.navigate('LoginScreen')}>
+              <Text style={styles.endButtonText}>Request</Text>
+            </TouchableOpacity>  
+          )}    
         </View>
       </View>
       

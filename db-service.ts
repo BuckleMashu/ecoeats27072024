@@ -200,7 +200,41 @@ export const updateUserSharePosts = async (db: SQLiteDatabase, share_Id:number, 
     console.log('Failed to update user share posts');
   }
 };
+
 //Profile page related stuff
+export const checkLoginDetails = async(db: SQLiteDatabase, username:string, password:string) =>{
+  try{
+    console.log("1"+username + password+"2");
+    const profileQuery = `SELECT * FROM User_credential WHERE username= "${username}" AND password= "${password}"`;
+    const [results] = await db.executeSql(profileQuery);
+    // console.log("outoput of login");
+    // console.log(results);
+    // console.log(results.rows.item(0).user_Id);
+    return results.rows.item(0).user_Id;
+  }catch(error){
+    console.error(error);
+    throw Error('Failed to get user credentials');
+  }
+};
+
+export const registeringUser = async(db: SQLiteDatabase, username:string, password:string, accountType:number, email:string) =>{
+  try{
+    const insertAccCredentialQuery = `INSERT INTO User_credential (password,username,account_Type) VALUES (?, ?, ?)`;
+    await db.executeSql(insertAccCredentialQuery, [password, username,accountType]);
+    const insertAccProfileQuery = 'INSERT INTO User (name,birthday,email,phone_Number,address,followers,following,reedemed_Coupons,bio,pf,share_Posts,explore_Posts) VALUE (?,?,?,?,?,?,?,?,?,?,?,?,)';
+    await db.executeSql(insertAccProfileQuery, ['NewUser', null, email, null, null, null, null, null, null, null, null, null]);
+
+    const registeredUserIdQuery = `SELECT * FROM User WHERE email = "${email}"`;
+    const [results] = await db.executeSql(registeredUserIdQuery);
+    console.log("outoput of registering");
+    console.log(results);
+    console.log(results.rows.item(0).user_Id);
+    return results.rows.item(0).user_Id;
+  }catch(error){
+    console.error(error);
+    throw Error('Failed to add user');
+  }
+};
 
 export const updateProfilePicture = async(db:SQLiteDatabase, user_Id:number,picture:any) =>{
   try{

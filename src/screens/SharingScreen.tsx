@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState,useContext } from 'react';
 import {
   Button,
   SafeAreaView,
@@ -27,6 +27,8 @@ import localImages from '../imageImports';
 
 import { useIsFocused } from '@react-navigation/native';
 
+import { UserContext } from '../../UserContext';
+
 type SharingScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Sharing'
@@ -46,7 +48,9 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
   const [shareEntity, setShareEntity] = React.useState<share_page[]>([]);
   let db;
   const [shareType, setShareType] = useState(0);
-  const [currentUserId, setCurrentUserId] = React.useState<number>(1);
+  const {userId} = useContext(UserContext);
+  const [currentUserId, setCurrentUserId] = React.useState<number|null>();
+  // const { userId } = useContext(UserContext);
 
 // Import images
 // const imageMap = {
@@ -75,7 +79,8 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
   useEffect(()=>{
     if(isFocused){
         loadDataCallback(shareType,searchQuery);
-        console.log(currentUserId);
+        console.log(userId);
+        setCurrentUserId(userId);
     }
   },[loadDataCallback,shareType,searchQuery,isFocused]);
 
@@ -134,9 +139,11 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
                 </View>
             </View>
         </ScrollView>
-        <TouchableOpacity style={styles.addShareButton} onPress={() => navigation.navigate('AddShare',{currentUserId})}>
-            <Text style={styles.addShareButtonText}>ADD</Text>
-        </TouchableOpacity>  
+        {currentUserId ? (
+              <TouchableOpacity style={styles.addShareButton} onPress={() => navigation.navigate('AddShare',{currentUserId})}>
+                <Text style={styles.addShareButtonText}>ADD</Text>
+              </TouchableOpacity> 
+        ): null} 
     </SafeAreaView>
   );
 };

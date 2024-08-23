@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ExploreScreen from './src/screens/ExploreScreen';
@@ -11,6 +11,8 @@ import RequestScreen from './src/screens/RequestScreen';
 import AddDealScreen from './src/screens/AddDealScreen';  
 import DealDetailsScreen from './src/screens/DealDetailsScreen';  
 import AddExplorePostScreen from './src/screens/AddExplorePostScreen'; 
+import LoginScreen from './src/screens/LoginScreen';
+import RegisterScreen from './src/screens/RegisterScreen';
 
 import UserScreen from './src/screens/UserScreen';
 
@@ -20,7 +22,9 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { share_page, userD, deal_page, explore_page } from './src/models'; // Import all necessary models
 import ExploreDetailsScreen from './src/screens/ExploreDetailsScreen';
 
-import { copyDatabase } from './db-service'
+import { copyDatabase } from './db-service';
+
+import { UserProvider, UserContext } from './UserContext';
 
 
 export type RootStackParamList = {
@@ -36,6 +40,8 @@ export type RootStackParamList = {
   AddExplorePost: undefined; 
   ExploreDetails: { explore: explore_page }; 
   AddShare: {currentUserId: any}
+  LoginScreen: undefined;
+  RegisterScreen: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -43,6 +49,7 @@ const Tab = createBottomTabNavigator();
 
 // Main Tab Navigator
 function MainTabNavigator() {
+  const { userId } = useContext(UserContext);
   return (
     <Tab.Navigator
       initialRouteName="Sharing"
@@ -85,7 +92,7 @@ function MainTabNavigator() {
       <Tab.Screen
         name="User"
         component={UserScreen}
-        initialParams={{ userID: 1 }}
+        initialParams={{ userID: userId }}
         options={{
           tabBarLabel: 'User',
           tabBarIcon: ({ color, size }) => (
@@ -106,7 +113,8 @@ const App = () => {
   //   copyImage();
   // }, []); // The empty dependency array ensures this runs only once
   return (
-    <NavigationContainer>
+    <UserProvider>
+      <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen 
           name="MainTabs" 
@@ -123,8 +131,11 @@ const App = () => {
         <Stack.Screen name="DealDetails" component={DealDetailsScreen} />
         <Stack.Screen name="AddExplorePost" component={AddExplorePostScreen} />
         <Stack.Screen name="ExploreDetails" component={ExploreDetailsScreen} />
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
+        <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
       </Stack.Navigator>
-    </NavigationContainer>
+      </NavigationContainer>
+    </UserProvider>
   );
 };
 

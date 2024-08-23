@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState,useContext } from 'react';
 import {
   Button,
   SafeAreaView,
@@ -28,6 +28,8 @@ import { launchImageLibrary } from 'react-native-image-picker';
 
 import { useIsFocused } from '@react-navigation/native';
 
+import { UserContext } from '../../UserContext';
+
 type RequestScreenRouteProp = RouteProp<
    RootStackParamList, 
    'User'
@@ -47,6 +49,7 @@ const columnWidth = screenWidth / 2;
 
 const UserScreen: React.FC<Props> = ({ route,navigation }) => {
   const { userID } = route.params;
+  const { userId } = useContext(UserContext);
   const isDarkMode = useColorScheme() === 'dark';
   const [profile, setProfile] = React.useState<userD>();
   const [shareEntity, setShareEntity] = React.useState<share_page[]>([]);
@@ -62,6 +65,13 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
   const [selectedImageUri, setSelectedImageUId] = useState<string | null>(null);
 
   let db;
+
+  const checkUserLoggedIn = () =>{
+    if(!userID){
+      // navigation.navigate('MainTabs', {screen:'LoginScreen'});
+      navigation.navigate('LoginScreen');
+    }
+  };
 
   const processTextToNumberArray = (text:string) => {
     if(text){
@@ -124,7 +134,7 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
     setModalVisible(false);
     db = await getEcoEatsDBConnection();
     await updateProfilePicture(db,userID,selectedImageUri);
-    navigation.navigate('MainTabs', {screen: 'User',   params: {userID: 1}});
+    navigation.navigate('MainTabs', {screen: 'User',   params: {userID: userId}});
   });
 
   const cancelPfChange = () => {
@@ -135,7 +145,10 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
 
   useEffect(()=>{
     if(isFocused){
-      loadDataCallback(userID);
+      checkUserLoggedIn();
+      if(userID){
+        loadDataCallback(userID);
+      }
     }
     setSelectedImageUId('https://i.imgur.com/50exbMa.png');
   },[loadDataCallback,isFocused,modalVisible]);
@@ -143,15 +156,16 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-  
         <ScrollView contentContainerStyle={styles.scroll} contentInsetAdjustmentBehavior="automatic">
           <View style={styles.headerSec}>
             <View style= {styles.profileImgSec}>
               <Image style={styles.profileImg} source={{uri:profile?.pf || 'https://i.imgur.com/50exbMa.png'}}/>
               <Text style={styles.profileName}>{profile?.name}</Text>
-              <TouchableOpacity style={styles.editPf} onPress={() => setModalVisible(true)}>
-                <Text style={styles.editPfText}>Edit profile image</Text>
-              </TouchableOpacity>  
+              {userId ? (
+                <TouchableOpacity style={styles.editPf} onPress={() => setModalVisible(true)}>
+                  <Text style={styles.editPfText}>Edit profile image</Text>
+                </TouchableOpacity> 
+              ):null} 
             </View>
             <View style={styles.PFF}>
               <View style={styles.PFFsection}>
