@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     position: 'absolute',  // Positioning the button absolutely
-    top: 10,
+    top: 60,
     right: 10,
     backgroundColor: 'red',
     padding: 10,
