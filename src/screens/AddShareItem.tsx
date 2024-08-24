@@ -23,7 +23,6 @@ import { getEcoEatsDBConnection, saveNewShareItem, saveNewRequestItem, getLastes
 import { launchImageLibrary } from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
 import uploadImageToImgur from '../uploadToImgur';
-import deleteImageFromImgur from '../deleteToImgur';
 // import localImages from '../imageImports';
 
 type AddShareScreenNavigationProp = StackNavigationProp<
@@ -79,27 +78,27 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
     }
   },[]);
 
-  const returnSharePageFormat = (itemType:number,title:string,tags:string,address:string,picture:string,expiration:string) =>{
-    const share: share_page = {
-        share_Id: -1,
-        type: itemType,
-        title: title,
-        tags: tags,
-        address: address,
-        picture: picture,
-        expiration: expiration,
-      };
-    setShareDetails(share);
-  };
+  // const returnSharePageFormat = (itemType:number,title:string,tags:string,address:string,picture:string,expiration:string) =>{
+  //   const share: share_page = {
+  //       share_Id: -1,
+  //       type: itemType,
+  //       title: title,
+  //       tags: tags,
+  //       address: address,
+  //       picture: picture,
+  //       expiration: expiration,
+  //     };
+  //   setShareDetails(share);
+  // };
 
-  const returnRequestPageFormat = (user_Id:number,description:string) =>{
-    const request: request_page = {
-        share_Id: -1,
-        user_Id:user_Id,
-        description: description,
-      };
-    setRequestDetails(request);
-  };
+  // const returnRequestPageFormat = (user_Id:number,description:string) =>{
+  //   const request: request_page = {
+  //       share_Id: -1,
+  //       user_Id:user_Id,
+  //       description: description,
+  //     };
+  //   setRequestDetails(request);
+  // };
 
   const handleItemChangeFood = () =>{
     setItemType(1);

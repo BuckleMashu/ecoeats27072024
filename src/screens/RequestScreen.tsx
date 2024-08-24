@@ -21,7 +21,6 @@ import { RootStackParamList } from '../../App';
 import { request_page,userD } from '../models';
 
 import { getEcoEatsDBConnection, getRequestPage, getUserDetails} from '../../db-service';
-import localImages from '../imageImports';
 import { Picker } from '@react-native-picker/picker';
 import dateNtime from '../requestDateTimePicker';
 

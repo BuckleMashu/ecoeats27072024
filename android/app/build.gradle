@@ -112,15 +112,15 @@ android {
 }
 
 //To map each image in the images folder to a static url.----------------
-task generateImageImports(type: Exec) {
-    workingDir '../../'  // Adjust this path to point to your project root
-    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-        commandLine 'cmd', '/c', 'npm run generate-image-imports'
-    } else {
-        commandLine 'npm', 'run', 'generate-image-imports'
-    }
-}
-preBuild.dependsOn generateImageImports
+// task generateImageImports(type: Exec) {
+//     workingDir '../../'  // Adjust this path to point to your project root
+//     if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+//         commandLine 'cmd', '/c', 'npm run generate-image-imports'
+//     } else {
+//         commandLine 'npm', 'run', 'generate-image-imports'
+//     }
+// }
+// preBuild.dependsOn generateImageImports
 //-------------------------------------------------------------------------
 
 

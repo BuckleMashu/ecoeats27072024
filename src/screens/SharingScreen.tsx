@@ -23,8 +23,6 @@ import { getEcoEatsDBConnection, getSharePage} from '../../db-service';
 
 import { Searchbar } from 'react-native-paper';
 
-import localImages from '../imageImports';
-
 import { useIsFocused } from '@react-navigation/native';
 
 import { UserContext } from '../../UserContext';
