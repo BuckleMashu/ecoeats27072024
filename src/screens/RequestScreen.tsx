@@ -120,7 +120,7 @@ const RequestScreen = ({ route,navigation } : Props) => {
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('MainTabs', {screen: 'User',   params: {userID: userID}})}>
             {/* onPress={() => navigation.navigate('Request',{post})} */}
-              <Text style={styles.username}>{userName}</Text>
+              <Text style={styles.username}>Post by "{userName}"</Text>
             </TouchableOpacity>
             <Text style={styles.description}>{requestEntity?.description}</Text>
             {/* Render other post details as needed */}
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
   },
   title:{
     fontWeight: 'bold',
-    fontSize:16,
+    fontSize:28,
   },
   expiration:{
     textDecorationLine:'underline',
