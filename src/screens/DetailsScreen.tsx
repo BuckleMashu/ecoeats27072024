@@ -88,7 +88,7 @@ const DetailsScreen: React.FC<Props> = ({ navigation }) => {
                     key={deal.deal_Id}
                     deal={deal}
                     picture={
-                      localImages[deal.picture] || {uri: 'https://i.imgur.com/50exbMa.png'}
+                      null || {uri: 'https://i.imgur.com/50exbMa.png'}
                     }
                   />
                 </View>

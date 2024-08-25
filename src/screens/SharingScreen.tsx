@@ -113,6 +113,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
                           placeholder="Search"
                           onChangeText={setSearchQuery}
                           value={searchQuery}
+                          icon={() => <Text style={{ fontSize: 20 }}>🔍</Text>}
                       />
                     {/* <Pressable style={({pressed})=>[styles.searchButton, pressed && styles.searchButtonPressed,]} onPress={() => updateSearchResult()}>
                       {({pressed})=>(<Text style={[styles.searchButtonText, pressed && styles.buttonBoldText]}>Search</Text>)}

@@ -86,7 +86,7 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
                     key={explore.explore_Id}
                     explore={explore}
                     picture={
-                      localImages[explore.picture] || {uri:'https://i.imgur.com/50exbMa.png'}
+                      null || {uri:'https://i.imgur.com/50exbMa.png'}
                     }
                   />
                 </View>

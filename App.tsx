@@ -25,7 +25,7 @@ import ExploreDetailsScreen from './src/screens/ExploreDetailsScreen';
 import { copyDatabase } from './db-service';
 
 import { UserProvider, UserContext } from './UserContext';
-
+import { Text } from 'react-native';
 
 export type RootStackParamList = {
   MainTabs: undefined;
@@ -65,7 +65,7 @@ function MainTabNavigator() {
         options={{
           tabBarLabel: 'Sharing',
           tabBarIcon: ({ color, size }) => (
-            <Icon name="info-circle" color={color} size={size} />
+            <Text style={{ fontSize: size, color: color }}>🏠︎</Text>
           ),
         }}
       />
@@ -75,7 +75,7 @@ function MainTabNavigator() {
         options={{
           tabBarLabel: 'Explore',
           tabBarIcon: ({ color, size }) => (
-            <Icon name="compass" color={color} size={size} />
+            <Text style={{ fontSize: size, color: color }}>🧭</Text>
           ),
         }}
       />
@@ -85,7 +85,7 @@ function MainTabNavigator() {
         options={{
           tabBarLabel: 'Details',
           tabBarIcon: ({ color, size }) => (
-            <Icon name="database" color={color} size={size} />
+            <Text style={{ fontSize: size, color: color }}>🏷️</Text>
           ),
         }}
       />
@@ -96,7 +96,7 @@ function MainTabNavigator() {
         options={{
           tabBarLabel: 'User',
           tabBarIcon: ({ color, size }) => (
-            <Icon name="user" color={color} size={size} />
+            <Text style={{ fontSize: size, color: color }}>👤</Text>
           ),
         }}
       />
