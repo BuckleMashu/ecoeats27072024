@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-import React, { useEffect, useContext } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import React, { useEffect, useContext,useState, } from 'react';
+import { NavigationContainer,useIsFocused,useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ExploreScreen from './src/screens/ExploreScreen';
 import DetailsScreen from './src/screens/DetailsScreen';
@@ -18,14 +18,14 @@ import UserScreen from './src/screens/UserScreen';
 
 // Navigation bar
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import { share_page, userD, deal_page, explore_page } from './src/models'; // Import all necessary models
 import ExploreDetailsScreen from './src/screens/ExploreDetailsScreen';
 
 import { copyDatabase } from './db-service';
 
 import { UserProvider, UserContext } from './UserContext';
-import { Text } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+// import CustomTabBarButton from './userBottomTabNav';
 
 export type RootStackParamList = {
   MainTabs: undefined;
@@ -50,13 +50,20 @@ const Tab = createBottomTabNavigator();
 // Main Tab Navigator
 function MainTabNavigator() {
   const { userId } = useContext(UserContext);
+  const isFocused = useIsFocused();
+  const navigation = useNavigation();
+  useEffect(() => {
+    if(isFocused){
+      console.log("logged user is"+userId);
+    }
+  },[userId]);
   return (
     <Tab.Navigator
       initialRouteName="Sharing"
       screenOptions={{
         tabBarActiveTintColor: '#f5f5f5',
         tabBarInactiveTintColor: '#2e2e2e',
-        tabBarActiveBackgroundColor: '#1a1919',
+        tabBarActiveBackgroundColor: '#71834f',
       }}
     >
       <Tab.Screen
@@ -94,7 +101,16 @@ function MainTabNavigator() {
         component={UserScreen}
         initialParams={{ userID: userId }}
         options={{
-          tabBarLabel: 'User',
+          tabBarButton: (props) => 
+          <TouchableOpacity
+          {...props}
+          onPress={() => {
+            // Navigate to the User screen with the loggedUser parameter
+            navigation.navigate('MainTabs', { screen: 'User', params: { userID: userId } });
+            // // If you want to include the default behavior after your custom action:
+            // props.onPress(); // This will still trigger the default navigation behavior
+          }}
+          />,
           tabBarIcon: ({ color, size }) => (
             <Text style={{ fontSize: size, color: color }}>👤</Text>
           ),
@@ -108,7 +124,7 @@ function MainTabNavigator() {
 const App = () => {
   useEffect(() => {
       copyDatabase();
-    });
+  });
 
   //   copyImage();
   // }, []); // The empty dependency array ensures this runs only once

@@ -149,10 +149,11 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
       checkUserLoggedIn();
       if(userID){
         loadDataCallback(userID);
+        // navigation.setParams({ userID });
       }
     }
     setSelectedImageUId('https://i.imgur.com/50exbMa.png');
-  },[loadDataCallback,isFocused,modalVisible,userId]);
+  },[loadDataCallback,isFocused,modalVisible,userID,userId]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -162,13 +163,14 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
             <View style= {styles.profileImgSec}>
               <Image style={styles.profileImg} source={{uri:profile?.pf || 'https://i.imgur.com/50exbMa.png'}}/>
               <Text style={styles.profileName}>{profile?.name}</Text>
-              {userId ? (
+              {userId==userID ? (
                 <TouchableOpacity style={styles.editPf} onPress={() => setModalVisible(true)}>
                   <Text style={styles.editPfText}>Edit profile image</Text>
                 </TouchableOpacity> 
               ):null} 
             </View>
             <View style={styles.PFF}>
+              {/* <Text>{userID}+{userId}</Text> */}
               <View style={styles.PFFsection}>
                 <Text style={styles.PFFtext}>Posts</Text>
                 <Text style={styles.PFFvalue}>{explore.length + share.length}</Text>
@@ -294,8 +296,10 @@ const styles = StyleSheet.create({
   },
 
   profileName:{
-    fontSize:16,
+    fontSize:screenWidth*0.045,
+    maxWidth:screenWidth*0.30,
     fontWeight:'bold',
+    overflow:'hidden',
   },
 
   editPfText:{
@@ -383,7 +387,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   buttonPressed:{
-    backgroundColor: 'gray',
+    backgroundColor: '#598ef0',
   },
   postContainer:{
     flex: 1,

@@ -118,7 +118,7 @@ const RequestScreen = ({ route,navigation } : Props) => {
                 {/* <Text style={styles.expiration}>Expiry: {post.expiration}</Text> */}
               </View>
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate('User',{userID})}>
+            <TouchableOpacity onPress={() => navigation.navigate('MainTabs', {screen: 'User',   params: {userID: userID}})}>
             {/* onPress={() => navigation.navigate('Request',{post})} */}
               <Text style={styles.username}>{userName}</Text>
             </TouchableOpacity>

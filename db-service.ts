@@ -88,9 +88,13 @@ export const getSharePage = async (
     } else {
       query = `SELECT * FROM Share WHERE type=${type} AND title LIKE '%${keyword}%'`;
     }
-
+    console.log(id);
+    console.log(type);
+    console.log(keyword);
     if (id && type === undefined && keyword==="") {
       query = `SELECT * FROM Share WHERE share_id IN (${id})`;
+    } else if(id===null && type === undefined && keyword===""){
+      return [];
     }
 
     const results = await db.executeSql(query);
@@ -191,9 +195,15 @@ export const saveNewShareItem = async (db: SQLiteDatabase, type:number, title:st
 
 export const updateUserSharePosts = async (db: SQLiteDatabase, share_Id:number, user_Id:number) => {
   try{
+    console.log("testing backend of adding share"+user_Id);
     let query = `SELECT * FROM User WHERE user_Id = ${user_Id}`;
     let [output] = await db.executeSql(query);
-    let newSharePosts = output.rows.item(0).share_Posts.concat(",",share_Id);
+    let newSharePosts;
+    if(output.rows.item(0).share_Posts){
+      newSharePosts = output.rows.item(0).share_Posts.concat(",",share_Id);
+    }else{
+      newSharePosts = share_Id.toString();
+    }
     query = `UPDATE User SET share_Posts = '${newSharePosts}' WHERE user_Id = ${user_Id}`;
     return db.executeSql(query);
   }catch(error){

@@ -70,6 +70,7 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
         console.log(shareIdnew);
         console.log(shareIdnew[0]["insertId"]);
         console.log(await saveNewShareItem(db,itemType,title,tags,address,picture,expiration,shareIdnew[0]["insertId"]));
+        console.log(shareIdnew[0]["insertId"]+user_Id+"addashreitem page adding item");
         await updateUserSharePosts(db,shareIdnew[0]["insertId"],user_Id);
 
         navigation.navigate('MainTabs', {screen: 'Sharing'});

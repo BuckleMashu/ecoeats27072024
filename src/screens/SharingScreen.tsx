@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonPressed:{
-    backgroundColor: 'gray',
+    backgroundColor: '#598ef0',
   },
   buttonText:{
     color: 'black',
@@ -203,6 +203,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,  // This creates the rounded corners
     paddingHorizontal: 10,
     fontSize: 16,
+    fontWeight:'600',
     backgroundColor: 'white',
   },
   searchButton:{

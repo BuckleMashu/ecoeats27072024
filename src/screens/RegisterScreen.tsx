@@ -23,7 +23,7 @@ type Props = {
   navigation: RegisterScreenNavigationProp;
 };
 
-const LoginScreen: React.FC<Props> = ({ navigation }) => {
+const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -68,6 +68,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
         <ScrollView contentContainerStyle={styles.scroll} contentInsetAdjustmentBehavior="automatic">
           <View style={styles.container}>
+          <Text style={styles.headerText}>Eco Eats</Text>
             <TextInput
               style={styles.input}
               placeholder="Username"
@@ -132,7 +133,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
-    paddingTop:"50%"
+    paddingTop:"30%"
+  },
+  headerText: {
+    fontSize: 50,
+    fontFamily: 'Monospace',
+    color: '#71834f',
+    fontWeight: '900',
+    margin:'auto',
+    marginBottom: 30,
   },
   input: {
     height: 40,
@@ -187,7 +196,7 @@ const styles = StyleSheet.create({
   }, 
   loginSecButton: {
     fontSize: 16,
-    color: 'green',
+    color: '#71834f',
     fontWeight:'900',
   },
   homeSec: {
@@ -208,4 +217,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default RegisterScreen;

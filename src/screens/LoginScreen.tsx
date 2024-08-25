@@ -73,6 +73,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
         <ScrollView contentContainerStyle={styles.scroll} contentInsetAdjustmentBehavior="automatic">
           <View style={styles.container}>
+            <Text style={styles.headerText}>Eco Eats</Text>
             <TextInput
               style={styles.input}
               placeholder="Username"
@@ -119,6 +120,14 @@ scroll:{
     padding: 20,
     paddingTop:"50%"
   },
+  headerText: {
+    fontSize: 50,
+    fontFamily: 'Monospace',
+    color: '#71834f',
+    fontWeight: '900',
+    margin:'auto',
+    marginBottom: 30,
+  },
   input: {
     height: 40,
     borderColor: 'gray',
@@ -143,7 +152,7 @@ scroll:{
   }, 
   registerSecButton: {
     fontSize: 16,
-    color: 'green',
+    color: '#71834f',
     fontWeight:'900',
   },
   homeSec: {
