@@ -50,6 +50,7 @@ const columnWidth = screenWidth / 2;
 const UserScreen: React.FC<Props> = ({ route,navigation }) => {
   const { userID } = route.params;
   const { userId } = useContext(UserContext);
+  const {setUserId} = useContext(UserContext);
   const isDarkMode = useColorScheme() === 'dark';
   const [profile, setProfile] = React.useState<userD>();
   const [shareEntity, setShareEntity] = React.useState<share_page[]>([]);
@@ -67,7 +68,7 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
   let db;
 
   const checkUserLoggedIn = () =>{
-    if(!userID){
+    if(!userId){
       // navigation.navigate('MainTabs', {screen:'LoginScreen'});
       navigation.navigate('LoginScreen');
     }
@@ -151,7 +152,7 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
       }
     }
     setSelectedImageUId('https://i.imgur.com/50exbMa.png');
-  },[loadDataCallback,isFocused,modalVisible]);
+  },[loadDataCallback,isFocused,modalVisible,userId]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -250,7 +251,12 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
                 </TouchableOpacity>
               </View>
             </View>
-        </Modal>
+        </Modal>                                        
+        {userId == userID ? (
+              <TouchableOpacity style={styles.logoutButton} onPress={() => setUserId(undefined)}>
+                <Text style={styles.logoutButtonText}>Logout</Text>
+              </TouchableOpacity> 
+        ): null} 
     </SafeAreaView>
     
   );
@@ -444,6 +450,21 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
     color:'white',
     margin:'auto',
+  },
+  logoutButton:{
+    position:'absolute',
+    right:10,
+    top:10,
+    backgroundColor: 'red',
+    padding:2,
+    borderRadius: 3,
+    opacity: 0.8,
+  },
+  logoutButtonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });
 

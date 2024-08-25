@@ -80,7 +80,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
         console.log(userId);
         setCurrentUserId(userId);
     }
-  },[loadDataCallback,shareType,searchQuery,isFocused]);
+  },[loadDataCallback,shareType,searchQuery,isFocused, userId]);
 
   // const updateSearchResult = async () =>{
   //   setSearchQuery(newsearchQuery);

@@ -156,41 +156,41 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
         <ScrollView contentContainerStyle={styles.scroll} contentInsetAdjustmentBehavior="automatic">
             <View style={styles.all}>
                 <View>
-                    <Text>Title:</Text>
-                    <TextInput value={title} onChangeText={setTitle} />
+                    <Text style={styles.postText}>Title:</Text>
+                    <TextInput style={styles.textBox} value={title} onChangeText={setTitle} />
                 </View>
                 <View>
-                    <Text>Description:</Text>
-                    <TextInput value={description} onChangeText={setDescription} />
+                    <Text style={styles.postText}>Description:</Text>
+                    <TextInput style={styles.textBox} value={description} onChangeText={setDescription} />
                 </View>
                 <View>
-                    <Text>Address:</Text>
-                    <TextInput value={address} onChangeText={setAdress} />
+                    <Text style={styles.postText}>Address:</Text>
+                    <TextInput style={styles.textBox} value={address} onChangeText={setAdress} />
                 </View>
                 <View>
-                    <Text>Tags, if any:</Text>
-                    <TextInput value={tags ? tags : ""} onChangeText={setTags} />
+                    <Text style={styles.postText}>Tags, if any:</Text>
+                    <TextInput style={styles.textBox} value={tags ? tags : ""} onChangeText={setTags} />
                 </View>
                 <View>
                     {itemType == 0 ? (
                             <TouchableOpacity onPress={handleItemChangeFood}>
-                                <Text>Food</Text>
+                                <Text style={styles.postType}>this item is Food</Text>
                             </TouchableOpacity>  
                         ):(
                             <TouchableOpacity onPress={handleItemChangeObject}>
-                                <Text>Object</Text>
+                                <Text style={styles.postType}>this item is an Object</Text>
                             </TouchableOpacity>
                         )
                     }
-                </View>
+                </View >
                 {itemType==0 ? (
-                    <View>
-                        <Text>Expiration:</Text>
-                        <TextInput value={expiration} onChangeText={setExpiration} />
+                    <View style={styles.postExpi}>
+                        <Text style={styles.postText}>Expiration:</Text>
+                        <TextInput style={styles.textBoxExpi} value={expiration} onChangeText={setExpiration} placeholder="DD/MM/YYYY"/>
                     </View>
                 ):(
-                    <View>
-                        <Text>Expiration: none</Text>
+                    <View style={styles.postExpi}>
+                        <Text style={styles.postText}>Expiration: none</Text>
                     </View>
                 )}
                 <Button title="Pick an Image" onPress={pickImage} />
@@ -203,7 +203,7 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
                     <Image source={{ uri: selectedImageUri || 'https://i.imgur.com/50exbMa.png'}} style={styles.image}/>
                 }
                 <TouchableOpacity onPress={handleItemSubmit}>
-                    <Text>UPLOAD</Text>
+                    <Text style={styles.postUpload}>UPLOAD</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>
@@ -219,16 +219,56 @@ scroll:{
     paddingBottom: 40,
 },
 all:{
+  backgroundColor:'white',
   flexDirection: 'column',
   margin: 'auto',
-  width: '80%',
+  width: '85%',
+  paddingLeft:15,
+  paddingRight:15,
+  paddingBottom:15,
+  gap:4,
 },
-    image: {
+postText:{
+  fontSize:16,
+  fontWeight: 'bold',
+
+},
+textBox:{
+  borderColor:'black',
+  borderWidth:3,
+  borderRadius:4,
+  padding:3,
+},
+postType:{
+  fontSize:18,
+  padding:5,
+  backgroundColor:'#5e5d5d',
+  borderRadius:4,
+  margin:'auto',
+  color:'white',
+},
+image: {
         width: 300,
         height: 300,
         resizeMode: 'contain',
         marginTop: 20,
-      },
+},
+postExpi:{
+  flexDirection: 'row',
+  width: '100%',
+},
+textBoxExpi:{
+  padding:0,
+  paddingLeft: 10,
+},
+postUpload:{
+  fontSize:18,
+  padding:5,
+  backgroundColor:'#026605',
+  borderRadius:4,
+  margin:'auto',
+  color:'white',
+},
 });
 
 export default AddShareScreen;
