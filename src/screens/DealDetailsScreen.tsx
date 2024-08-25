@@ -39,7 +39,7 @@ const DealDetailsScreen: React.FC<Props> = ({ route }) => {
         <View style={styles.contentContainer}>
           <Image
             style={styles.image}
-            source={deal.picture ? { uri: deal.picture } : require('../images/missing.png')}
+            source={deal.picture ? { uri: deal.picture } : {uri:'https://i.imgur.com/50exbMa.png'}}
           />
           <Text style={styles.title}>{deal.title}</Text>
           <Text style={styles.description}>{deal.description}</Text>

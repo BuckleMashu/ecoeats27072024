@@ -17,7 +17,7 @@ import { explore_page } from '../models'; // Create this model similar to deal_p
 import { getEcoEatsDBConnection, getExplorePage } from '../../db-service'; // Create functions similar to getDealsPage
 import { Searchbar } from 'react-native-paper';
 
-import localImages from '../imageImports';
+// import localImages from '../imageImports';
 
 import { useIsFocused } from '@react-navigation/native';
 
@@ -86,7 +86,7 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
                     key={explore.explore_Id}
                     explore={explore}
                     picture={
-                      localImages[explore.picture] || require('../images/missing.png')
+                      localImages[explore.picture] || {uri:'https://i.imgur.com/50exbMa.png'}
                     }
                   />
                 </View>
