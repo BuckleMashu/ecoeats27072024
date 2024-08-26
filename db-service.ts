@@ -270,9 +270,12 @@ export const checkLoginDetails = async(db: SQLiteDatabase, username:string, pass
 export const registeringUser = async(db: SQLiteDatabase, username:string, password:string, accountType:number, email:string) =>{
   try{
     const insertAccCredentialQuery = `INSERT INTO User_credential (password,username,account_Type) VALUES (?, ?, ?)`;
-    await db.executeSql(insertAccCredentialQuery, [password, username,accountType]);
-    const insertAccProfileQuery = 'INSERT INTO User (name,birthday,email,phone_Number,address,followers,following,reedemed_Coupons,bio,pf,share_Posts,explore_Posts) VALUE (?,?,?,?,?,?,?,?,?,?,?,?,)';
-    await db.executeSql(insertAccProfileQuery, ['NewUser', null, email, null, null, null, null, null, null, null, null, null]);
+    const id = await db.executeSql(insertAccCredentialQuery, [password, username,accountType]);
+    console.log("registering balh" +id[0]["insertId"]);
+    const name = 'NewUser'.concat(id[0]["insertId"].toString());
+    const insertAccProfileQuery = `INSERT INTO User (name,email) VALUES (?,?)`;
+    await db.executeSql(insertAccProfileQuery, [name,email]);
+    console.log("registered user:" + name);
 
     const registeredUserIdQuery = `SELECT * FROM User WHERE email = "${email}"`;
     const [results] = await db.executeSql(registeredUserIdQuery);
@@ -286,9 +289,19 @@ export const registeringUser = async(db: SQLiteDatabase, username:string, passwo
   }
 };
 
-export const updateProfilePicture = async(db:SQLiteDatabase, user_Id:number,picture:any) =>{
+export const updateProfilePicture = async(db:SQLiteDatabase, user_Id:number,picture:any,name:string|null) =>{
   try{
-    const query = `UPDATE User SET pf = "${picture}" WHERE user_Id = ${user_Id}`;
+    console.log("testing backend of updating profile picture");
+    console.log(picture);
+    console.log(name);
+    let query;
+    if(name == null || name == ""){
+      query = `UPDATE User SET pf = "${picture}" WHERE user_Id = ${user_Id}`;
+    }else if (picture == null){
+      query = `UPDATE User SET name = "${name}" WHERE user_Id = ${user_Id}`;
+    }else{
+      query = `UPDATE User SET name = "${name}", pf = "${picture}" WHERE user_Id = ${user_Id}`;
+    }
     console.log(query);
     return db.executeSql(query);
   }catch(error){

@@ -67,6 +67,8 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImageUri, setSelectedImageUId] = useState<string | null>(null);
 
+  const [newName,setNewName] = useState<string | null>(null);
+
   let db;
 
   const checkUserLoggedIn = () =>{
@@ -148,7 +150,9 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
   const handleRequestModal = (async() => {
     setModalVisible(false);
     db = await getEcoEatsDBConnection();
-    await updateProfilePicture(db,userID,selectedImageUri);
+    await updateProfilePicture(db,userID,selectedImageUri,newName);
+    setSelectedImageUId(null);
+    setNewName(null);
     navigation.navigate('MainTabs', {screen: 'User',   params: {userID: userId}});
   });
 
@@ -166,7 +170,7 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
         // navigation.setParams({ userID });
       }
     }
-    setSelectedImageUId('https://i.imgur.com/50exbMa.png');
+    // setSelectedImageUId('https://i.imgur.com/50exbMa.png');
   },[loadDataCallback,isFocused,modalVisible,userID,userId]);
 
   return (
@@ -265,6 +269,10 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
                     <Text style={styles.modalHeaderTextCancel}>X</Text>
                   </TouchableOpacity>
                 </View>
+                <View style={styles.userNameChangeModal}>
+                  <Text style={styles.userNameChangeModalText}>Change Username?</Text>
+                  <TextInput style={styles.textBox} value={newName ? newName : ''} onChangeText={setNewName} placeholder={profile?.name}/>
+                </View>
                 <Image source={{ uri: selectedImageUri || 'https://i.imgur.com/50exbMa.png'}} style={styles.newPfImage}/>
                 <Button title="Pick an Image" onPress={pickImage} />
                 {/* <Button  title="Save" onPress={handleRequestModal} /> */}
@@ -300,6 +308,12 @@ const styles = StyleSheet.create({
     // marginRight: 'auto',
     justifyContent: 'space-between',
     // marginLeft:screenWidth/3,
+  },
+  textBox:{
+    borderColor:'black',
+    borderWidth:3,
+    borderRadius:4,
+    padding:3,
   },
 
   profileImgSec:{
@@ -434,12 +448,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent:{
-    padding: 20,
+    padding: 10,
     backgroundColor: 'white',
     borderRadius: 10,
     alignItems: 'center',
     width:screenWidth*0.7,
     height: screenHeight*0.7,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
 
   modalHeaderText:{
@@ -459,10 +475,18 @@ const styles = StyleSheet.create({
     justifyContent:'space-between',
   },
 
+  userNameChangeModalText:{
+    fontSize: 18,
+    fontWeight:'bold',
+    marginBottom:10,
+  },
+
   newPfImage:{
-    width:'75%',
-    height: '75%',
+    width:'90%',
+    height: '50%',
     resizeMode: 'contain',
+    // borderColor: 'black',
+    // borderWidth:3,
   },
 
   pfSaveButton:{
@@ -478,7 +502,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight:'bold',
     color:'white',
-    margin:'auto',
+    marginLeft:'auto',
+    marginRight:'auto',
   },
   logoutButton:{
     position:'absolute',
