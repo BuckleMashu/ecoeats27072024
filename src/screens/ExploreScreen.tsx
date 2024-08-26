@@ -8,6 +8,7 @@ import {
   View,
   TouchableOpacity,
   Dimensions,
+  Image,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
@@ -34,6 +35,7 @@ const { width } = Dimensions.get('window');
 const columnWidth = width / 2;
 
 const ExploreScreen: React.FC<Props> = ({ navigation }) => {
+  const [activeTab, setActiveTab] = useState('Food');
   const [searchQuery, setSearchQuery] = useState('');
   const [exploreEntity, setExploreEntity] = useState<explore_page[]>([]);
   let db: any;  // Make sure to define the type for db if needed
@@ -59,15 +61,47 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
     <SafeAreaView>
       <StatusBar />
       <ScrollView contentInsetAdjustmentBehavior="automatic">
+        {/* food and activity bar */}
+        <View style={styles.tabsContainer}>
+        <TouchableOpacity
+          style={[
+            styles.tabButton,
+            activeTab === 'Food' && styles.activeTabButton,
+          ]}
+          onPress={() => setActiveTab('Food')}
+        >
+          <Text style={styles.tabText}>Food</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.tabButton,
+            activeTab === 'Activities' && styles.activeTabButton,
+          ]}
+          onPress={() => setActiveTab('Activities')}
+        >
+          <Text style={styles.tabText}>Activities</Text>
+        </TouchableOpacity>
+        </View>
+
+        {/* search bar */}
         <View style={styles.container}>
-          <View style={styles.search}>
+          <View style={styles.searchFilterContainer}>
             <Searchbar
               style={styles.searchbar}
               placeholder="Search"
               onChangeText={setSearchQuery}
               value={searchQuery}
             />
+            {/* add filter icon next to the search bar */}
+            <TouchableOpacity onPress={() => console.log('Filter pressed')}>
+            <Image
+              source={require('../images/filter-icon.png')}
+              style={styles.filterIcon}
+            />
+          </TouchableOpacity>
           </View>
+
+          {/* plus button */}
           <TouchableOpacity
             style={styles.plusButton}
             onPress={() => navigation.navigate('AddExplorePost')}
@@ -104,6 +138,31 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(250,250,250)',
     flex: 1,
   },
+  tabsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 10,
+  },
+   tabButton: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: 'lightgray',
+  },
+  activeTabButton: {
+    borderBottomColor: 'black',
+  },
+  tabText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  searchFilterContainer: { 
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    justifyContent: 'space-between', // Space between search bar and filter icon
+  },
   search: {
     paddingTop: 5,
     flexDirection: 'row',
@@ -111,12 +170,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   searchbar: {
-    width: width * 0.95,
+    // width: width * 0.95,
+    flex: 1,
     borderRadius: width * 0.05,
     borderColor: 'gray',
     borderWidth: 1.5,
     backgroundColor: 'white',
     opacity: 0.6,
+  },
+  filterIcon: {
+    width: 24,
+    height: 24,
+    marginLeft: 10,
   },
   postContainer: {
     flex: 1,
@@ -146,6 +211,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 30,
   },
+
 });
 
 export default ExploreScreen;
