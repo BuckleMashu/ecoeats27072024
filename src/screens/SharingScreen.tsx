@@ -162,23 +162,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     width: '100%',
+    backgroundColor:'white',
   },
   button:{
     width: '50%',
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     padding: 10,
     alignItems: 'center',
+    borderBottomWidth: 5,
+    borderBottomColor: 'lightgray',
   },
   buttonPressed:{
-    backgroundColor: '#598ef0',
+    borderBottomColor: '#71834f',
+    borderBottomWidth: 5,
   },
   buttonText:{
-    color: 'black',
     fontSize: 16,
+    fontWeight: 'bold',
   },
   boldText:{
     fontWeight: 'bold',
-    color: 'white',
+    color: '#71834f',
     fontSize: 20,
   },
   search:{

@@ -110,6 +110,28 @@ export const getSharePage = async (
   }
 };
 
+export const getExplorePageUser = async(db:SQLiteDatabase, id:string):Promise<explore_page[]> =>{
+  try{
+    const explorePageItems: explore_page[] = [];
+    let query;
+    if (id) {
+      query = `SELECT * FROM Explores WHERE explore_Id IN (${id})`;
+    } else{
+      return [];
+    }
+    const results = await db.executeSql(query);
+    results.forEach(result => {
+      for (let index = 0; index < result.rows.length; index++) {
+        explorePageItems.push(result.rows.item(index));
+      }
+    });
+    return explorePageItems;
+  }catch(error){
+    console.error(error);
+    throw Error('Failed to get explore pages items for user profile');
+  }
+};
+
 export const getRequestPage = async(db:SQLiteDatabase, id:number):Promise<request_page> => {
   try{
     const [results] = await db.executeSql(`SELECT * FROM Request WHERE share_Id=?`, [id]);
@@ -205,6 +227,24 @@ export const updateUserSharePosts = async (db: SQLiteDatabase, share_Id:number, 
       newSharePosts = share_Id.toString();
     }
     query = `UPDATE User SET share_Posts = '${newSharePosts}' WHERE user_Id = ${user_Id}`;
+    return db.executeSql(query);
+  }catch(error){
+    console.log('Failed to update user share posts');
+  }
+};
+
+export const updateUserExplorePosts = async (db: SQLiteDatabase, explore_Id:number, user_Id:number) => {
+  try{
+    console.log("testing backend of adding share"+user_Id);
+    let query = `SELECT * FROM User WHERE user_Id = ${user_Id}`;
+    let [output] = await db.executeSql(query);
+    let newExplorePosts;
+    if(output.rows.item(0).explore_Posts){
+      newExplorePosts = output.rows.item(0).explore_Posts.concat(",",explore_Id);
+    }else{
+      newExplorePosts = explore_Id.toString();
+    }
+    query = `UPDATE User SET explore_Posts = '${newExplorePosts}' WHERE user_Id = ${user_Id}`;
     return db.executeSql(query);
   }catch(error){
     console.log('Failed to update user share posts');
@@ -355,12 +395,16 @@ export const getExplorePage = async(db: SQLiteDatabase, type: number, keyword: s
 };
 
 export const saveNewExplore = async(db: SQLiteDatabase, explore: explore_page) => {
-  const insertQuery = `
-    INSERT INTO Explores (title, description, picture, date_created) 
-    VALUES ('${explore.title}', '${explore.description}', '${explore.picture}', '${explore.date_created}')
-  `;
-
-  return db.executeSql(insertQuery);
+  try{
+    const insertQuery = `
+    INSERT INTO Explores (title, description, picture, date_created,type,user_Id) 
+    VALUES ('${explore.title}', '${explore.description}', '${explore.picture}', '${explore.date_created}',${explore.type},${explore.user_Id})
+    `;
+    return db.executeSql(insertQuery);
+  }catch(error){
+    console.error(error);
+    throw Error('Failed to add explore');
+  }
 };
 
 // In db-service.ts

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useContext} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -18,9 +18,9 @@ import { explore_page } from '../models'; // Create this model similar to deal_p
 import { getEcoEatsDBConnection, getExplorePage } from '../../db-service'; // Create functions similar to getDealsPage
 import { Searchbar } from 'react-native-paper';
 
-// import localImages from '../imageImports';
 
 import { useIsFocused } from '@react-navigation/native';
+import { UserContext } from '../../UserContext';
 
 type ExploreScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -39,6 +39,7 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [exploreEntity, setExploreEntity] = useState<explore_page[]>([]);
   let db: any;  // Make sure to define the type for db if needed
+  const {userId} = useContext(UserContext);
 
   const loadDataCallback = useCallback(async (searchR: string) => {
     try {
@@ -47,6 +48,8 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
       db = await getEcoEatsDBConnection();
       const result = await getExplorePage(db, type, searchR);
       setExploreEntity(result);
+      console.log("explore entity");
+      console.log(exploreEntity);
     } catch (error) {
       console.error(error);
     }
@@ -72,7 +75,7 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
           ]}
           onPress={() => setActiveTab('Food')}
         >
-          <Text style={styles.tabText}>Food</Text>
+          <Text style={[styles.tabText, activeTab === 'Food' && styles.boldText]}>Food</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
@@ -81,7 +84,7 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
           ]}
           onPress={() => setActiveTab('Activities')}
         >
-          <Text style={styles.tabText}>Activities</Text>
+          <Text style={[styles.tabText, activeTab === 'Activities' && styles.boldText]}>Activities</Text>
         </TouchableOpacity>
         </View>
 
@@ -93,6 +96,7 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
               placeholder="Search"
               onChangeText={setSearchQuery}
               value={searchQuery}
+              icon={() => <Text style={{ fontSize: 20 }}>🔍</Text>}
             />
             {/* add filter icon next to the search bar */}
             <TouchableOpacity onPress={() => console.log('Filter pressed')}>
@@ -103,13 +107,13 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
           </TouchableOpacity>
           </View>
 
-          {/* plus button */}
+          {userId ? (
           <TouchableOpacity
-            style={styles.plusButton}
-            onPress={() => navigation.navigate('AddExplorePost')}
-          >
+          style={styles.plusButton}
+          onPress={() => navigation.navigate('AddExplorePost')}>
             <Text style={styles.plusButtonText}>+</Text>
           </TouchableOpacity>
+          ): null}
           <View style={styles.postContainer}>
             {exploreEntity.map((explore) => (
               <TouchableOpacity
@@ -122,7 +126,7 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
                     key={explore.explore_Id}
                     explore={explore}
                     picture={
-                      null || {uri:'https://i.imgur.com/50exbMa.png'}
+                      explore.picture || 'https://i.imgur.com/50exbMa.png'
                     }
                   />
                 </View>
@@ -143,21 +147,28 @@ const styles = StyleSheet.create({
   tabsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginVertical: 10,
+    marginBottom: 10,
+    backgroundColor:'white',
   },
    tabButton: {
     flex: 1,
     alignItems: 'center',
     paddingVertical: 10,
-    borderBottomWidth: 2,
+    borderBottomWidth: 5,
     borderBottomColor: 'lightgray',
   },
   activeTabButton: {
-    borderBottomColor: 'black',
+    borderBottomColor: '#71834f',
+    borderBottomWidth: 5,
   },
   tabText: {
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  boldText:{
+    fontWeight: 'bold',
+    color: '#71834f',
+    fontSize: 20,
   },
   searchFilterContainer: { 
     flexDirection: 'row',

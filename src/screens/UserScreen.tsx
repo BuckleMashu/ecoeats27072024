@@ -18,10 +18,11 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
-import { userD,share_page } from '../models';
+import { userD,share_page,explore_page } from '../models';
 
 import { ShareComponent } from '../modules/EcoEatsShare';
-import { getEcoEatsDBConnection, getUserDetails, getSharePage, updateProfilePicture} from '../../db-service';
+import { ExploreComponent } from '../modules/EcoEatsExplore';
+import { getEcoEatsDBConnection, getUserDetails, getSharePage, updateProfilePicture, getExplorePageUser} from '../../db-service';
 // import localImages from '../imageImports';
 import { Picker } from '@react-native-picker/picker';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -54,6 +55,7 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [profile, setProfile] = React.useState<userD>();
   const [shareEntity, setShareEntity] = React.useState<share_page[]>([]);
+  const [exploreEntity, setExploreEntity] = React.useState<explore_page[]>([]);
 
   const [explore, setExplore] = React.useState<number[]>([]);
   const [share, setShare] = React.useState<number[]>([]);
@@ -91,8 +93,19 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
     try{
       db = await getEcoEatsDBConnection();
       console.log(id);
-      const result = await getSharePage(db,undefined,"",id);
-      setShareEntity(result);
+      const shareResult = await getSharePage(db,undefined,"",id);
+      setShareEntity(shareResult);
+    } catch(error){
+      console.error(error);
+    }
+  },[]);
+
+  const loadExploreCallback = useCallback(async (id:string) =>{
+    try{
+      db = await getEcoEatsDBConnection();
+      console.log(id);
+      const ExploreResult = await getExplorePageUser(db,id);
+      setExploreEntity(ExploreResult);
     } catch(error){
       console.error(error);
     }
@@ -108,6 +121,7 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
         setFollower(processTextToNumberArray(result.followers));
         setFollowing(processTextToNumberArray(result.following));
         loadShareCallback(result.share_Posts);
+        loadExploreCallback(result.explore_Posts);
     } catch(error){
         console.error(error);
     }
@@ -226,7 +240,13 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
               </View>
             ):(
               <View style={styles.postContainer}>
-                <Text>Skibidi</Text>
+                {exploreEntity.map((explore) =>(
+                  <TouchableOpacity key={explore.explore_Id} onPress={() => navigation.navigate('ExploreDetails', {explore})} style={styles.itemContainer}>
+                    <View>
+                      <ExploreComponent key={explore.explore_Id} explore={explore} picture={explore.picture}/>
+                    </View>
+                  </TouchableOpacity>
+                ))}
               </View>
             )}
           </View>
@@ -367,27 +387,32 @@ const styles = StyleSheet.create({
   // },
 
   typeButtonsBoth:{
+    marginTop:1,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     width: '100%',
+    backgroundColor:'white',
   },
   button:{
     width: '50%',
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     padding: 10,
     alignItems: 'center',
+    borderBottomWidth: 5,
+    borderBottomColor: 'lightgray',
   },
   buttonText:{
-    color: 'black',
     fontSize: 16,
+    fontWeight: 'bold',
   },
   boldText:{
     fontWeight: 'bold',
-    color: 'white',
+    color: '#71834f',
     fontSize: 20,
   },
   buttonPressed:{
-    backgroundColor: '#598ef0',
+    borderBottomColor: '#71834f',
+    borderBottomWidth: 5,
   },
   postContainer:{
     flex: 1,

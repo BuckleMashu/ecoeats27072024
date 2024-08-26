@@ -7,13 +7,13 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 export const ExploreComponent: React.FC<{
   explore: explore_page;
   picture: any;
-}> = ({ explore: { title, description, explore_Id }, picture }) => {
+}> = ({ explore: { title, description, explore_Id, date_created }, picture }) => {
   return (
     <View style={styles.exploreContainer}>
-      <Image style={styles.image} source={picture} />
+      <Image style={styles.image} source={{uri:picture}} />
       <View style={styles.exploreTextContainer}>
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.description}>{description}</Text>
+        <Text style={styles.description}>{date_created}</Text>
       </View>
     </View>
   );

@@ -59,6 +59,8 @@ title: string;
 description: string;
 picture: string;
 date_created: string; // or any other fields you need
+type:number;
+user_Id: number;
 };
   
   
