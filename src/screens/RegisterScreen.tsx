@@ -23,7 +23,7 @@ type Props = {
   navigation: RegisterScreenNavigationProp;
 };
 
-const LoginScreen: React.FC<Props> = ({ navigation }) => {
+const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -68,6 +68,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
         <ScrollView contentContainerStyle={styles.scroll} contentInsetAdjustmentBehavior="automatic">
           <View style={styles.container}>
+          <Text style={styles.headerText}>Eco Eats</Text>
             <TextInput
               style={styles.input}
               placeholder="Username"
@@ -89,8 +90,8 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
               onChangeText={setEmailAdd}
             />
             <View>
-                <Text>Whats the purpose of this account?</Text>
-                <View>
+                <Text style={styles.accTypeText}>Whats the purpose of this account?</Text>
+                <View style={styles.typeButtonLayout}>
                     <TouchableOpacity onPress={() => setAccountType(2)}
                         style={[styles.button, acountType == 2 && styles.buttonPressed,]}>
                         <Text style={[styles.buttonText, acountType == 2 && styles.boldText]}>Normal Usage</Text>
@@ -103,16 +104,16 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
             </View>
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
             <Button title="Register" onPress={registerCheck} />
-            <View>
-              <Text>Have an account?</Text>
+            <View style={styles.loginSec}>
+              <Text style={styles.loginSecText}>Have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
-                <Text>Log in now!</Text>
+                <Text style={styles.loginSecButton}>Log in now!</Text>
               </TouchableOpacity>
             </View>
-            <View>
-              <Text>Just want to look around?</Text>
+            <View style={styles.homeSec}>
+              <Text style={styles.homeSecText}>Just want to look around?</Text>
               <TouchableOpacity onPress={() => navigation.navigate('MainTabs', {screen: 'Sharing'})}>
-                <Text>Return to home</Text>
+                <Text style={styles.homeSecButton}>Return to home</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -132,7 +133,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
-    paddingTop:"50%"
+    paddingTop:"30%"
+  },
+  headerText: {
+    fontSize: 50,
+    fontFamily: 'Monospace',
+    color: '#71834f',
+    fontWeight: '900',
+    margin:'auto',
+    marginBottom: 30,
   },
   input: {
     height: 40,
@@ -147,8 +156,19 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
   },
+  accTypeText:{
+    fontSize:16,
+    fontWeight: 'bold',
+  
+  },
+  typeButtonLayout:{
+    flexDirection: 'row',
+    justifyContent:'space-between',
+    width: '100%',
+    paddingBottom:20,
+  },
   buttonPressed:{
-    backgroundColor: 'gray',
+    backgroundColor: '#598ef0',
   },
   buttonText:{
     color: 'black',
@@ -163,6 +183,38 @@ const styles = StyleSheet.create({
     color: 'red',
     marginBottom: 10,
   },
+  loginSec: {
+    flexDirection: 'row',
+    gap:10,
+    justifyContent: 'center',
+    padding: 10,
+  },
+  loginSecText: { 
+    fontSize: 16,
+    color: 'black',
+    fontWeight:'600',
+  }, 
+  loginSecButton: {
+    fontSize: 16,
+    color: '#71834f',
+    fontWeight:'900',
+  },
+  homeSec: {
+    flexDirection: 'row',
+    gap:10,
+    justifyContent: 'center',
+    padding: 10,
+  },
+  homeSecText: {
+    fontSize: 16,
+    color: 'black',
+    fontWeight:'600',
+  },
+  homeSecButton: {
+    fontSize: 16,
+    color: 'red',
+    fontWeight:'900',
+  },
 });
 
-export default LoginScreen;
+export default RegisterScreen;

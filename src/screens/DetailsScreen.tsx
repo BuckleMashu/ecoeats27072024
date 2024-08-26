@@ -18,7 +18,7 @@ import { deal_page } from '../models';
 import { getEcoEatsDBConnection, getDealsPage } from '../../db-service';
 import { Searchbar } from 'react-native-paper';
 
-import localImages from '../imageImports';
+// import localImages from '../imageImports';
 
 import { useIsFocused } from '@react-navigation/native';
 
@@ -88,7 +88,7 @@ const DetailsScreen: React.FC<Props> = ({ navigation }) => {
                     key={deal.deal_Id}
                     deal={deal}
                     picture={
-                      localImages[deal.picture] || require('../images/missing.png')
+                      null || {uri: 'https://i.imgur.com/50exbMa.png'}
                     }
                   />
                 </View>

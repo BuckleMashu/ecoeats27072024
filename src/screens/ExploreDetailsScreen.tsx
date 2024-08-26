@@ -79,7 +79,7 @@ const ExploreDetailsScreen: React.FC<Props> = ({ route }) => {
         <View style={styles.contentContainer}>
           <Image
             style={styles.image}
-            source={explore.picture ? { uri: explore.picture } : require('../images/missing.png')}
+            source={explore.picture ? { uri: explore.picture } : {uri:'https://i.imgur.com/50exbMa.png'}}
           />
           <Text style={styles.title}>{explore.title}</Text>
           <Text style={styles.description}>{explore.description}</Text>

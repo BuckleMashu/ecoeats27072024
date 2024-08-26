@@ -73,6 +73,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
         <ScrollView contentContainerStyle={styles.scroll} contentInsetAdjustmentBehavior="automatic">
           <View style={styles.container}>
+            <Text style={styles.headerText}>Eco Eats</Text>
             <TextInput
               style={styles.input}
               placeholder="Username"
@@ -88,16 +89,16 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
             />
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
             <Button title="Login" onPress={checkInputs} />
-            <View>
-              <Text>Don't have an account?</Text>
+            <View style={styles.registerSec}>
+              <Text style={styles.registerSecText}>Don't have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
-                <Text>Register now!</Text>
+                <Text style={styles.registerSecButton}>Register now!</Text>
               </TouchableOpacity>
             </View>
-            <View>
-              <Text>Just want to look around?</Text>
+            <View style={styles.homeSec}>
+              <Text style={styles.homeSecText}>Just want to look around?</Text>
               <TouchableOpacity onPress={() => navigation.navigate('MainTabs', {screen: 'Sharing'})}>
-                <Text>Return to home</Text>
+                <Text style={styles.homeSecButton}>Return to home</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -119,6 +120,14 @@ scroll:{
     padding: 20,
     paddingTop:"50%"
   },
+  headerText: {
+    fontSize: 50,
+    fontFamily: 'Monospace',
+    color: '#71834f',
+    fontWeight: '900',
+    margin:'auto',
+    marginBottom: 30,
+  },
   input: {
     height: 40,
     borderColor: 'gray',
@@ -129,6 +138,38 @@ scroll:{
   errorText: {
     color: 'red',
     marginBottom: 10,
+  },
+  registerSec: {
+    flexDirection: 'row',
+    gap:10,
+    justifyContent: 'center',
+    padding: 10,
+  },
+  registerSecText: { 
+    fontSize: 16,
+    color: 'black',
+    fontWeight:'600',
+  }, 
+  registerSecButton: {
+    fontSize: 16,
+    color: '#71834f',
+    fontWeight:'900',
+  },
+  homeSec: {
+    flexDirection: 'row',
+    gap:10,
+    justifyContent: 'center',
+    padding: 10,
+  },
+  homeSecText: {
+    fontSize: 16,
+    color: 'black',
+    fontWeight:'600',
+  },
+  homeSecButton: {
+    fontSize: 16,
+    color: 'red',
+    fontWeight:'900',
   },
 });
 

@@ -23,8 +23,6 @@ import { getEcoEatsDBConnection, getSharePage} from '../../db-service';
 
 import { Searchbar } from 'react-native-paper';
 
-import localImages from '../imageImports';
-
 import { useIsFocused } from '@react-navigation/native';
 
 import { UserContext } from '../../UserContext';
@@ -82,7 +80,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
         console.log(userId);
         setCurrentUserId(userId);
     }
-  },[loadDataCallback,shareType,searchQuery,isFocused]);
+  },[loadDataCallback,shareType,searchQuery,isFocused, userId]);
 
   // const updateSearchResult = async () =>{
   //   setSearchQuery(newsearchQuery);
@@ -115,6 +113,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
                           placeholder="Search"
                           onChangeText={setSearchQuery}
                           value={searchQuery}
+                          icon={() => <Text style={{ fontSize: 20 }}>🔍</Text>}
                       />
                     {/* <Pressable style={({pressed})=>[styles.searchButton, pressed && styles.searchButtonPressed,]} onPress={() => updateSearchResult()}>
                       {({pressed})=>(<Text style={[styles.searchButtonText, pressed && styles.buttonBoldText]}>Search</Text>)}
@@ -171,7 +170,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonPressed:{
-    backgroundColor: 'gray',
+    backgroundColor: '#598ef0',
   },
   buttonText:{
     color: 'black',
@@ -204,6 +203,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,  // This creates the rounded corners
     paddingHorizontal: 10,
     fontSize: 16,
+    fontWeight:'600',
     backgroundColor: 'white',
   },
   searchButton:{
