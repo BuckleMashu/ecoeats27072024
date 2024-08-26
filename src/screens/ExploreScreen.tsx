@@ -42,13 +42,15 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
 
   const loadDataCallback = useCallback(async (searchR: string) => {
     try {
+      // 0 for food, 1 for activity
+      const type = activeTab === 'Food' ? 0 : 1;
       db = await getEcoEatsDBConnection();
-      const result = await getExplorePage(db, searchR);
+      const result = await getExplorePage(db, type, searchR);
       setExploreEntity(result);
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  }, [activeTab]);
 
   const isFocused = useIsFocused();
   useEffect(() => {

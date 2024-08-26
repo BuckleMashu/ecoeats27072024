@@ -127,9 +127,6 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
   const [selectedImageUri, setSelectedImageUId] = useState<string | null>(null);
 
   const pickImage = () => {
-    // if(imageUrl != 'https://i.imgur.com/50exbMa.png'){
-    //     deleteImageFromImgur(imageId);
-    // }
     launchImageLibrary({ mediaType: 'photo' }, async (response) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');

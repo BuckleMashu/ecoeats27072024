@@ -6,11 +6,14 @@ import {
   StyleSheet,
   View,
   Text,
+  TouchableOpacity,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 import { getEcoEatsDBConnection, saveNewExplore } from '../../db-service';
 import { explore_page } from '../models';
+import { launchImageLibrary } from 'react-native-image-picker';
+
 
 type AddExplorePostScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -26,13 +29,32 @@ const AddExplorePostScreen: React.FC<Props> = ({ navigation }) => {
   const [description, setDescription] = useState('');
   const [picture, setPicture] = useState('');
 
+  // funciton to handle image picker
+  const pickImage = () => {
+  // if(imageUrl != 'https://i.imgur.com/50exbMa.png'){
+  //     deleteImageFromImgur(imageId);
+  // } 
+  launchImageLibrary({ mediaType: 'photo' }, async (response) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.errorCode) {
+      console.log('ImagePicker Error:', response.errorMessage);
+    } else {
+      if (response.assets && response.assets[0].uri) {
+        const uri = response.assets[0].uri;
+        setSelectedImageUId(uri);
+      }
+    }
+  });
+};
+
   const handleSaveExplorePost = async () => {
     const db = await getEcoEatsDBConnection();
     const newExplore: explore_page = {
       explore_Id: 0, // This will be auto-incremented by the database
       title,
       description,
-      picture,
+      picture: '',
       date_created: new Date().toISOString(), // Current date and time
     };
 
@@ -56,13 +78,10 @@ const AddExplorePostScreen: React.FC<Props> = ({ navigation }) => {
         onChangeText={setDescription}
         placeholder="Enter explore post description"
       />
-      <Text style={styles.label}>Picture URL</Text>
-      <TextInput
-        style={styles.input}
-        value={picture}
-        onChangeText={setPicture}
-        placeholder="Enter picture URL"
-      />
+      <Text style={styles.label}>Picture</Text>
+      <TouchableOpacity style={styles.imageButton} onPress={pickImage}>
+        <Text style={styles.imageButtonText}>Pick an Image</Text>
+      </TouchableOpacity>
       <Button title="Save Post" onPress={handleSaveExplorePost} />
     </SafeAreaView>
   );
@@ -84,6 +103,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 16,
     paddingHorizontal: 8,
+  },
+  imageButton: {
+    backgroundColor: '#007BFF',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  imageButtonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
 

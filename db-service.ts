@@ -321,13 +321,13 @@ export const getCommentsForDeal = async(db: SQLiteDatabase, dealId: number): Pro
 
 
 //Explore page related stuff
-export const getExplorePage = async(db: SQLiteDatabase, keyword: string): Promise<explore_page[]> => {
+export const getExplorePage = async(db: SQLiteDatabase, type: number, keyword: string): Promise<explore_page[]> => {
   try {
     const explores: explore_page[] = [];
-    let query = `SELECT * FROM Explores`;
+    let query = `SELECT * FROM Explores WHERE type=${type}`;
 
     if (keyword) {
-      query += ` WHERE title LIKE '%${keyword}%' OR description LIKE '%${keyword}%'`;
+      query += ` AND (title LIKE '%${keyword}%' OR description LIKE '%${keyword}%')`;
     }
 
     const results = await db.executeSql(query);
