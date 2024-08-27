@@ -13,7 +13,7 @@ TouchableOpacity,} from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 
-import { getEcoEatsDBConnection, checkLoginDetails } from '../../db-service';
+import { getEcoEatsDBConnection, checkLoginDetails, getAccountType } from '../../db-service';
 
 import {UserContext} from '../../UserContext';
 
@@ -31,7 +31,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [passWordCheck, setPassWordCheck] = useState<string>('');
   const [error, setError] = useState<string>('');
   let db;
-  const {setUserId} = useContext(UserContext);
+  const {setUserId,setIsBusinessAccount, isBusinessAccount} = useContext(UserContext);
   // const handleLogin = () => {
   //   if (username === 'admin' && password === 'admin') {
   //     navigation.navigate('User', { userID: 1 });  // Pass userID when navigating
@@ -49,12 +49,17 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   const handleLogin = useCallback(async (user:string,pass:string) =>{
     try{
-        console.log("2"+user + " " + pass);
         db = await getEcoEatsDBConnection();
         const result = await checkLoginDetails(db,user,pass);
         console.log("login output:"+result);
         if (result){
           setUserId(result);  // Pass userID when navigating
+          const AccountType = await getAccountType(db,result);
+          console.log("account type checking");
+          console.log(AccountType);
+          setIsBusinessAccount(AccountType);
+          console.log("aacount type setted");
+          console.log(setIsBusinessAccount);
           navigation.navigate('MainTabs', {screen: 'User',   params: {userID: result}});
         }else{
           setError('Invalid username or password, or account does not exist');

@@ -270,9 +270,10 @@ export const checkLoginDetails = async(db: SQLiteDatabase, username:string, pass
 export const registeringUser = async(db: SQLiteDatabase, username:string, password:string, accountType:number, email:string) =>{
   try{
     const insertAccCredentialQuery = `INSERT INTO User_credential (password,username,account_Type) VALUES (?, ?, ?)`;
-    await db.executeSql(insertAccCredentialQuery, [password, username,accountType]);
-    const insertAccProfileQuery = 'INSERT INTO User (name,birthday,email,phone_Number,address,followers,following,reedemed_Coupons,bio,pf,share_Posts,explore_Posts) VALUE (?,?,?,?,?,?,?,?,?,?,?,?,)';
-    await db.executeSql(insertAccProfileQuery, ['NewUser', null, email, null, null, null, null, null, null, null, null, null]);
+    const [output] =await db.executeSql(insertAccCredentialQuery, [password, username,accountType]);
+    const name = "NewUser".concat(output.insertId.toString());
+    const insertAccProfileQuery = 'INSERT INTO User (name,email) VALUE (?,?)';
+    await db.executeSql(insertAccProfileQuery, [name,email]);
 
     const registeredUserIdQuery = `SELECT * FROM User WHERE email = "${email}"`;
     const [results] = await db.executeSql(registeredUserIdQuery);
@@ -296,6 +297,15 @@ export const updateProfilePicture = async(db:SQLiteDatabase, user_Id:number,pict
   }
 };
 
+export const getAccountType = async(db:SQLiteDatabase, user_Id:number) =>{
+  try{
+    const query = `SELECT account_Type FROM User_credential WHERE user_Id = ${user_Id}`;
+    const [result] = await db.executeSql(query);
+    return result.rows.item(0).account_Type;
+  }catch(error){
+    console.log("Cannot get user type")
+  }
+}
 
 //Deals page related stuff
 
@@ -368,6 +378,27 @@ export const getCommentsForDeal = async(db: SQLiteDatabase, dealId: number): Pro
   }
 };
 
+export const getRedeemedState = async (db: SQLiteDatabase, dealId: number): Promise<boolean> => {
+  try {
+    const [result] = await db.executeSql('SELECT isRedeemed FROM Deals WHERE deal_Id = ?', [dealId]);
+    if (result.rows.length > 0) {
+      return result.rows.item(0).isRedeemed === 1;
+    }
+    return false;
+  } catch (error) {
+    console.error('Failed to get redeemed state', error);
+    throw Error('Failed to get redeemed state');
+  }
+};
+
+export const saveRedeemedState = async (db: SQLiteDatabase, dealId: number, redeemed: boolean) => {
+  try {
+    await db.executeSql('UPDATE Deals SET isRedeemed = ? WHERE deal_Id = ?', [redeemed ? 1 : 0, dealId]);
+  } catch (error) {
+    console.error('Failed to save redeemed state', error);
+    throw Error('Failed to save redeemed state');
+  }
+};
 
 
 //Explore page related stuff

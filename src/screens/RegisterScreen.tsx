@@ -85,7 +85,6 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             <TextInput
               style={styles.input}
               placeholder="Email"
-              secureTextEntry
               value={emailAdd}
               onChangeText={setEmailAdd}
             />
