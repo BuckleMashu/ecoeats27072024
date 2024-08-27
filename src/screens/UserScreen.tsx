@@ -66,6 +66,8 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImageUri, setSelectedImageUId] = useState<string | null>(null);
+  
+  const [newName,setNewName] = useState<string | null>(null);
 
   let db;
 
@@ -148,7 +150,9 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
   const handleRequestModal = (async() => {
     setModalVisible(false);
     db = await getEcoEatsDBConnection();
-    await updateProfilePicture(db,userID,selectedImageUri);
+    await updateProfilePicture(db,userID,selectedImageUri,newName);
+    setSelectedImageUId(null);
+    setNewName(null);
     navigation.navigate('MainTabs', {screen: 'User',   params: {userID: userId}});
   });
 
@@ -265,6 +269,10 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
                     <Text style={styles.modalHeaderTextCancel}>X</Text>
                   </TouchableOpacity>
                 </View>
+                <View style={styles.userNameChangeModal}>
+                  <Text style={styles.userNameChangeModalText}>Change Username?</Text>
+                  <TextInput style={styles.textBox} value={newName ? newName : ''} onChangeText={setNewName} placeholder={profile?.name}/>
+                </View>
                 <Image source={{ uri: selectedImageUri || 'https://i.imgur.com/50exbMa.png'}} style={styles.newPfImage}/>
                 <Button title="Pick an Image" onPress={pickImage} />
                 {/* <Button  title="Save" onPress={handleRequestModal} /> */}
@@ -300,6 +308,12 @@ const styles = StyleSheet.create({
     // marginRight: 'auto',
     justifyContent: 'space-between',
     // marginLeft:screenWidth/3,
+  },
+  textBox:{
+    borderColor:'black',
+    borderWidth:3,
+    borderRadius:4,
+    padding:3,
   },
 
   profileImgSec:{
@@ -494,6 +508,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  userNameChangeModalText:{
+    fontSize: 18,
+    fontWeight:'bold',
+    marginBottom:10,
   },
 });
 

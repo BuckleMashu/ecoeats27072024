@@ -13,7 +13,7 @@ TouchableOpacity,} from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 
-import { getEcoEatsDBConnection, registeringUser } from '../../db-service';
+import { getEcoEatsDBConnection, registeringUser , getAccountType} from '../../db-service';
 
 import {UserContext} from '../../UserContext';
 
@@ -31,7 +31,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   const [emailAdd, setEmailAdd] = useState<string>('');
   const [error, setError] = useState<string>('');
   let db;
-  const {setUserId} = useContext(UserContext);
+  const {setUserId,setIsBusinessAccount, isBusinessAccount} = useContext(UserContext);
   // const handleLogin = () => {
   //   if (username === 'admin' && password === 'admin') {
   //     navigation.navigate('User', { userID: 1 });  // Pass userID when navigating
@@ -50,6 +50,12 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         console.log("register output:"+result);
         if (result){
           setUserId(result);  // Pass userID when navigating
+          const AccountType = await getAccountType(db,result);
+          console.log("account type checking");
+          console.log(AccountType);
+          setIsBusinessAccount(AccountType);
+          console.log("aacount type setted");
+          console.log(setIsBusinessAccount);
           navigation.navigate('MainTabs', {screen: 'User',   params: {userID: result}});
         }else{
             setError('username already in use');

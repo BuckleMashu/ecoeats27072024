@@ -54,8 +54,9 @@ const DetailsScreen: React.FC<Props> = ({ navigation }) => {
   const accTypeCheck = () =>{
     if(isBusinessAccount == 1 || isBusinessAccount == 0){
       setDisplayAdd(true);
+    }else{
+      setDisplayAdd(false);
     }
-    setDisplayAdd(false);
   };
 
   const isFocused = useIsFocused();
@@ -64,8 +65,10 @@ const DetailsScreen: React.FC<Props> = ({ navigation }) => {
       loadDataCallback(searchQuery);
       console.log("deals screen");
       console.log(isBusinessAccount);
+      accTypeCheck();
+      console.log(displayAdd);
     }
-  }, [loadDataCallback, searchQuery, isFocused]);
+  }, [loadDataCallback, searchQuery, isFocused,displayAdd]);
 
 
   return (
