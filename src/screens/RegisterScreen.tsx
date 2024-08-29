@@ -1,4 +1,6 @@
 import React, { useState,useEffect,useCallback,useContext } from 'react';
+import { hashPassword } from '../../db-service';
+
 import { 
 View, 
 TextInput, 
@@ -23,6 +25,7 @@ type Props = {
   navigation: RegisterScreenNavigationProp;
 };
 
+
 const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [username, setUsername] = useState<string>('');
@@ -42,33 +45,30 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   const registerCheck = ()  => {
     handleRegister(username,password,acountType,emailAdd)
   };
+    
 
-  const handleRegister = useCallback(async (user:string,pass:string,accT:number,email:string) =>{
-    try{
-        db = await getEcoEatsDBConnection();
-        const result = await registeringUser(db,user,pass,accT,email);
-        console.log("register output:"+result);
-        if (result){
-          setUserId(result);  // Pass userID when navigating
-          const AccountType = await getAccountType(db,result);
-          console.log("account type checking");
-          console.log(AccountType);
-          setIsBusinessAccount(AccountType);
-          console.log("aacount type setted");
-          console.log(setIsBusinessAccount);
-          navigation.navigate('MainTabs', {screen: 'User',   params: {userID: result}});
-        }else{
-            setError('username already in use');
-        }
-    } catch(error){
-        console.error(error);
-    }
-  },[]);
+  const handleRegister = useCallback(async (user: string, enteredPassword: string, accT: number, email: string) => {
+    try {
+      db = await getEcoEatsDBConnection();
   
-  useEffect(()=>{
-
-  },[]);
-
+      // Hash the password before storing it
+      const registerHashedPassword = await hashPassword(enteredPassword);
+      const result = await registeringUser(db, user, registerHashedPassword, accT, email);
+  
+      if (result) {
+        setUserId(result);  // Pass userID when navigating
+        const AccountType = await getAccountType(db, result);
+        setIsBusinessAccount(AccountType);
+        navigation.navigate('MainTabs', { screen: 'User', params: { userID: result } });
+      } else {
+        setError('Username already in use');
+      }
+    } catch (error) {
+      console.error("Error in handleRegister:", error);
+    }
+  }, []);
+  
+  
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />

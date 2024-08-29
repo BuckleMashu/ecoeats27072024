@@ -1,6 +1,7 @@
 import { enablePromise, openDatabase, SQLiteDatabase } from 'react-native-sqlite-storage';
 import { ToDoItem, explore_page, share_page, request_page, userD, deal_page, comment } from './src/models';
 import RNFS from 'react-native-fs';
+import SimpleCrypto from 'react-native-simple-crypto';
 
 enablePromise(true);
 
@@ -252,72 +253,72 @@ export const updateUserExplorePosts = async (db: SQLiteDatabase, explore_Id:numb
 };
 
 //Profile page related stuff
-export const checkLoginDetails = async(db: SQLiteDatabase, username:string, password:string) =>{
-  try{
-    console.log("1"+username + password+"2");
-    const profileQuery = `SELECT * FROM User_credential WHERE username= "${username}" AND password= "${password}"`;
-    const [results] = await db.executeSql(profileQuery);
-    // console.log("outoput of login");
-    // console.log(results);
-    // console.log(results.rows.item(0).user_Id);
-    return results.rows.item(0).user_Id;
-  }catch(error){
-    console.error(error);
-    throw Error('Failed to get user credentials');
+
+export const hashPassword = async (password: string): Promise<string> => {
+  // Convert the password string to an ArrayBuffer
+  const passwordBuffer = SimpleCrypto.utils.convertUtf8ToArrayBuffer(password);
+
+  // Hash the ArrayBuffer using SHA-256
+  const hash = await SimpleCrypto.SHA.sha256(passwordBuffer);
+
+  // Convert the hash (ArrayBuffer) to a hexadecimal string
+  return SimpleCrypto.utils.convertArrayBufferToHex(hash);
+};
+
+export const checkLoginDetails = async (db: SQLiteDatabase, username: string, loginHashedPassword: string) => {
+  try {
+    const profileQuery = `SELECT * FROM User_credential WHERE username = ?`;
+    const [results] = await db.executeSql(profileQuery, [username]);
+
+    if (results.rows.length > 0) {
+      const storedHashedPassword = results.rows.item(0).password;
+
+      // Compare the hashed passwords
+      if (storedHashedPassword === loginHashedPassword) {
+        // Return the entire user data object
+        return results.rows.item(0);
+      } else {
+        throw new Error('Invalid password');
+      }
+    } else {
+      throw new Error('User not found');
+    }
+  } catch (error) {
+    console.error("Error in checkLoginDetails:", error);
+    throw new Error('Failed to get user credentials');
   }
 };
 
-// export const registeringUser = async(db: SQLiteDatabase, username:string, password:string, accountType:number, email:string) =>{
-//   try{
-//     const insertAccCredentialQuery = `INSERT INTO User_credential (password,username,account_Type) VALUES (?, ?, ?)`;
-//     const [output] =await db.executeSql(insertAccCredentialQuery, [password, username,accountType]);
-//     const name = "NewUser".concat(output.insertId.toString());
-//     const insertAccProfileQuery = 'INSERT INTO User (name,email) VALUE (?,?)';
-//     await db.executeSql(insertAccProfileQuery, [name,email]);
 
-//     const registeredUserIdQuery = `SELECT * FROM User WHERE email = "${email}"`;
-//     const [results] = await db.executeSql(registeredUserIdQuery);
-//     console.log("outoput of registering");
-//     console.log(results);
-//     console.log(results.rows.item(0).user_Id);
-//     return results.rows.item(0).user_Id;
-//   }catch(error){
-//     console.error(error);
-//     throw Error('Failed to add user');
-//   }
-// };
+export const registeringUser = async (db: SQLiteDatabase, username: string, password: string, accountType: number, email: string) => {
+  try {
+    // Insert into User_credential table with the hashed password
 
-// export const updateProfilePicture = async(db:SQLiteDatabase, user_Id:number,picture:any) =>{
-//   try{
-//     const query = `UPDATE User SET pf = "${picture}" WHERE user_Id = ${user_Id}`;
-//     console.log(query);
-//     return db.executeSql(query);
-//   }catch(error){
-//     console.log('Failed to update user profile picture');
-//   }
-// };
+    const insertAccCredentialQuery = `INSERT INTO User_credential (username, password, account_Type) VALUES (?, ?, ?)`;
+    const result = await db.executeSql(insertAccCredentialQuery, [username, password, accountType]);
 
-export const registeringUser = async(db: SQLiteDatabase, username:string, password:string, accountType:number, email:string) =>{
-  try{
-    const insertAccCredentialQuery = `INSERT INTO User_credential (password,username,account_Type) VALUES (?, ?, ?)`;
-    const id = await db.executeSql(insertAccCredentialQuery, [password, username,accountType]);
-    console.log("registering balh" +id[0]["insertId"]);
-    const name = 'NewUser'.concat(id[0]["insertId"].toString());
-    const insertAccProfileQuery = `INSERT INTO User (name,email) VALUES (?,?)`;
-    await db.executeSql(insertAccProfileQuery, [name,email]);
-    console.log("registered user:" + name);
+    const userId = result[0]["insertId"]; // Get the inserted user ID
+    console.log("Registering Hashed Password in db" + password);
 
-    const registeredUserIdQuery = `SELECT * FROM User WHERE email = "${email}"`;
-    const [results] = await db.executeSql(registeredUserIdQuery);
-    console.log("outoput of registering");
-    console.log(results);
-    console.log(results.rows.item(0).user_Id);
-    return results.rows.item(0).user_Id;
-  }catch(error){
-    console.error(error);
-    throw Error('Failed to add user');
+    // Create a default name using the user ID
+    const name = 'NewUser'.concat(userId.toString());
+
+    // Insert into User table
+    const insertAccProfileQuery = `INSERT INTO User (user_Id, name, email) VALUES (?, ?, ?)`;
+    await db.executeSql(insertAccProfileQuery, [userId, name, email]);
+
+    console.log("Registered user:", name);
+
+    // Return the user ID
+    return userId;
+  } catch (error) {
+    console.error("Error in registeringUser:", error);
+    throw new Error('Failed to add user');
   }
 };
+
+
+
 
 export const updateProfilePicture = async(db:SQLiteDatabase, user_Id:number,picture:any,name:string|null) =>{
   try{
@@ -339,15 +340,21 @@ export const updateProfilePicture = async(db:SQLiteDatabase, user_Id:number,pict
   }
 };
 
-export const getAccountType = async(db:SQLiteDatabase, user_Id:number) =>{
-  try{
-    const query = `SELECT account_Type FROM User_credential WHERE user_Id = ${user_Id}`;
-    const [result] = await db.executeSql(query);
-    return result.rows.item(0).account_Type;
-  }catch(error){
-    console.log("Cannot get user type")
+export const getAccountType = async (db: SQLiteDatabase, userId: number): Promise<number> => {
+  try {
+    const query = `SELECT account_Type FROM User_credential WHERE user_Id = ?`;
+    const [result] = await db.executeSql(query, [userId]);
+
+    if (result.rows.length > 0) {
+      return result.rows.item(0).account_Type;
+    } else {
+      throw new Error('User type not found');
+    }
+  } catch (error) {
+    console.error('Error in getAccountType:', error);
+    throw error;
   }
-}
+};
 
 //Deals page related stuff
 

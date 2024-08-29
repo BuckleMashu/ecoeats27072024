@@ -1,4 +1,6 @@
 import React, { useState,useEffect,useCallback,useContext } from 'react';
+import { hashPassword } from '../../db-service'; // or wherever you defined it
+
 import { 
 View, 
 TextInput, 
@@ -47,31 +49,43 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
     handleLogin(username, password);
   };
 
-  const handleLogin = useCallback(async (user:string,pass:string) =>{
-    try{
-        db = await getEcoEatsDBConnection();
-        const result = await checkLoginDetails(db,user,pass);
-        console.log("login output:"+result);
-        if (result){
-          setUserId(result);  // Pass userID when navigating
-          const AccountType = await getAccountType(db,result);
-          console.log("account type checking");
-          console.log(AccountType);
-          setIsBusinessAccount(AccountType);
-          console.log("aacount type setted");
-          console.log(setIsBusinessAccount);
-          navigation.navigate('MainTabs', {screen: 'User',   params: {userID: result}});
-        }else{
-          setError('Invalid username or password, or account does not exist');
-        }
-    } catch(error){
-        console.error(error);
-    }
-  },[]);
-  
-  useEffect(()=>{
 
-  },[username,password]);
+  const handleLogin = useCallback(async (user: string, enteredPassword: string) => {
+    try {
+      const db = await getEcoEatsDBConnection();
+      
+      // Hash the entered password
+      const loginHashedPassword = await hashPassword(enteredPassword);
+      console.log("Plain Password during Login:", enteredPassword);
+      console.log("Hashed Password during Login:", loginHashedPassword);
+  
+      // Check if the hashed password matches the stored hashed password in the database
+      const userData = await checkLoginDetails(db, user, loginHashedPassword);
+  
+      if (userData && userData.user_Id) {
+        console.log("User data found:", userData.user_Id);
+  
+        // Set the user ID and account type in context
+        setUserId(userData.user_Id);
+        
+        const AccountType = await getAccountType(db, userData.user_Id);
+        console.log("Account Type retrieved:", AccountType);
+  
+        setIsBusinessAccount(AccountType);
+  
+        // Navigate to the User screen
+        navigation.navigate('MainTabs', { screen: 'User', params: { userID: userData.user_Id } });
+      } else {
+        setError('Invalid username or password');
+      }
+    } catch (error) {
+      console.error('Error in handleLogin:', error);
+      setError('An error occurred during login. Please try again.');
+    }
+  }, []);
+  
+  
+  
 
   return (
     <SafeAreaView style={styles.safeArea}>
