@@ -45,12 +45,14 @@ export type userD = {
     explore_Posts: string;
 }
 
-export type comment = {
+export interface comment {
     comment_Id: number;
-    explore_Id: number; 
+    explore_Id: number;
     user_Name: string;
     comment_Text: string;
-  };
+    parent_comment_id?: number | null;
+    like_count: number; 
+  }
   
 
 export type explore_page = {

@@ -487,44 +487,112 @@ export const saveNewExplore = async(db: SQLiteDatabase, explore: explore_page) =
   }
 };
 
-// In db-service.ts
+//comments
 
-export const getCommentsForExplore = async (
-  db: SQLiteDatabase,
-  exploreId: number
-): Promise<comment[]> => {
+export const getCommentsForExplore = async (db: SQLiteDatabase, explore_Id: number): Promise<comment[]> => {
   try {
+    const commentsQuery = `
+      SELECT * FROM Comments WHERE explore_Id = ? ORDER BY parent_comment_id ASC, comment_Id ASC
+    `;
+    const [results] = await db.executeSql(commentsQuery, [explore_Id]);
+
     const comments: comment[] = [];
-    const results = await db.executeSql(
-      `SELECT * FROM Comments WHERE explore_Id = ?`,
-      [exploreId]
-    );
-    results.forEach(result => {
-      for (let index = 0; index < result.rows.length; index++) {
-        comments.push(result.rows.item(index));
-      }
-    });
+    for (let i = 0; i < results.rows.length; i++) {
+      comments.push(results.rows.item(i));
+    }
     return comments;
   } catch (error) {
-    console.error('Failed to get comments', error);
-    throw Error('Failed to get comments');
+    console.error('Error retrieving comments:', error);
+    throw Error('Failed to retrieve comments');
   }
 };
 
-// Make sure to also add the saveNewComment function if it doesn't exist:
-export const saveNewComment = async (
-  db: SQLiteDatabase,
-  comment: comment
-) => {
-  const insertQuery = `
-    INSERT INTO Comments (explore_Id, user_Name, comment_Text)
-    VALUES (?, ?, ?)
-  `;
-  await db.executeSql(insertQuery, [
-    comment.explore_Id,
-    comment.user_Name,
-    comment.comment_Text,
-  ]);
+
+export const saveNewComment = async (db: SQLiteDatabase, comment: comment) => {
+  try {
+    const insertQuery = `
+      INSERT INTO Comments (explore_Id, user_Name, comment_Text, parent_comment_id, like_count) 
+      VALUES (?, ?, ?, ?, ?)
+    `;
+    await db.executeSql(insertQuery, [
+      comment.explore_Id,
+      comment.user_Name,
+      comment.comment_Text,
+      comment.parent_comment_id,
+      comment.like_count,
+    ]);
+  } catch (error) {
+    console.error('Error saving comment:', error);
+    throw new Error('Failed to save comment');
+  }
+};
+
+export const likeComment = async (db: SQLiteDatabase, userId: number, commentId: number) => {
+  try {
+    // Add a like to the CommentLikes table
+    await db.executeSql(
+      `INSERT INTO CommentLikes (user_Id, comment_Id) VALUES (?, ?)`,
+      [userId, commentId]
+    );
+
+    // Update the like count in the Comments table
+    const [likeCountResult] = await db.executeSql(
+      `SELECT COUNT(*) AS likeCount FROM CommentLikes WHERE comment_Id = ?`,
+      [commentId]
+    );
+    const newLikeCount = likeCountResult.rows.item(0).likeCount;
+
+    await db.executeSql(
+      `UPDATE Comments SET like_count = ? WHERE comment_Id = ?`,
+      [newLikeCount, commentId]
+    );
+
+    return newLikeCount;
+  } catch (error) {
+    console.error('Error liking comment:', error);
+    throw new Error('Failed to like comment');
+  }
+};
+
+export const unlikeComment = async (db: SQLiteDatabase, userId: number, commentId: number) => {
+  try {
+    // Remove the like from the CommentLikes table
+    await db.executeSql(
+      `DELETE FROM CommentLikes WHERE user_Id = ? AND comment_Id = ?`,
+      [userId, commentId]
+    );
+
+    // Update the like count in the Comments table
+    const [likeCountResult] = await db.executeSql(
+      `SELECT COUNT(*) AS likeCount FROM CommentLikes WHERE comment_Id = ?`,
+      [commentId]
+    );
+    const newLikeCount = likeCountResult.rows.item(0).likeCount;
+
+    await db.executeSql(
+      `UPDATE Comments SET like_count = ? WHERE comment_Id = ?`,
+      [newLikeCount, commentId]
+    );
+
+    return newLikeCount;
+  } catch (error) {
+    console.error('Error unliking comment:', error);
+    throw new Error('Failed to unlike comment');
+  }
+};
+
+export const checkIfUserLikedComment = async (db: SQLiteDatabase, userId: number, commentId: number) => {
+  try {
+    const [result] = await db.executeSql(
+      `SELECT * FROM CommentLikes WHERE user_Id = ? AND comment_Id = ?`,
+      [userId, commentId]
+    );
+
+    return result.rows.length > 0;
+  } catch (error) {
+    console.error('Error checking if user liked comment:', error);
+    throw new Error('Failed to check if user liked comment');
+  }
 };
 
 
