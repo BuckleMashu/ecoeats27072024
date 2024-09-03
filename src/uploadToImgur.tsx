@@ -4,7 +4,7 @@ import RNFS from 'react-native-fs';
 //dab3c20d2286e0fdb8335933305d5c1e26a6eac7
 
 const uploadImageToImgur = async (imageUri:any) => {
-  const clientId = '081bb7fbbb3e62d';  // Replace with your actual Imgur Client ID
+  const clientId = 'xxxxxx';  // Replace with your actual Imgur Client ID, I removed mine cause of obivous security issues
 
   try {
     // Read the image file as a base64 string
