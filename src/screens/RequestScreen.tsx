@@ -120,7 +120,7 @@ const RequestScreen = ({ route,navigation } : Props) => {
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('MainTabs', {screen: 'User',   params: {userID: userID}})}>
             {/* onPress={() => navigation.navigate('Request',{post})} */}
-              <Text style={styles.username}>Post by "{userName}"</Text>
+              <View style={styles.linkToProfile}><Text style={styles.username}>Post by </Text><Text style={styles.usernameLink}>"{userName}"</Text></View>
             </TouchableOpacity>
             <Text style={styles.description}>{requestEntity?.description}</Text>
             {/* Render other post details as needed */}
@@ -274,19 +274,31 @@ const styles = StyleSheet.create({
   titleNexpiration:{
     paddingLeft:screenWidth*0.05,
   },
+  linkToProfile:{
+    flexDirection: 'row',
+  },
   username:{
     fontWeight: 'bold',
     fontStyle:'italic',
     fontSize:20,
   },
+  usernameLink:{
+    fontWeight: 'bold',
+    fontStyle:'italic',
+    fontSize:20,
+    color:'#71834f',
+    textDecorationLine:'underline',
+  },
   description:{
     padding:10,
     fontSize:16,
+    color:'black',
+    fontWeight:'400',
   },
   location:{
     fontSize:24,
     fontStyle:'italic',
-    textDecorationLine:'underline',
+    color:'red',
   },
   chatNrequest:{
     flexDirection: 'row',
