@@ -1,8 +1,9 @@
+////////////////////Cuong////////////////////////////////
 export type ToDoItem = {
     id: number;
     value: string;
 };
-
+////////////////////Cuong////////////////////////////////
 export type share_page = {
     share_Id: number;
     type: number;
@@ -12,7 +13,7 @@ export type share_page = {
     picture: string;
     expiration: string;
 };
-
+////////////////////Cuong////////////////////////////////
 export type deal_page = {
     deal_Id: number;
     title: string;
@@ -22,13 +23,14 @@ export type deal_page = {
   };
   
 
-
+////////////////////Cuong////////////////////////////////
 export type request_page = {
     share_Id: number;
     user_Id: number;
     description: string;
 };
 
+////////////////////Cuong////////////////////////////////
 export type userD = {
     user_Id: number;
     name: string;

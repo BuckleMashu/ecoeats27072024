@@ -1,3 +1,4 @@
+////////////////////Cuong//////////////////////////////// Cuong coded the whole file
 import axios from 'axios';
 import RNFS from 'react-native-fs';
 

@@ -1,3 +1,4 @@
+////////////////////Cuong//////////////////////////////// Cuong coded the whole file, only inspired the style of Xiang En's login page styling
 import React, { useState,useEffect,useCallback,useContext } from 'react';
 import { hashPassword } from '../../db-service';
 

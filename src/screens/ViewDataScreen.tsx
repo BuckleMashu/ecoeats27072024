@@ -222,6 +222,11 @@
 // });
 // export default App;
 //----------------------------------------------------------------
+
+//THIS PAGE IS NOT USED IN THE ECOEATS APP. ITS JUST THE BASE FILE FOR TESTING
+// BUT CUONG CODED 99.99% OF THIS
+
+//----------------------------------------------------------------
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Button,

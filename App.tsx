@@ -1,3 +1,4 @@
+////////////////////Team//////////////////////////////// But other than adding new pages, Cuong coded the whole file
 import 'react-native-gesture-handler';
 import React, { useEffect, useContext,useState, } from 'react';
 import { NavigationContainer,useIsFocused,useNavigation } from '@react-navigation/native';

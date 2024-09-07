@@ -1,6 +1,11 @@
+////////////////////Cuong & Xiang En////////////////////////////////
+
+////////////////////Cuong////////////////////////////////
 import React, { useState,useEffect,useCallback,useContext } from 'react';
+////////////////////Nicole////////////////////////////////
 import { hashPassword } from '../../db-service'; // or wherever you defined it
 
+////////////////////Xiang En////////////////////////////////
 import { 
 View, 
 TextInput, 
@@ -27,6 +32,7 @@ type Props = {
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const isDarkMode = useColorScheme() === 'dark';
+  ////////////////////Cuong////////////////////////////////
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [userNameCheck, setUserNameCheck] = useState<string>('');
@@ -41,6 +47,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   //     setError('Invalid username or password');
   //   }
   // };
+  ////////////////////Cuong////////////////////////////////
   const checkInputs = () => {
     console.log("2"+username + " " + password);
     // setUserNameCheck(username);
@@ -49,7 +56,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
     handleLogin(username, password);
   };
 
-
+  ////////////////////Cuong & Nicole////////////////////////////////
   const handleLogin = useCallback(async (user: string, enteredPassword: string) => {
     try {
       const db = await getEcoEatsDBConnection();
@@ -86,7 +93,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   
   
   
-
+////////////////////Xiang En////////////////////////////////
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -106,8 +113,10 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
               value={password}
               onChangeText={setPassword}
             />
+            
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
             <Button title="Login" onPress={checkInputs} />
+            {/* ////////////////////Cuong//////////////////////////////// */}
             <View style={styles.registerSec}>
               <Text style={styles.registerSecText}>Don't have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
@@ -126,6 +135,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
+////////////////////Xiang En////////////////////////////////
 const styles = StyleSheet.create({
   safeArea:{
     flex:1
@@ -158,33 +168,39 @@ scroll:{
     color: 'red',
     marginBottom: 10,
   },
+  ////////////////////Cuong////////////////////////////////
   registerSec: {
     flexDirection: 'row',
     gap:10,
     justifyContent: 'center',
     padding: 10,
   },
+  ////////////////////Cuong////////////////////////////////
   registerSecText: { 
     fontSize: 16,
     color: 'black',
     fontWeight:'600',
   }, 
+  ////////////////////Cuong////////////////////////////////
   registerSecButton: {
     fontSize: 16,
     color: '#71834f',
     fontWeight:'900',
   },
+  ////////////////////Cuong////////////////////////////////
   homeSec: {
     flexDirection: 'row',
     gap:10,
     justifyContent: 'center',
     padding: 10,
   },
+  ////////////////////Cuong////////////////////////////////
   homeSecText: {
     fontSize: 16,
     color: 'black',
     fontWeight:'600',
   },
+  ////////////////////Cuong////////////////////////////////
   homeSecButton: {
     fontSize: 16,
     color: 'red',

@@ -1,3 +1,4 @@
+////////////////////Cuong&Xiang En//////////////////////////////// Cuong coded the 99% file, Xiang En only provides the log out button style
 import React, { useCallback, useEffect, useState,useContext } from 'react';
 import {
   Button,
@@ -494,6 +495,7 @@ const styles = StyleSheet.create({
     color:'white',
     margin:'auto',
   },
+  ////////////////////Xiang En////////////////////////////////
   logoutButton:{
     position:'absolute',
     right:10,
@@ -503,6 +505,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     opacity: 0.8,
   },
+  ////////////////////Xiang En////////////////////////////////
   logoutButtonText: {
     color: 'white',
     textAlign: 'center',

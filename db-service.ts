@@ -1,3 +1,4 @@
+////////////////////Cuong////////////////////////////////
 import { enablePromise, openDatabase, SQLiteDatabase } from 'react-native-sqlite-storage';
 import { ToDoItem, explore_page, share_page, request_page, userD, deal_page, comment } from './src/models';
 import RNFS from 'react-native-fs';
@@ -6,7 +7,7 @@ import SimpleCrypto from 'react-native-simple-crypto';
 enablePromise(true);
 
 //------------------------------ECOEATSSTUFF----------------------------------
-
+////////////////////Cuong////////////////////////////////
 const dbName = 'ecoeats.db';
 const internalDbPath = `${RNFS.DocumentDirectoryPath}/${dbName}`;
 
@@ -75,6 +76,7 @@ const checkTables = async () => {
 };
 
 // Share and Explore related functions
+////////////////////Cuong////////////////////////////////
 export const getSharePage = async (
   db: SQLiteDatabase,
   type: number | undefined,
@@ -133,6 +135,7 @@ export const getExplorePageUser = async(db:SQLiteDatabase, id:string):Promise<ex
   }
 };
 
+////////////////////Cuong////////////////////////////////
 export const getRequestPage = async(db:SQLiteDatabase, id:number):Promise<request_page> => {
   try{
     const [results] = await db.executeSql(`SELECT * FROM Request WHERE share_Id=?`, [id]);
@@ -156,6 +159,7 @@ export const getRequestPage = async(db:SQLiteDatabase, id:number):Promise<reques
   }
 };
 
+////////////////////Cuong////////////////////////////////
 export const getUserDetails = async(db:SQLiteDatabase, id:number): Promise<userD> =>{
   try{
     const [results] = await db.executeSql(`SELECT * FROM User WHERE user_id =?`,[id]);
@@ -186,6 +190,7 @@ export const getUserDetails = async(db:SQLiteDatabase, id:number): Promise<userD
   }
 }
 
+////////////////////Cuong////////////////////////////////
 export const saveNewRequestItem = async (db: SQLiteDatabase, user_Id:number,description:string) => {
   try {
     const insertRequestQuery = `INSERT INTO Request (user_Id, description) VALUES (${user_Id}, "${description}")`;
@@ -197,6 +202,7 @@ export const saveNewRequestItem = async (db: SQLiteDatabase, user_Id:number,desc
   }
 };
 
+////////////////////Cuong////////////////////////////////
 export const getLastestRequestItem =  async(db:SQLiteDatabase) =>{
   try{
     const getShareIdQuery = `SELECT share_Id FROM Request ORDER BY share_Id DESC LIMIT 1`;
@@ -206,6 +212,7 @@ export const getLastestRequestItem =  async(db:SQLiteDatabase) =>{
   }
 }
 
+////////////////////Cuong////////////////////////////////
 export const saveNewShareItem = async (db: SQLiteDatabase, type:number, title:string,tags:string|null,address:string,picture:string,expiration:string, id: number) => {
   try {
     const insertShareQuery = `INSERT INTO Share (share_Id, type, title, tags, address, picture, expiration) VALUES (?, ?, ?, ?, ?, ?, ?)`;
@@ -216,6 +223,7 @@ export const saveNewShareItem = async (db: SQLiteDatabase, type:number, title:st
   }
 };
 
+////////////////////Cuong////////////////////////////////
 export const updateUserSharePosts = async (db: SQLiteDatabase, share_Id:number, user_Id:number) => {
   try{
     console.log("testing backend of adding share"+user_Id);
@@ -234,6 +242,7 @@ export const updateUserSharePosts = async (db: SQLiteDatabase, share_Id:number, 
   }
 };
 
+////////////////////Cuong////////////////////////////////
 export const updateUserExplorePosts = async (db: SQLiteDatabase, explore_Id:number, user_Id:number) => {
   try{
     console.log("testing backend of adding share"+user_Id);
@@ -265,6 +274,7 @@ export const hashPassword = async (password: string): Promise<string> => {
   return SimpleCrypto.utils.convertArrayBufferToHex(hash);
 };
 
+////////////////////Cuong&Nicole////////////////////////////////
 export const checkLoginDetails = async (db: SQLiteDatabase, username: string, loginHashedPassword: string) => {
   try {
     const profileQuery = `SELECT * FROM User_credential WHERE username = ?`;
@@ -289,7 +299,7 @@ export const checkLoginDetails = async (db: SQLiteDatabase, username: string, lo
   }
 };
 
-
+////////////////////Cuong&Nicole////////////////////////////////
 export const registeringUser = async (db: SQLiteDatabase, username: string, password: string, accountType: number, email: string) => {
   try {
     // Insert into User_credential table with the hashed password
@@ -317,9 +327,7 @@ export const registeringUser = async (db: SQLiteDatabase, username: string, pass
   }
 };
 
-
-
-
+////////////////////Cuong////////////////////////////////
 export const updateProfilePicture = async(db:SQLiteDatabase, user_Id:number,picture:any,name:string|null) =>{
   try{
     console.log("testing backend of updating profile picture");
@@ -340,6 +348,7 @@ export const updateProfilePicture = async(db:SQLiteDatabase, user_Id:number,pict
   }
 };
 
+////////////////////Cuong////////////////////////////////
 export const getAccountType = async (db: SQLiteDatabase, userId: number): Promise<number> => {
   try {
     const query = `SELECT account_Type FROM User_credential WHERE user_Id = ?`;
@@ -384,12 +393,14 @@ export const getDealsPage = async(db: SQLiteDatabase, keyword: string): Promise<
 
 // Insert a new deal
 export const saveNewDeal = async(db: SQLiteDatabase, deal: deal_page) => {
-  const insertQuery = `
-    INSERT INTO Deals (title, description, picture, date_created) 
-    VALUES ('${deal.title}', '${deal.description}', '${deal.picture}', '${deal.date_created}')
-  `;
-
-  return db.executeSql(insertQuery);
+  try{
+    console.log(deal);
+    const insertQuery = `INSERT INTO Deals (title, description, picture, date_created, isBusinessAccount, isRedeemed) VALUES ('?','?','?','?',0,0)`;
+    return db.executeSql(insertQuery,[deal.title,deal.description,deal.picture,deal.date_created]);
+  }catch(error){
+    console.error(error);
+    throw Error('Failed to add new deal');
+  }
 };
 
 export const updateDeal = async(db: SQLiteDatabase, deal: deal_page) => {
@@ -595,61 +606,4 @@ export const checkIfUserLikedComment = async (db: SQLiteDatabase, userId: number
   }
 };
 
-
-//login and register related stuff
-
-
-
-
-//-----------------------------TESTING STUFF---IGNORE--------------------------------
-//everytime you edit the db externally, you need to uninstall the app first then reinstall it for it to notice the changes.
-// export const getDBConnection = async () => {
-//   return SQLite.openDatabase({
-//     name: 'todo-data.db', createFromLocation: '~www/todo-data.db', },() => { },);
-// };
-
-// export const createTable = async (db: SQLiteDatabase) => {
-//   // create table if not exists
-//   const query = `CREATE TABLE IF NOT EXISTS ${tableName}(
-//         value TEXT NOT NULL
-//     );`;
-
-//   await db.executeSql(query);
-// };
-
-// export const getTodoItems = async (db: SQLiteDatabase): Promise<ToDoItem[]> => {
-//   try {
-//     const todoItems: ToDoItem[] = [];
-//     const results = await db.executeSql(`SELECT rowid as id,value FROM ${tableName}`);
-//     results.forEach(result => {
-//       for (let index = 0; index < result.rows.length; index++) {
-//         // result.rows.item(index)["picture"] =  require('./src/images/share1.png');
-//         todoItems.push(result.rows.item(index))
-//       }
-//     });
-//     return todoItems;
-//   } catch (error) {
-//     console.error(error);
-//     throw Error('Failed to get todoItems !!!');
-//   }
-// };
-
-// export const saveTodoItems = async (db: SQLiteDatabase, todoItems: ToDoItem[]) => {
-//   const insertQuery =
-//     `INSERT OR REPLACE INTO ${tableName}(rowid, value) values` +
-//     todoItems.map(i => `(${i.id}, '${i.value}')`).join(',');
-
-//   return db.executeSql(insertQuery);
-// };
-
-// export const deleteTodoItem = async (db: SQLiteDatabase, id: number) => {
-//   const deleteQuery = `DELETE from ${tableName} where rowid = ${id}`;
-//   await db.executeSql(deleteQuery);
-// };
-
-// export const deleteTable = async (db: SQLiteDatabase) => {
-//   const query = `drop table ${tableName}`;
-
-//   await db.executeSql(query);
-// };
 
