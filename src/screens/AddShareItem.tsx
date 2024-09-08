@@ -1,3 +1,6 @@
+////////////////////Cuong//////////////////////////////// Cuong coded this whole page
+
+//import neccessary libraries
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Button,
@@ -46,12 +49,10 @@ const columnWidth = width / 2;
 const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
   const { currentUserId } = route.params;
   const isDarkMode = useColorScheme() === 'dark';
-//   const [shareEntity, setShareEntity] = React.useState<share_page[]>([]);
   const [title, setTitle] = React.useState<string>('');
   const [description, setDescription] = React.useState<string>('');
   const [address, setAdress] = React.useState<string>('');
   const [tags, setTags] = React.useState<string|null>(null);
-//   const [pictureName, setPictureName] = React.useState<string>('kokomi');
 
   const [imageUrl, setImageUrl] = React.useState<string>('https://i.imgur.com/50exbMa.png');
 
@@ -79,27 +80,6 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
     }
   },[]);
 
-  // const returnSharePageFormat = (itemType:number,title:string,tags:string,address:string,picture:string,expiration:string) =>{
-  //   const share: share_page = {
-  //       share_Id: -1,
-  //       type: itemType,
-  //       title: title,
-  //       tags: tags,
-  //       address: address,
-  //       picture: picture,
-  //       expiration: expiration,
-  //     };
-  //   setShareDetails(share);
-  // };
-
-  // const returnRequestPageFormat = (user_Id:number,description:string) =>{
-  //   const request: request_page = {
-  //       share_Id: -1,
-  //       user_Id:user_Id,
-  //       description: description,
-  //     };
-  //   setRequestDetails(request);
-  // };
 
   const handleItemChangeFood = () =>{
     setItemType(1);
@@ -112,13 +92,6 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
   };
 
   const handleItemSubmit = () =>{
-    // const uploadedImageUrl = uploadImageToImgur(selectedImageUri);
-    // if(uploadedImageUrl){
-    //   setImageUrl(uploadedImageUrl[0]);
-    //   setImageUId(uploadedImageUrl[1]);
-    // }
-    // returnSharePageFormat(itemType,title,tags,address,selectedImageUri,expiration);
-    // returnRequestPageFormat(currentUserID,description);
     loadDataCallback(currentUserId,description,itemType,title,tags,address,selectedImageUri,expiration);
   };
 
@@ -147,7 +120,7 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
     setImageUrl('https://i.imgur.com/50exbMa.png');
   },[]);
 
-  
+  // allow user to input neccessary information and image to create share post
   return (
     <SafeAreaView style={styles.safeArea}>
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -209,6 +182,8 @@ const AddShareScreen: React.FC<Props> = ({ route,navigation } : Props) => {
   );
 };
 
+
+//styling for add share item page
 const styles = StyleSheet.create({
   safeArea:{
     flex:1

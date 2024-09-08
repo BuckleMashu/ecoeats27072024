@@ -1,3 +1,4 @@
+////////////////////Cuong//////////////////////////////// Cuong coded the whole file
 let day = [];
 let month = [];
 let minute = [];

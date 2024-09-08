@@ -1,11 +1,13 @@
+////////////////////Cuong and Nicole ////////////////////////////////
 import { enablePromise, openDatabase, SQLiteDatabase } from 'react-native-sqlite-storage';
 import { ToDoItem, explore_page, share_page, request_page, userD, deal_page, comment } from './src/models';
 import RNFS from 'react-native-fs';
+import SimpleCrypto from 'react-native-simple-crypto';
 
 enablePromise(true);
 
 //------------------------------ECOEATSSTUFF----------------------------------
-
+////////////////////Cuong////////////////////////////////
 const dbName = 'ecoeats.db';
 const internalDbPath = `${RNFS.DocumentDirectoryPath}/${dbName}`;
 
@@ -74,6 +76,7 @@ const checkTables = async () => {
 };
 
 // Share and Explore related functions
+////////////////////Cuong////////////////////////////////
 export const getSharePage = async (
   db: SQLiteDatabase,
   type: number | undefined,
@@ -132,6 +135,7 @@ export const getExplorePageUser = async(db:SQLiteDatabase, id:string):Promise<ex
   }
 };
 
+////////////////////Cuong////////////////////////////////
 export const getRequestPage = async(db:SQLiteDatabase, id:number):Promise<request_page> => {
   try{
     const [results] = await db.executeSql(`SELECT * FROM Request WHERE share_Id=?`, [id]);
@@ -155,6 +159,7 @@ export const getRequestPage = async(db:SQLiteDatabase, id:number):Promise<reques
   }
 };
 
+////////////////////Cuong////////////////////////////////
 export const getUserDetails = async(db:SQLiteDatabase, id:number): Promise<userD> =>{
   try{
     const [results] = await db.executeSql(`SELECT * FROM User WHERE user_id =?`,[id]);
@@ -185,6 +190,7 @@ export const getUserDetails = async(db:SQLiteDatabase, id:number): Promise<userD
   }
 }
 
+////////////////////Cuong////////////////////////////////
 export const saveNewRequestItem = async (db: SQLiteDatabase, user_Id:number,description:string) => {
   try {
     const insertRequestQuery = `INSERT INTO Request (user_Id, description) VALUES (${user_Id}, "${description}")`;
@@ -196,6 +202,7 @@ export const saveNewRequestItem = async (db: SQLiteDatabase, user_Id:number,desc
   }
 };
 
+////////////////////Cuong////////////////////////////////
 export const getLastestRequestItem =  async(db:SQLiteDatabase) =>{
   try{
     const getShareIdQuery = `SELECT share_Id FROM Request ORDER BY share_Id DESC LIMIT 1`;
@@ -205,6 +212,7 @@ export const getLastestRequestItem =  async(db:SQLiteDatabase) =>{
   }
 }
 
+////////////////////Cuong////////////////////////////////
 export const saveNewShareItem = async (db: SQLiteDatabase, type:number, title:string,tags:string|null,address:string,picture:string,expiration:string, id: number) => {
   try {
     const insertShareQuery = `INSERT INTO Share (share_Id, type, title, tags, address, picture, expiration) VALUES (?, ?, ?, ?, ?, ?, ?)`;
@@ -215,6 +223,7 @@ export const saveNewShareItem = async (db: SQLiteDatabase, type:number, title:st
   }
 };
 
+////////////////////Cuong////////////////////////////////
 export const updateUserSharePosts = async (db: SQLiteDatabase, share_Id:number, user_Id:number) => {
   try{
     console.log("testing backend of adding share"+user_Id);
@@ -233,6 +242,7 @@ export const updateUserSharePosts = async (db: SQLiteDatabase, share_Id:number, 
   }
 };
 
+////////////////////Cuong////////////////////////////////
 export const updateUserExplorePosts = async (db: SQLiteDatabase, explore_Id:number, user_Id:number) => {
   try{
     console.log("testing backend of adding share"+user_Id);
@@ -252,43 +262,73 @@ export const updateUserExplorePosts = async (db: SQLiteDatabase, explore_Id:numb
 };
 
 //Profile page related stuff
-export const checkLoginDetails = async(db: SQLiteDatabase, username:string, password:string) =>{
-  try{
-    console.log("1"+username + password+"2");
-    const profileQuery = `SELECT * FROM User_credential WHERE username= "${username}" AND password= "${password}"`;
-    const [results] = await db.executeSql(profileQuery);
-    // console.log("outoput of login");
-    // console.log(results);
-    // console.log(results.rows.item(0).user_Id);
-    return results.rows.item(0).user_Id;
-  }catch(error){
-    console.error(error);
-    throw Error('Failed to get user credentials');
+////////////////////Nicole////////////////////////////////
+
+export const hashPassword = async (password: string): Promise<string> => {
+  // Convert the password string to an ArrayBuffer
+  const passwordBuffer = SimpleCrypto.utils.convertUtf8ToArrayBuffer(password);
+
+  // Hash the ArrayBuffer using SHA-256
+  const hash = await SimpleCrypto.SHA.sha256(passwordBuffer);
+
+  // Convert the hash (ArrayBuffer) to a hexadecimal string
+  return SimpleCrypto.utils.convertArrayBufferToHex(hash);
+};
+
+////////////////////Cuong&Nicole////////////////////////////////
+export const checkLoginDetails = async (db: SQLiteDatabase, username: string, loginHashedPassword: string) => {
+  try {
+    const profileQuery = `SELECT * FROM User_credential WHERE username = ?`;
+    const [results] = await db.executeSql(profileQuery, [username]);
+
+    if (results.rows.length > 0) {
+      const storedHashedPassword = results.rows.item(0).password;
+
+      // Compare the hashed passwords
+      if (storedHashedPassword === loginHashedPassword) {
+        // Return the entire user data object
+        return results.rows.item(0);
+      } else {
+        throw new Error('Invalid password');
+      }
+    } else {
+      throw new Error('User not found');
+    }
+  } catch (error) {
+    console.error("Error in checkLoginDetails:", error);
+    throw new Error('Failed to get user credentials');
   }
 };
 
-export const registeringUser = async(db: SQLiteDatabase, username:string, password:string, accountType:number, email:string) =>{
-  try{
-    const insertAccCredentialQuery = `INSERT INTO User_credential (password,username,account_Type) VALUES (?, ?, ?)`;
-    const id = await db.executeSql(insertAccCredentialQuery, [password, username,accountType]);
-    console.log("registering balh" +id[0]["insertId"]);
-    const name = 'NewUser'.concat(id[0]["insertId"].toString());
-    const insertAccProfileQuery = `INSERT INTO User (name,email) VALUES (?,?)`;
-    await db.executeSql(insertAccProfileQuery, [name,email]);
-    console.log("registered user:" + name);
+////////////////////Cuong&Nicole////////////////////////////////
+export const registeringUser = async (db: SQLiteDatabase, username: string, password: string, accountType: number, email: string) => {
+  try {
+    // Insert into User_credential table with the hashed password
 
-    const registeredUserIdQuery = `SELECT * FROM User WHERE email = "${email}"`;
-    const [results] = await db.executeSql(registeredUserIdQuery);
-    console.log("outoput of registering");
-    console.log(results);
-    console.log(results.rows.item(0).user_Id);
-    return results.rows.item(0).user_Id;
-  }catch(error){
-    console.error(error);
-    throw Error('Failed to add user');
+    const insertAccCredentialQuery = `INSERT INTO User_credential (username, password, account_Type) VALUES (?, ?, ?)`;
+    const result = await db.executeSql(insertAccCredentialQuery, [username, password, accountType]);
+
+    const userId = result[0]["insertId"]; // Get the inserted user ID
+    console.log("Registering Hashed Password in db" + password);
+
+    // Create a default name using the user ID
+    const name = 'NewUser'.concat(userId.toString());
+
+    // Insert into User table
+    const insertAccProfileQuery = `INSERT INTO User (user_Id, name, email) VALUES (?, ?, ?)`;
+    await db.executeSql(insertAccProfileQuery, [userId, name, email]);
+
+    console.log("Registered user:", name);
+
+    // Return the user ID
+    return userId;
+  } catch (error) {
+    console.error("Error in registeringUser:", error);
+    throw new Error('Failed to add user');
   }
 };
 
+////////////////////Cuong////////////////////////////////
 export const updateProfilePicture = async(db:SQLiteDatabase, user_Id:number,picture:any,name:string|null) =>{
   try{
     console.log("testing backend of updating profile picture");
@@ -309,8 +349,25 @@ export const updateProfilePicture = async(db:SQLiteDatabase, user_Id:number,pict
   }
 };
 
+////////////////////Cuong////////////////////////////////
+export const getAccountType = async (db: SQLiteDatabase, userId: number): Promise<number> => {
+  try {
+    const query = `SELECT account_Type FROM User_credential WHERE user_Id = ?`;
+    const [result] = await db.executeSql(query, [userId]);
+
+    if (result.rows.length > 0) {
+      return result.rows.item(0).account_Type;
+    } else {
+      throw new Error('User type not found');
+    }
+  } catch (error) {
+    console.error('Error in getAccountType:', error);
+    throw error;
+  }
+};
 
 //Deals page related stuff
+////////////////////Nicole////////////////////////////////
 
 // Fetch deals from the database
 export const getDealsPage = async(db: SQLiteDatabase, keyword: string): Promise<deal_page[]> => {
@@ -336,16 +393,20 @@ export const getDealsPage = async(db: SQLiteDatabase, keyword: string): Promise<
   }
 };
 
+////////////////////Nicole////////////////////////////////
 // Insert a new deal
 export const saveNewDeal = async(db: SQLiteDatabase, deal: deal_page) => {
-  const insertQuery = `
-    INSERT INTO Deals (title, description, picture, date_created) 
-    VALUES ('${deal.title}', '${deal.description}', '${deal.picture}', '${deal.date_created}')
-  `;
-
-  return db.executeSql(insertQuery);
+  try{
+    console.log(deal);
+    const insertQuery = `INSERT INTO Deals (title, description, picture, date_created, isBusinessAccount, isRedeemed) VALUES ('?','?','?','?',0,0)`;
+    return db.executeSql(insertQuery,[deal.title,deal.description,deal.picture,deal.date_created]);
+  }catch(error){
+    console.error(error);
+    throw Error('Failed to add new deal');
+  }
 };
 
+////////////////////Nicole////////////////////////////////
 export const updateDeal = async(db: SQLiteDatabase, deal: deal_page) => {
   const updateQuery = `
     UPDATE Deals 
@@ -364,6 +425,7 @@ export const deleteDeal = async(db: SQLiteDatabase, deal_Id: number) => {
   return db.executeSql(deleteQuery);
 };
 
+////////////////////Nicole////////////////////////////////
 export const getCommentsForDeal = async(db: SQLiteDatabase, dealId: number): Promise<comment[]> => {
   try {
     const comments: comment[] = [];
@@ -381,9 +443,33 @@ export const getCommentsForDeal = async(db: SQLiteDatabase, dealId: number): Pro
   }
 };
 
+////////////////////Nicole////////////////////////////////
+export const getRedeemedState = async (db: SQLiteDatabase, dealId: number): Promise<boolean> => {
+  try {
+    const [result] = await db.executeSql('SELECT isRedeemed FROM Deals WHERE deal_Id = ?', [dealId]);
+    if (result.rows.length > 0) {
+      return result.rows.item(0).isRedeemed === 1;
+    }
+    return false;
+  } catch (error) {
+    console.error('Failed to get redeemed state', error);
+    throw Error('Failed to get redeemed state');
+  }
+};
+
+////////////////////Nicole////////////////////////////////
+export const saveRedeemedState = async (db: SQLiteDatabase, dealId: number, redeemed: boolean) => {
+  try {
+    await db.executeSql('UPDATE Deals SET isRedeemed = ? WHERE deal_Id = ?', [redeemed ? 1 : 0, dealId]);
+  } catch (error) {
+    console.error('Failed to save redeemed state', error);
+    throw Error('Failed to save redeemed state');
+  }
+};
 
 
 //Explore page related stuff
+////////////////////Nicole////////////////////////////////
 export const getExplorePage = async(db: SQLiteDatabase, type: number, keyword: string): Promise<explore_page[]> => {
   try {
     const explores: explore_page[] = [];
@@ -406,7 +492,7 @@ export const getExplorePage = async(db: SQLiteDatabase, type: number, keyword: s
     throw Error('Failed to get explores');
   }
 };
-
+////////////////////Nicole////////////////////////////////
 export const saveNewExplore = async(db: SQLiteDatabase, explore: explore_page) => {
   try{
     const insertQuery = `
@@ -420,101 +506,115 @@ export const saveNewExplore = async(db: SQLiteDatabase, explore: explore_page) =
   }
 };
 
-// In db-service.ts
-
-export const getCommentsForExplore = async (
-  db: SQLiteDatabase,
-  exploreId: number
-): Promise<comment[]> => {
+//comments
+////////////////////Nicole////////////////////////////////
+export const getCommentsForExplore = async (db: SQLiteDatabase, explore_Id: number): Promise<comment[]> => {
   try {
+    const commentsQuery = `
+      SELECT * FROM Comments WHERE explore_Id = ? ORDER BY parent_comment_id ASC, comment_Id ASC
+    `;
+    const [results] = await db.executeSql(commentsQuery, [explore_Id]);
+
     const comments: comment[] = [];
-    const results = await db.executeSql(
-      `SELECT * FROM Comments WHERE explore_Id = ?`,
-      [exploreId]
-    );
-    results.forEach(result => {
-      for (let index = 0; index < result.rows.length; index++) {
-        comments.push(result.rows.item(index));
-      }
-    });
+    for (let i = 0; i < results.rows.length; i++) {
+      comments.push(results.rows.item(i));
+    }
     return comments;
   } catch (error) {
-    console.error('Failed to get comments', error);
-    throw Error('Failed to get comments');
+    console.error('Error retrieving comments:', error);
+    throw Error('Failed to retrieve comments');
   }
 };
 
-// Make sure to also add the saveNewComment function if it doesn't exist:
-export const saveNewComment = async (
-  db: SQLiteDatabase,
-  comment: comment
-) => {
-  const insertQuery = `
-    INSERT INTO Comments (explore_Id, user_Name, comment_Text)
-    VALUES (?, ?, ?)
-  `;
-  await db.executeSql(insertQuery, [
-    comment.explore_Id,
-    comment.user_Name,
-    comment.comment_Text,
-  ]);
+////////////////////Nicole////////////////////////////////
+export const saveNewComment = async (db: SQLiteDatabase, comment: comment) => {
+  try {
+    const insertQuery = `
+      INSERT INTO Comments (explore_Id, user_Name, comment_Text, parent_comment_id, like_count) 
+      VALUES (?, ?, ?, ?, ?)
+    `;
+    await db.executeSql(insertQuery, [
+      comment.explore_Id,
+      comment.user_Name,
+      comment.comment_Text,
+      comment.parent_comment_id,
+      comment.like_count,
+    ]);
+  } catch (error) {
+    console.error('Error saving comment:', error);
+    throw new Error('Failed to save comment');
+  }
 };
 
+////////////////////Nicole////////////////////////////////
+export const likeComment = async (db: SQLiteDatabase, userId: number, commentId: number) => {
+  try {
+    // Add a like to the CommentLikes table
+    await db.executeSql(
+      `INSERT INTO CommentLikes (user_Id, comment_Id) VALUES (?, ?)`,
+      [userId, commentId]
+    );
 
-//login and register related stuff
+    // Update the like count in the Comments table
+    const [likeCountResult] = await db.executeSql(
+      `SELECT COUNT(*) AS likeCount FROM CommentLikes WHERE comment_Id = ?`,
+      [commentId]
+    );
+    const newLikeCount = likeCountResult.rows.item(0).likeCount;
 
+    await db.executeSql(
+      `UPDATE Comments SET like_count = ? WHERE comment_Id = ?`,
+      [newLikeCount, commentId]
+    );
 
+    return newLikeCount;
+  } catch (error) {
+    console.error('Error liking comment:', error);
+    throw new Error('Failed to like comment');
+  }
+};
 
+////////////////////Nicole////////////////////////////////
+export const unlikeComment = async (db: SQLiteDatabase, userId: number, commentId: number) => {
+  try {
+    // Remove the like from the CommentLikes table
+    await db.executeSql(
+      `DELETE FROM CommentLikes WHERE user_Id = ? AND comment_Id = ?`,
+      [userId, commentId]
+    );
 
-//-----------------------------TESTING STUFF---IGNORE--------------------------------
-//everytime you edit the db externally, you need to uninstall the app first then reinstall it for it to notice the changes.
-// export const getDBConnection = async () => {
-//   return SQLite.openDatabase({
-//     name: 'todo-data.db', createFromLocation: '~www/todo-data.db', },() => { },);
-// };
+    // Update the like count in the Comments table
+    const [likeCountResult] = await db.executeSql(
+      `SELECT COUNT(*) AS likeCount FROM CommentLikes WHERE comment_Id = ?`,
+      [commentId]
+    );
+    const newLikeCount = likeCountResult.rows.item(0).likeCount;
 
-// export const createTable = async (db: SQLiteDatabase) => {
-//   // create table if not exists
-//   const query = `CREATE TABLE IF NOT EXISTS ${tableName}(
-//         value TEXT NOT NULL
-//     );`;
+    await db.executeSql(
+      `UPDATE Comments SET like_count = ? WHERE comment_Id = ?`,
+      [newLikeCount, commentId]
+    );
 
-//   await db.executeSql(query);
-// };
+    return newLikeCount;
+  } catch (error) {
+    console.error('Error unliking comment:', error);
+    throw new Error('Failed to unlike comment');
+  }
+};
 
-// export const getTodoItems = async (db: SQLiteDatabase): Promise<ToDoItem[]> => {
-//   try {
-//     const todoItems: ToDoItem[] = [];
-//     const results = await db.executeSql(`SELECT rowid as id,value FROM ${tableName}`);
-//     results.forEach(result => {
-//       for (let index = 0; index < result.rows.length; index++) {
-//         // result.rows.item(index)["picture"] =  require('./src/images/share1.png');
-//         todoItems.push(result.rows.item(index))
-//       }
-//     });
-//     return todoItems;
-//   } catch (error) {
-//     console.error(error);
-//     throw Error('Failed to get todoItems !!!');
-//   }
-// };
+////////////////////Nicole////////////////////////////////
+export const checkIfUserLikedComment = async (db: SQLiteDatabase, userId: number, commentId: number) => {
+  try {
+    const [result] = await db.executeSql(
+      `SELECT * FROM CommentLikes WHERE user_Id = ? AND comment_Id = ?`,
+      [userId, commentId]
+    );
 
-// export const saveTodoItems = async (db: SQLiteDatabase, todoItems: ToDoItem[]) => {
-//   const insertQuery =
-//     `INSERT OR REPLACE INTO ${tableName}(rowid, value) values` +
-//     todoItems.map(i => `(${i.id}, '${i.value}')`).join(',');
+    return result.rows.length > 0;
+  } catch (error) {
+    console.error('Error checking if user liked comment:', error);
+    throw new Error('Failed to check if user liked comment');
+  }
+};
 
-//   return db.executeSql(insertQuery);
-// };
-
-// export const deleteTodoItem = async (db: SQLiteDatabase, id: number) => {
-//   const deleteQuery = `DELETE from ${tableName} where rowid = ${id}`;
-//   await db.executeSql(deleteQuery);
-// };
-
-// export const deleteTable = async (db: SQLiteDatabase) => {
-//   const query = `drop table ${tableName}`;
-
-//   await db.executeSql(query);
-// };
 

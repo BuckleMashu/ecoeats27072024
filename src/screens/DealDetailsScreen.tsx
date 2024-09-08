@@ -1,4 +1,7 @@
-import React from 'react';
+////////////// Nicole coded whole file //////////////////
+
+//import neccessary libraries
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -13,6 +16,8 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useColorScheme } from 'react-native';
 import { RootStackParamList } from '../../App';
+import RedeemSlider from '../modules/RedeemSlider';
+import { getEcoEatsDBConnection, getRedeemedState, saveRedeemedState } from '../../db-service';
 
 type DealDetailsScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -32,6 +37,28 @@ const DealDetailsScreen: React.FC<Props> = ({ route }) => {
   const isDarkMode = useColorScheme() === 'dark';
   const { deal } = route.params;
 
+  const [isRedeemed, setIsRedeemed] = useState(false);
+
+  //get state of redeemed slider from database
+  useEffect(() => {
+    const fetchRedeemedState = async () => {
+      const db = await getEcoEatsDBConnection();
+      const redeemed = await getRedeemedState(db, deal.deal_Id);
+      setIsRedeemed(redeemed);
+    };
+
+    fetchRedeemedState();
+  }, [deal.deal_Id]);
+
+  //handle redeem state when user redeems a deal
+  const handleRedeem = async () => {
+    setIsRedeemed(true);
+    const db = await getEcoEatsDBConnection();
+    await saveRedeemedState(db, deal.deal_Id, true);
+    alert('Deal Redeemed!');
+  };
+
+  //display information and image of the deals and the correct state of redeem slider
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -45,13 +72,15 @@ const DealDetailsScreen: React.FC<Props> = ({ route }) => {
           <Text style={styles.description}>{deal.description}</Text>
           <Text style={styles.dateCreated}>Date Created: {deal.date_created}</Text>
 
-          {/* Comment Section - Removed from the deals page */}
+          {/* Redeem Slider */}
+          <RedeemSlider onComplete={handleRedeem} isRedeemed={isRedeemed} />
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
+//styling for deal details page
 const styles = StyleSheet.create({
   container: {
     flex: 1,

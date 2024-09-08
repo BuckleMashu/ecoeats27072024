@@ -1,4 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
+////////////// Nicole coded whole file //////////////////
+
+//import neccessary libraries 
+import React, { useCallback, useEffect, useState, useContext } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,17 +12,15 @@ import {
   View,
   TouchableOpacity,
   Dimensions,
+  Image, 
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
-
 import { DealComponent } from '../modules/EcoEatsDeals';
 import { deal_page } from '../models';
 import { getEcoEatsDBConnection, getDealsPage } from '../../db-service';
 import { Searchbar } from 'react-native-paper';
-
-// import localImages from '../imageImports';
-
+import { UserContext } from '../../UserContext';
 import { useIsFocused } from '@react-navigation/native';
 
 type DetailsScreenNavigationProp = StackNavigationProp<
@@ -38,11 +39,14 @@ const DetailsScreen: React.FC<Props> = ({ navigation }) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [searchQuery, setSearchQuery] = React.useState("");
   const [dealsEntity, setDealsEntity] = React.useState<deal_page[]>([]);
+  const [displayAdd, setDisplayAdd] = React.useState(false);
+  const { isBusinessAccount } = useContext(UserContext);
+
   let db;
 
   const loadDataCallback = useCallback(async (searchR: string) => {
     try {
-      db = await getEcoEatsDBConnection();
+      const db = await getEcoEatsDBConnection();
       const result = await getDealsPage(db, searchR);
       setDealsEntity(result);
     } catch (error) {
@@ -50,13 +54,26 @@ const DetailsScreen: React.FC<Props> = ({ navigation }) => {
     }
   }, []);
 
+  const accTypeCheck = () =>{
+    if(isBusinessAccount == 1 || isBusinessAccount == 0){
+      setDisplayAdd(true);
+    }else{
+      setDisplayAdd(false);
+    }
+  };
+
   const isFocused = useIsFocused();
   useEffect(() => {
-    if(isFocused) {
+    if (isFocused) {
       loadDataCallback(searchQuery);
+      console.log("deals screen");
+      console.log(isBusinessAccount);
+      accTypeCheck();
+      console.log(displayAdd);
     }
-  }, [loadDataCallback, searchQuery, isFocused]);
+  }, [loadDataCallback, searchQuery, isFocused,displayAdd]);
 
+// display search bar and deal posts and correct image for each deal
   return (
     <SafeAreaView>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -68,14 +85,17 @@ const DetailsScreen: React.FC<Props> = ({ navigation }) => {
               placeholder="Search"
               onChangeText={setSearchQuery}
               value={searchQuery}
+              icon={() => <Text style={{ fontSize: 20 }}>🔍</Text>}
             />
           </View>
-          <TouchableOpacity
-            style={styles.plusButton}
-            onPress={() => navigation.navigate('AddDeal')}
-          >
-            <Text style={styles.plusButtonText}>+</Text>
-          </TouchableOpacity>
+          {displayAdd? (
+            <TouchableOpacity
+              style={styles.plusButton}
+              onPress={() => navigation.navigate('AddDeal')}
+            >
+              <Text style={styles.plusButtonText}>+</Text>
+            </TouchableOpacity>
+          ):null} 
           <View style={styles.postContainer}>
             {dealsEntity.map((deal) => (
               <TouchableOpacity
@@ -87,9 +107,7 @@ const DetailsScreen: React.FC<Props> = ({ navigation }) => {
                   <DealComponent
                     key={deal.deal_Id}
                     deal={deal}
-                    picture={
-                      null || {uri: 'https://i.imgur.com/50exbMa.png'}
-                    }
+                    picture={deal.picture ? deal.picture : { uri: 'https://i.imgur.com/50exbMa.png' }}
                   />
                 </View>
               </TouchableOpacity>
@@ -101,6 +119,7 @@ const DetailsScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
+// deal page styling
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'rgb(250,250,250)',
@@ -147,6 +166,12 @@ const styles = StyleSheet.create({
   plusButtonText: {
     color: 'white',
     fontSize: 30,
+  },
+  image: {
+    width: columnWidth - 15,
+    height: columnWidth - 15,
+    borderRadius: 10,
+    marginBottom: 10,
   },
 });
 

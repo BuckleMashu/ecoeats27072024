@@ -1,3 +1,5 @@
+////////////////////Cuong&Xiang En//////////////////////////////// Cuong coded the 99% file, Xiang En only provides the log out button style
+//import neccessary libraries
 import React, { useCallback, useEffect, useState,useContext } from 'react';
 import {
   Button,
@@ -66,6 +68,8 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImageUri, setSelectedImageUId] = useState<string | null>(null);
+  
+  const [newName,setNewName] = useState<string | null>(null);
 
   const [newName,setNewName] = useState<string | null>(null);
 
@@ -173,6 +177,7 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
     // setSelectedImageUId('https://i.imgur.com/50exbMa.png');
   },[loadDataCallback,isFocused,modalVisible,userID,userId]);
 
+  //display
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -292,6 +297,7 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
   );
 };
 
+//styling for user screen
 const styles = StyleSheet.create({
   safeArea:{
       flex:1
@@ -505,6 +511,7 @@ const styles = StyleSheet.create({
     marginLeft:'auto',
     marginRight:'auto',
   },
+  ////////////////////Xiang En////////////////////////////////
   logoutButton:{
     position:'absolute',
     right:10,
@@ -514,11 +521,17 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     opacity: 0.8,
   },
+  ////////////////////Xiang En////////////////////////////////
   logoutButtonText: {
     color: 'white',
     textAlign: 'center',
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  userNameChangeModalText:{
+    fontSize: 18,
+    fontWeight:'bold',
+    marginBottom:10,
   },
 });
 

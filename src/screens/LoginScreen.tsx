@@ -1,4 +1,13 @@
+////////////////////Cuong & Xiang En////////////////////////////////
+///////////////////Nicole added some parts to make deal and explore restrictions work////////////
+
+////////////////////Cuong////////////////////////////////
 import React, { useState,useEffect,useCallback,useContext } from 'react';
+////////////////////Nicole////////////////////////////////
+import { hashPassword } from '../../db-service'; // or wherever you defined it
+
+////////////////////Xiang En////////////////////////////////
+//import libraries needed
 import { 
 View, 
 TextInput, 
@@ -13,7 +22,7 @@ TouchableOpacity,} from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 
-import { getEcoEatsDBConnection, checkLoginDetails } from '../../db-service';
+import { getEcoEatsDBConnection, checkLoginDetails, getAccountType } from '../../db-service';
 
 import {UserContext} from '../../UserContext';
 
@@ -25,49 +34,59 @@ type Props = {
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const isDarkMode = useColorScheme() === 'dark';
+  ////////////////////Cuong////////////////////////////////
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [userNameCheck, setUserNameCheck] = useState<string>('');
   const [passWordCheck, setPassWordCheck] = useState<string>('');
   const [error, setError] = useState<string>('');
   let db;
-  const {setUserId} = useContext(UserContext);
-  // const handleLogin = () => {
-  //   if (username === 'admin' && password === 'admin') {
-  //     navigation.navigate('User', { userID: 1 });  // Pass userID when navigating
-  //   } else {
-  //     setError('Invalid username or password');
-  //   }
-  // };
+  const {setUserId,setIsBusinessAccount, isBusinessAccount} = useContext(UserContext);
+ 
+  ////////////////////Cuong////////////////////////////////
   const checkInputs = () => {
     console.log("2"+username + " " + password);
-    // setUserNameCheck(username);
-    // setPassWordCheck(password);
-    // console.log("3"+userNameCheck + " " + passWordCheck);
     handleLogin(username, password);
   };
 
-  const handleLogin = useCallback(async (user:string,pass:string) =>{
-    try{
-        console.log("2"+user + " " + pass);
-        db = await getEcoEatsDBConnection();
-        const result = await checkLoginDetails(db,user,pass);
-        console.log("login output:"+result);
-        if (result){
-          setUserId(result);  // Pass userID when navigating
-          navigation.navigate('MainTabs', {screen: 'User',   params: {userID: result}});
-        }else{
-          setError('Invalid username or password, or account does not exist');
-        }
-    } catch(error){
-        console.error(error);
-    }
-  },[]);
+  ////////////////////Cuong & Nicole////////////////////////////////
+  const handleLogin = useCallback(async (user: string, enteredPassword: string) => {
+    try {
+      const db = await getEcoEatsDBConnection();
+      
+      // Hash the entered password
+      const loginHashedPassword = await hashPassword(enteredPassword);
+      console.log("Plain Password during Login:", enteredPassword);
+      console.log("Hashed Password during Login:", loginHashedPassword);
   
-  useEffect(()=>{
-
-  },[username,password]);
-
+      // Check if the hashed password matches the stored hashed password in the database
+      const userData = await checkLoginDetails(db, user, loginHashedPassword);
+  
+      if (userData && userData.user_Id) {
+        console.log("User data found:", userData.user_Id);
+  
+        // Set the user ID and account type in context
+        setUserId(userData.user_Id);
+        
+        const AccountType = await getAccountType(db, userData.user_Id);
+        console.log("Account Type retrieved:", AccountType);
+  
+        setIsBusinessAccount(AccountType);
+  
+        // Navigate to the User screen
+        navigation.navigate('MainTabs', { screen: 'User', params: { userID: userData.user_Id } });
+      } else {
+        setError('Invalid username or password');
+      }
+    } catch (error) {
+      console.error('Error in handleLogin:', error);
+      setError('An error occurred during login. Please try again.');
+    }
+  }, []);
+  
+  
+  
+////////////////////Xiang En////////////////////////////////
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -87,8 +106,10 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
               value={password}
               onChangeText={setPassword}
             />
+            
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
             <Button title="Login" onPress={checkInputs} />
+            {/* ////////////////////Cuong//////////////////////////////// */}
             <View style={styles.registerSec}>
               <Text style={styles.registerSecText}>Don't have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
@@ -107,6 +128,8 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
+////////////////////Xiang En////////////////////////////////
+//login page styling
 const styles = StyleSheet.create({
   safeArea:{
     flex:1
@@ -139,33 +162,39 @@ scroll:{
     color: 'red',
     marginBottom: 10,
   },
+  ////////////////////Cuong////////////////////////////////
   registerSec: {
     flexDirection: 'row',
     gap:10,
     justifyContent: 'center',
     padding: 10,
   },
+  ////////////////////Cuong////////////////////////////////
   registerSecText: { 
     fontSize: 16,
     color: 'black',
     fontWeight:'600',
   }, 
+  ////////////////////Cuong////////////////////////////////
   registerSecButton: {
     fontSize: 16,
     color: '#71834f',
     fontWeight:'900',
   },
+  ////////////////////Cuong////////////////////////////////
   homeSec: {
     flexDirection: 'row',
     gap:10,
     justifyContent: 'center',
     padding: 10,
   },
+  ////////////////////Cuong////////////////////////////////
   homeSecText: {
     fontSize: 16,
     color: 'black',
     fontWeight:'600',
   },
+  ////////////////////Cuong////////////////////////////////
   homeSecButton: {
     fontSize: 16,
     color: 'red',

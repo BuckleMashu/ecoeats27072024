@@ -1,3 +1,7 @@
+////////////// coded by Nicole and Thien Tran ///////////////////
+
+///////////Nicole coded this///////////
+//import neccessary libraries
 import React, { useCallback, useEffect, useState, useContext} from 'react';
 import {
   SafeAreaView,
@@ -22,6 +26,7 @@ import { Searchbar } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { UserContext } from '../../UserContext';
 
+///////////Nicole coded this///////////
 type ExploreScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Explore'
@@ -33,7 +38,6 @@ type Props = {
 
 const { width } = Dimensions.get('window');
 const columnWidth = width / 2;
-
 const ExploreScreen: React.FC<Props> = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState('Food');
   const [searchQuery, setSearchQuery] = useState('');
@@ -41,6 +45,8 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
   let db: any;  // Make sure to define the type for db if needed
   const {userId} = useContext(UserContext);
 
+  ///////////Nicole coded this///////////
+  //check if item is food or activitiy and display in correct food/item page
   const loadDataCallback = useCallback(async (searchR: string) => {
     try {
       // 0 for food, 1 for activity
@@ -54,7 +60,7 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
       console.error(error);
     }
   }, [activeTab]);
-
+  ///////////Thien Tran coded this///////////
   const isFocused = useIsFocused();
   useEffect(() => {
     if(isFocused){
@@ -63,6 +69,7 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
   }, [loadDataCallback, searchQuery,isFocused]);
 
   return (
+    ///////////Thien Tran coded this///////////
     <SafeAreaView>
       <StatusBar />
       <ScrollView contentInsetAdjustmentBehavior="automatic">
@@ -88,7 +95,7 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
         </TouchableOpacity>
         </View>
 
-        {/* search bar */}
+        {/* cuong coded this */}
         <View style={styles.container}>
           <View style={styles.searchFilterContainer}>
             <Searchbar
@@ -106,7 +113,7 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
             />
           </TouchableOpacity>
           </View>
-
+          {/* Nicole coded this */}
           {userId ? (
           <TouchableOpacity
           style={styles.plusButton}
@@ -114,6 +121,7 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
             <Text style={styles.plusButtonText}>+</Text>
           </TouchableOpacity>
           ): null}
+          {/* Nicole coded this */}
           <View style={styles.postContainer}>
             {exploreEntity.map((explore) => (
               <TouchableOpacity
@@ -122,6 +130,7 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
                 style={styles.itemContainer}
               >
                 <View>
+                  {/* Nicole coded this */}
                   <ExploreComponent
                     key={explore.explore_Id}
                     explore={explore}
@@ -138,7 +147,8 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
+///////////Nicole coded this///////////
+//styling for explore page
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'rgb(250,250,250)',

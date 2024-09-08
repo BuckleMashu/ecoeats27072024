@@ -1,0 +1,12 @@
+For the EcoEats db,
+Cuong made and manage:
+- User
+- User_credentials
+- Share
+- Request
+
+Nicole made and manage:
+- Deals
+- Explores
+- Comments
+- CommentLikes

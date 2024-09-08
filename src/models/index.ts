@@ -1,8 +1,9 @@
+////////////////////Cuong////////////////////////////////
 export type ToDoItem = {
     id: number;
     value: string;
 };
-
+////////////////////Cuong////////////////////////////////
 export type share_page = {
     share_Id: number;
     type: number;
@@ -12,7 +13,7 @@ export type share_page = {
     picture: string;
     expiration: string;
 };
-
+////////////////////Cuong////////////////////////////////
 export type deal_page = {
     deal_Id: number;
     title: string;
@@ -22,13 +23,14 @@ export type deal_page = {
   };
   
 
-
+////////////////////Cuong////////////////////////////////
 export type request_page = {
     share_Id: number;
     user_Id: number;
     description: string;
 };
 
+////////////////////Cuong////////////////////////////////
 export type userD = {
     user_Id: number;
     name: string;
@@ -45,14 +47,17 @@ export type userD = {
     explore_Posts: string;
 }
 
-export type comment = {
+////////////////////Nicole////////////////////////////////
+export interface comment {
     comment_Id: number;
-    explore_Id: number; 
+    explore_Id: number;
     user_Name: string;
     comment_Text: string;
-  };
+    parent_comment_id?: number | null;
+    like_count: number; 
+  }
   
-
+////////////////////Nicole////////////////////////////////
 export type explore_page = {
 explore_Id: number;
 title: string;
@@ -64,4 +69,3 @@ user_Id: number;
 };
   
   
-//add new variable for each respective datatable below
