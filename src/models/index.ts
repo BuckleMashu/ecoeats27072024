@@ -47,6 +47,7 @@ export type userD = {
     explore_Posts: string;
 }
 
+////////////////////Nicole////////////////////////////////
 export interface comment {
     comment_Id: number;
     explore_Id: number;
@@ -56,7 +57,7 @@ export interface comment {
     like_count: number; 
   }
   
-
+////////////////////Nicole////////////////////////////////
 export type explore_page = {
 explore_Id: number;
 title: string;
@@ -68,4 +69,3 @@ user_Id: number;
 };
   
   
-//add new variable for each respective datatable below

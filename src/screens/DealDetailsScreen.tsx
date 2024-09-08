@@ -1,3 +1,6 @@
+////////////// Nicole coded whole file //////////////////
+
+//import neccessary libraries
 import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
@@ -36,6 +39,7 @@ const DealDetailsScreen: React.FC<Props> = ({ route }) => {
 
   const [isRedeemed, setIsRedeemed] = useState(false);
 
+  //get state of redeemed slider from database
   useEffect(() => {
     const fetchRedeemedState = async () => {
       const db = await getEcoEatsDBConnection();
@@ -46,6 +50,7 @@ const DealDetailsScreen: React.FC<Props> = ({ route }) => {
     fetchRedeemedState();
   }, [deal.deal_Id]);
 
+  //handle redeem state when user redeems a deal
   const handleRedeem = async () => {
     setIsRedeemed(true);
     const db = await getEcoEatsDBConnection();
@@ -53,6 +58,7 @@ const DealDetailsScreen: React.FC<Props> = ({ route }) => {
     alert('Deal Redeemed!');
   };
 
+  //display information and image of the deals and the correct state of redeem slider
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -74,6 +80,7 @@ const DealDetailsScreen: React.FC<Props> = ({ route }) => {
   );
 };
 
+//styling for deal details page
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -1,4 +1,5 @@
 ////////////////////Cuong & Xiang En////////////////////////////////
+///////////////////Nicole added some parts to make deal and explore restrictions work////////////
 
 ////////////////////Cuong////////////////////////////////
 import React, { useState,useEffect,useCallback,useContext } from 'react';
@@ -6,6 +7,7 @@ import React, { useState,useEffect,useCallback,useContext } from 'react';
 import { hashPassword } from '../../db-service'; // or wherever you defined it
 
 ////////////////////Xiang En////////////////////////////////
+//import libraries needed
 import { 
 View, 
 TextInput, 
@@ -40,19 +42,10 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [error, setError] = useState<string>('');
   let db;
   const {setUserId,setIsBusinessAccount, isBusinessAccount} = useContext(UserContext);
-  // const handleLogin = () => {
-  //   if (username === 'admin' && password === 'admin') {
-  //     navigation.navigate('User', { userID: 1 });  // Pass userID when navigating
-  //   } else {
-  //     setError('Invalid username or password');
-  //   }
-  // };
+ 
   ////////////////////Cuong////////////////////////////////
   const checkInputs = () => {
     console.log("2"+username + " " + password);
-    // setUserNameCheck(username);
-    // setPassWordCheck(password);
-    // console.log("3"+userNameCheck + " " + passWordCheck);
     handleLogin(username, password);
   };
 
@@ -136,6 +129,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 };
 
 ////////////////////Xiang En////////////////////////////////
+//login page styling
 const styles = StyleSheet.create({
   safeArea:{
     flex:1

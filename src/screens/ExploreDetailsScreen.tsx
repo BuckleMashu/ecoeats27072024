@@ -1,3 +1,6 @@
+////////////// Nicole coded whole file //////////////////
+
+//import neccessary libraries
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 import {
   SafeAreaView,
@@ -34,6 +37,7 @@ type Props = {
 
 const { width: screenWidth } = Dimensions.get('window');
 
+
 const ExploreDetailsScreen: React.FC<Props> = ({ route }) => {
   const isDarkMode = useColorScheme() === 'dark';
   const { explore } = route.params;
@@ -45,6 +49,7 @@ const ExploreDetailsScreen: React.FC<Props> = ({ route }) => {
   const [username, setUsername] = useState<string | null>(null);
   const [replyToCommentId, setReplyToCommentId] = useState<number | null>(null);
 
+  // display comments 
   const loadComments = useCallback(async () => {
     try {
       const db = await getEcoEatsDBConnection();
@@ -55,6 +60,7 @@ const ExploreDetailsScreen: React.FC<Props> = ({ route }) => {
     }
   }, [explore.explore_Id]);
 
+  // get the username of the commenter
   const fetchUsername = useCallback(async () => {
     if (userId) {
       try {
@@ -67,6 +73,7 @@ const ExploreDetailsScreen: React.FC<Props> = ({ route }) => {
     }
   }, [userId]);
 
+  // function to add a new comment, save new comment to database
   const handleAddComment = async () => {
     if (newComment.trim()) {
       try {
@@ -89,16 +96,17 @@ const ExploreDetailsScreen: React.FC<Props> = ({ route }) => {
     }
   };
 
+  // handle like functions
   const handleLikeToggle = async (commentId: number) => {
     if (!userId) {
       console.log("User not logged in. Can't like comments.");
       return; // Prevent liking if user is not logged in
     }
-
+    // check if user has already liked the comment
     try {
       const db = await getEcoEatsDBConnection();
       const hasLiked = await checkIfUserLikedComment(db, userId, commentId);
-
+      //toggle like comment from like to dislike
       if (hasLiked) {
         await unlikeComment(db, userId, commentId);
       } else {
@@ -121,9 +129,11 @@ const ExploreDetailsScreen: React.FC<Props> = ({ route }) => {
     fetchUsername();
   }, [loadComments, fetchUsername]);
 
+  
   const renderComment = (comment: comment) => {
     const replies = comments.filter(c => c.parent_comment_id === comment.comment_Id);
 
+    // display functionalities for reply comment, like comment and like count
     return (
       <View key={comment.comment_Id} style={[styles.commentContainer, comment.parent_comment_id ? styles.replyContainer : null]}>
         <Text style={styles.commentUser}>
@@ -159,6 +169,7 @@ const ExploreDetailsScreen: React.FC<Props> = ({ route }) => {
     );
   };
 
+  //display the explore details and show image, details and comments
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -195,6 +206,7 @@ const ExploreDetailsScreen: React.FC<Props> = ({ route }) => {
   );
 };
 
+//explore detail page styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,

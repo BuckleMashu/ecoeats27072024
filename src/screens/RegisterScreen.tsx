@@ -1,4 +1,7 @@
 ////////////////////Cuong//////////////////////////////// Cuong coded the whole file, only inspired the style of Xiang En's login page styling
+///////////////////Nicole added password hashing////////////
+
+//import neccessary libraries
 import React, { useState,useEffect,useCallback,useContext } from 'react';
 import { hashPassword } from '../../db-service';
 
@@ -47,7 +50,8 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
     handleRegister(username,password,acountType,emailAdd)
   };
     
-
+  // handle user registration
+  ///////////////////Nicole coded password hashing////////////
   const handleRegister = useCallback(async (user: string, enteredPassword: string, accT: number, email: string) => {
     try {
       db = await getEcoEatsDBConnection();
@@ -69,7 +73,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
     }
   }, []);
   
-  
+  //display 
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -128,6 +132,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
+//register page styling
 const styles = StyleSheet.create({
     safeArea:{
         flex:1

@@ -1,3 +1,6 @@
+////////////// Nicole coded whole file //////////////////
+
+//import neccessary libraries 
 import React, { useCallback, useEffect, useState, useContext } from 'react';
 import {
   SafeAreaView,
@@ -70,7 +73,7 @@ const DetailsScreen: React.FC<Props> = ({ navigation }) => {
     }
   }, [loadDataCallback, searchQuery, isFocused,displayAdd]);
 
-
+// display search bar and deal posts and correct image for each deal
   return (
     <SafeAreaView>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -116,6 +119,7 @@ const DetailsScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
+// deal page styling
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'rgb(250,250,250)',

@@ -1,3 +1,6 @@
+////////////// Nicole coded whole file //////////////////
+
+//import neccessary libraries
 import React, { useState, useContext } from 'react';
 import {
   SafeAreaView,
@@ -33,15 +36,12 @@ const AddExplorePostScreen: React.FC<Props> = ({ navigation }) => {
   const [type,setType] = useState(0);
   const {userId} = useContext(UserContext);
 
-  // funciton to handle image picker
+  // funciton to handle image picker, allow user to pick image from galler
   const pickImage = () => {
-  // if(imageUrl != 'https://i.imgur.com/50exbMa.png'){
-  //     deleteImageFromImgur(imageId);
-  // } 
   launchImageLibrary({ mediaType: 'photo' }, async (response) => {
     if (response.didCancel) {
       console.log('User cancelled image picker');
-    } else if (response.errorCode) {
+    } else if (response.errorCode) {     // error handling
       console.log('ImagePicker Error:', response.errorMessage);
     } else {
       if (response.assets && response.assets[0].uri) {
@@ -52,6 +52,7 @@ const AddExplorePostScreen: React.FC<Props> = ({ navigation }) => {
   });
 };
 
+  // function to create explore post and save in database
   const handleSaveExplorePost = async () => {
     const db = await getEcoEatsDBConnection();
     const newExplore: explore_page = {
@@ -70,6 +71,7 @@ const AddExplorePostScreen: React.FC<Props> = ({ navigation }) => {
     navigation.navigate('MainTabs', {screen: 'Explore'}); // Navigate back to Explore page to show the posts
   };
 
+  // allow users to input neccessary information to create explore post
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.label}>Title:</Text>
@@ -111,6 +113,7 @@ const AddExplorePostScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
+//styling for add explore post page
 const styles = StyleSheet.create({
   container: {
     flex: 1,

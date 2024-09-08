@@ -1,3 +1,4 @@
+////////////////////Nicole coded whole file////////////////////////////////
 import React from 'react';
 import {
   StyleSheet,

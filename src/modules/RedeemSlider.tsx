@@ -1,3 +1,4 @@
+////////////////////Nicole coded whole file////////////////////////////////
 import React, { useState } from 'react';
 import { View, Text, PanResponder, Animated, StyleSheet, Dimensions } from 'react-native';
 

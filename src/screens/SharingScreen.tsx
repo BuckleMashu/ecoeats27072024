@@ -1,4 +1,5 @@
 ////////////////////Cuong//////////////////////////////// Cuong coded the whole file
+//import neccessary libraries
 import React, { useCallback, useEffect, useState,useContext } from 'react';
 import {
   Button,
@@ -66,13 +67,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
     }
   },[]);
 
-  // const setUpImagePaths = useCallback(async()=>{
-  //   let paths = [];
-  //   for (var i =0; i< shareEntity.length;i++){
-  //     paths.push(shareEntity[i].picture);
-  //   }
-  //   setImagePaths(paths);
-  // },[]);
+ 
   const isFocused = useIsFocused();
 
   useEffect(()=>{
@@ -83,10 +78,7 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
     }
   },[loadDataCallback,shareType,searchQuery,isFocused, userId]);
 
-  // const updateSearchResult = async () =>{
-  //   setSearchQuery(newsearchQuery);
-  // }
-  
+
   return (
     <SafeAreaView style={styles.safeArea}>
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -151,6 +143,8 @@ const SharingScreen: React.FC<Props> = ({ navigation }) => {
 //Image.resolveAssetSource(exampleImage).uri
 // require('../screens/images/')
 //"D:\work and non-game-related software\sim y2s2\agile\final project app\ecoeats27072024\src\screens\images\share1.png"
+
+// sharing screen styling
 const styles = StyleSheet.create({
   safeArea:{
     flex:1

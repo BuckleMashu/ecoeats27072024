@@ -1,3 +1,5 @@
+////////////// Nicole coded whole file //////////////////
+//import neccessary libraries
 import React, { useState } from 'react';
 import {
   SafeAreaView,
@@ -15,6 +17,7 @@ import { getEcoEatsDBConnection, saveNewDeal } from '../../db-service';
 import { deal_page } from '../models';
 import { launchImageLibrary } from 'react-native-image-picker';
 
+
 type AddDealScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'AddDeal'
@@ -28,7 +31,7 @@ const AddDealScreen: React.FC<Props> = ({ navigation }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [picture, setPicture] = useState<string | null>(null);
-
+  // save deal to database 
   const handleSaveDeal = async () => {
     const db = await getEcoEatsDBConnection();
     const newDeal: deal_page = {
@@ -37,16 +40,16 @@ const AddDealScreen: React.FC<Props> = ({ navigation }) => {
       description,
       picture: picture || '', // Save the picture URI or an empty string
     };
-
+    // wait for database to save the deal
     await saveNewDeal(db, newDeal);
     navigation.navigate('MainTabs', { screen: 'Details' });
   };
-
+  // allow user to launch gallery to pick image
   const pickImage = () => {
     launchImageLibrary({ mediaType: 'photo' }, (response) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
-      } else if (response.errorCode) {
+      } else if (response.errorCode) {       // handle error
         console.log('ImagePicker Error: ', response.errorMessage);
       } else if (response.assets && response.assets.length > 0) {
         const uri = response.assets[0].uri;
@@ -56,6 +59,7 @@ const AddDealScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
+    // allow users to input neccessary information to create deal
     <SafeAreaView style={styles.container}>
       <Text style={styles.label}>Title</Text>
       <TextInput
@@ -71,8 +75,8 @@ const AddDealScreen: React.FC<Props> = ({ navigation }) => {
         onChangeText={setDescription}
         placeholder="Enter deal description"
       />
-
-      <Button title="Pick an Image" onPress={pickImage} />
+  
+      <Button title="Pick an Image" onPress={pickImage} /> 
 
       {picture ? (
         <Image source={{ uri: picture }} style={styles.imagePreview} />
@@ -86,6 +90,7 @@ const AddDealScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
+// styling for add deals page
 const styles = StyleSheet.create({
   container: {
     flex: 1,

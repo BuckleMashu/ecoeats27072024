@@ -1,4 +1,4 @@
-////////////////////Cuong////////////////////////////////
+////////////////////Cuong and Nicole ////////////////////////////////
 import { enablePromise, openDatabase, SQLiteDatabase } from 'react-native-sqlite-storage';
 import { ToDoItem, explore_page, share_page, request_page, userD, deal_page, comment } from './src/models';
 import RNFS from 'react-native-fs';
@@ -262,6 +262,7 @@ export const updateUserExplorePosts = async (db: SQLiteDatabase, explore_Id:numb
 };
 
 //Profile page related stuff
+////////////////////Nicole////////////////////////////////
 
 export const hashPassword = async (password: string): Promise<string> => {
   // Convert the password string to an ArrayBuffer
@@ -366,6 +367,7 @@ export const getAccountType = async (db: SQLiteDatabase, userId: number): Promis
 };
 
 //Deals page related stuff
+////////////////////Nicole////////////////////////////////
 
 // Fetch deals from the database
 export const getDealsPage = async(db: SQLiteDatabase, keyword: string): Promise<deal_page[]> => {
@@ -391,6 +393,7 @@ export const getDealsPage = async(db: SQLiteDatabase, keyword: string): Promise<
   }
 };
 
+////////////////////Nicole////////////////////////////////
 // Insert a new deal
 export const saveNewDeal = async(db: SQLiteDatabase, deal: deal_page) => {
   try{
@@ -403,6 +406,7 @@ export const saveNewDeal = async(db: SQLiteDatabase, deal: deal_page) => {
   }
 };
 
+////////////////////Nicole////////////////////////////////
 export const updateDeal = async(db: SQLiteDatabase, deal: deal_page) => {
   const updateQuery = `
     UPDATE Deals 
@@ -421,6 +425,7 @@ export const deleteDeal = async(db: SQLiteDatabase, deal_Id: number) => {
   return db.executeSql(deleteQuery);
 };
 
+////////////////////Nicole////////////////////////////////
 export const getCommentsForDeal = async(db: SQLiteDatabase, dealId: number): Promise<comment[]> => {
   try {
     const comments: comment[] = [];
@@ -438,6 +443,7 @@ export const getCommentsForDeal = async(db: SQLiteDatabase, dealId: number): Pro
   }
 };
 
+////////////////////Nicole////////////////////////////////
 export const getRedeemedState = async (db: SQLiteDatabase, dealId: number): Promise<boolean> => {
   try {
     const [result] = await db.executeSql('SELECT isRedeemed FROM Deals WHERE deal_Id = ?', [dealId]);
@@ -451,6 +457,7 @@ export const getRedeemedState = async (db: SQLiteDatabase, dealId: number): Prom
   }
 };
 
+////////////////////Nicole////////////////////////////////
 export const saveRedeemedState = async (db: SQLiteDatabase, dealId: number, redeemed: boolean) => {
   try {
     await db.executeSql('UPDATE Deals SET isRedeemed = ? WHERE deal_Id = ?', [redeemed ? 1 : 0, dealId]);
@@ -462,6 +469,7 @@ export const saveRedeemedState = async (db: SQLiteDatabase, dealId: number, rede
 
 
 //Explore page related stuff
+////////////////////Nicole////////////////////////////////
 export const getExplorePage = async(db: SQLiteDatabase, type: number, keyword: string): Promise<explore_page[]> => {
   try {
     const explores: explore_page[] = [];
@@ -484,7 +492,7 @@ export const getExplorePage = async(db: SQLiteDatabase, type: number, keyword: s
     throw Error('Failed to get explores');
   }
 };
-
+////////////////////Nicole////////////////////////////////
 export const saveNewExplore = async(db: SQLiteDatabase, explore: explore_page) => {
   try{
     const insertQuery = `
@@ -499,7 +507,7 @@ export const saveNewExplore = async(db: SQLiteDatabase, explore: explore_page) =
 };
 
 //comments
-
+////////////////////Nicole////////////////////////////////
 export const getCommentsForExplore = async (db: SQLiteDatabase, explore_Id: number): Promise<comment[]> => {
   try {
     const commentsQuery = `
@@ -518,7 +526,7 @@ export const getCommentsForExplore = async (db: SQLiteDatabase, explore_Id: numb
   }
 };
 
-
+////////////////////Nicole////////////////////////////////
 export const saveNewComment = async (db: SQLiteDatabase, comment: comment) => {
   try {
     const insertQuery = `
@@ -538,6 +546,7 @@ export const saveNewComment = async (db: SQLiteDatabase, comment: comment) => {
   }
 };
 
+////////////////////Nicole////////////////////////////////
 export const likeComment = async (db: SQLiteDatabase, userId: number, commentId: number) => {
   try {
     // Add a like to the CommentLikes table
@@ -565,6 +574,7 @@ export const likeComment = async (db: SQLiteDatabase, userId: number, commentId:
   }
 };
 
+////////////////////Nicole////////////////////////////////
 export const unlikeComment = async (db: SQLiteDatabase, userId: number, commentId: number) => {
   try {
     // Remove the like from the CommentLikes table
@@ -592,6 +602,7 @@ export const unlikeComment = async (db: SQLiteDatabase, userId: number, commentI
   }
 };
 
+////////////////////Nicole////////////////////////////////
 export const checkIfUserLikedComment = async (db: SQLiteDatabase, userId: number, commentId: number) => {
   try {
     const [result] = await db.executeSql(

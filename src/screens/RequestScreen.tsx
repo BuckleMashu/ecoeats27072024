@@ -1,4 +1,5 @@
 ////////////////////Cuong//////////////////////////////// Cuong coded the whole file
+//import neccessary libraries
 import React, { useCallback, useEffect, useState,useContext } from 'react';
 import {
   Button,
@@ -82,15 +83,6 @@ const RequestScreen = ({ route,navigation } : Props) => {
   const handleRequestModal = () => {
     setModalVisible(false);
   };
-  // const profilePicture = useCallback(async (id:number) =>{
-  //   try{
-  //       db = await getEcoEatsDBConnection();
-  //       const result = await getUserDetails(db,id);
-  //       setUserPF(result.pf);
-  //   } catch(error){
-  //       console.error(error);
-  //   }
-  // },[]);
 
   useEffect(()=>{
     loadDataCallback(post.share_Id);
@@ -101,6 +93,7 @@ const RequestScreen = ({ route,navigation } : Props) => {
     console.log(userId);
   },[loadDataCallback]);
 
+  //display 
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -225,6 +218,7 @@ const RequestScreen = ({ route,navigation } : Props) => {
   );
 };
 
+//styling for request screen
 const styles = StyleSheet.create({
   safeArea:{
     flex:1

@@ -1,4 +1,5 @@
 ////////////////////Cuong&Xiang En//////////////////////////////// Cuong coded the 99% file, Xiang En only provides the log out button style
+//import neccessary libraries
 import React, { useCallback, useEffect, useState,useContext } from 'react';
 import {
   Button,
@@ -174,6 +175,7 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
     setSelectedImageUId('https://i.imgur.com/50exbMa.png');
   },[loadDataCallback,isFocused,modalVisible,userID,userId]);
 
+  //display
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -293,6 +295,7 @@ const UserScreen: React.FC<Props> = ({ route,navigation }) => {
   );
 };
 
+//styling for user screen
 const styles = StyleSheet.create({
   safeArea:{
       flex:1
