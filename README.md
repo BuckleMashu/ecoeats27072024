@@ -48,7 +48,7 @@ Snippet from our Report:
    We also decided to remove the proposed geolocation service as we realised that setting up a database with the exact coordinates of all restaurants in Singapore would be extremely 
    time-consuming to complete within the project's timeframe.
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/Google_Map_API_Snippet.png)
   
    [Figure 4.7: A snippet of code that required to use GoogleMap API in React-Native]
 
@@ -57,13 +57,13 @@ Snippet from our Report:
    differentiated by a value in the "type" column within the "User_credentials" table. This simplification aims to reduce complexity while efficiently fulfilling the application's 
    requirements. Overall, a more simple concise design can help the development process in the long term.
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/new_ERD.png)
   
-   [insert the new ERD table]
+   [Figure 4.8: The ERD of EcoEats’ final database.]
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/old_ERD.png)
   
-   [insert the proposed ERD table]
+   [Figure 4.9: The ERD of EcoEats’ proposal database.]
 
 ...
 - Product’s core components
@@ -76,27 +76,27 @@ Snippet from our Report:
    these posts and tap on them to access the Request page for detailed descriptions and to make a meeting request. 
    Logged-in users have the additional capability to create new sharing posts. The page also features a search bar and a filter system to allow users to filter the displayed posts by category.
   
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/share_page_SYSTEM.png)
   
-   [insert image of the Share page]
+   [The Share page]
 
    - Explore Page
      
    The Explore page offers similar functionalities to the Share page but focuses on user recommendations of restaurants and activities across various price ranges. Posts on this
    page include detailed reviews, and users can view the number of likes and comments associated with each post. Only logged-in users can like or comment on these posts.
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/explore_page_SYSTEM.png)
 
-   [insert image of the Explore page]
+   [The Explore page]
 
    - Deals Page
      
    This page displays discounts and offers from eateries and services that collaborate with the platform. Logged-in users can claim these offers. Like the Share and Explore pages,
    the Deals page includes a search bar and a filter system to narrow down the types of restaurants or activities shown.
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/deals_page_SYSTEM.png)
 
-   [insert image of the Deals page]
+   [The Deals page]
 
    - User Page
      
@@ -104,68 +104,68 @@ Snippet from our Report:
    The User page displays all posts made by the user across both the Share and Explore pages. Logged-in users can follow other profiles, share profiles via links, and view posts
    they have liked. Otherwise, not logged-in users will be redirected to the login page if they attempt to view any profiles. A registration page is also available for new users.
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/user_page_SYSTEM.png)
 
-   [insert image of the User page]
+   [The User page]
 
 ...
 - Design Details
   
    - Share page (Home page)
      
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/share_pages_home_DESIGN.png)
      
    - Share page – Post
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/share_page_post_DESIGN.png)
 
    - Share page - Post’s request popups
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/share_page_post_request_popups_DESIGN.png)
 
    - Share page - Add post
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/share_page_add_post_DESIGN.png) 
 
    - Explore page
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/explore_page_DESIGN.png) 
 
    - Explore page – Post
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/explore_page_post_DESIGN.png) 
 
    - Explore page - Add post
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/explore_page_add_post_DESIGN.png)
 
    - Deals page
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/deals_page_DESIGN.png) 
 
    - Deals page – Post
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/deals_page_post_DESIGN.png)
 
    - Deals page - Add deal
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/deals_page_add_deal_DESIGN.png)
 
    - User page
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/user_page_DESIGN.png)
 
    - User page - change profile picture and/or name popups
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/user_page_change_pfp_DESIGN.png)
 
    - Login page
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/login_page_DESIGN.png)
 
    - Register page
 
-   ![Screenshot]() #images/screenshot.png
+   ![Screenshot](agile_readme_pics/register_page_DESIGN.png)
 
 ...
 - Development Process Details
@@ -235,9 +235,9 @@ Snippet from our Report:
       to the desired page. The App.tsx will then provide the parameter value (userId) which is then used to retrieve the profile details(the queries are stored in the db-service.ts). 
       With all of the necessary information, the profile details are then displayed on the “User” page accordingly.
 
-      ![Screenshot]() #images/screenshot.png
+      ![Screenshot](agile_readme_pics/app_structure.png)
      
-      [insert image of the app's file structure]
+      [The app's file structure]
 ...
 - Libraries installed
   
