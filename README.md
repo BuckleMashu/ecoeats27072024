@@ -21,7 +21,7 @@ Side Contributors:
 -Winnie (a portion of Explore page's backend)
 
 ----------------------------------------------------------------------------------------------------------------------------------------
-                                                      ABOUT THIS PROJECT
+                                    ABOUT THIS PROJECT    [you can read the report in the root folder]
 ----------------------------------------------------------------------------------------------------------------------------------------
 For our module Agile Software Development (CM2020-01 from the University of London),  we are tasked with developing an application that solves a community problem.
 Driven by common interest, we decided to focus on coding an application that could tackle 'Food Waste' challenges. Thus, this is an early prototype of our application, EcoEats.
