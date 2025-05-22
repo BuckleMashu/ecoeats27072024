@@ -20,9 +20,9 @@ Side Contributors:
 -Xiang En (Login page's frontend)
 -Winnie (a portion of Explore page's backend)
 
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                                                                                    ABOUT THIS PROJECT
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
+                                                      ABOUT THIS PROJECT
+----------------------------------------------------------------------------------------------------------------------------------------
 For our module Agile Software Development (CM2020-01 from the University of London),  we are tasked with developing an application that solves a community problem.
 Driven by common interest, we decided to focus on coding an application that could tackle 'Food Waste' challenges. Thus, this is an early prototype of our application, EcoEats.
 
@@ -172,27 +172,50 @@ Snippet from our Report:
 ...
 - Libraries installed
    @expo/vector-icons: https://www.npmjs.com/package/%40expo/vector-icons
+  
    @react-native-picker/picker: https://www.npmjs.com/package/@react-native-picker/picker
+  
    @react-navigation/bottom-tabs: https://www.npmjs.com/package/@react-navigation/bottom-tabs
+  
    @react-navigation/native: https://www.npmjs.com/package/@react-navigation/native
+  
    @react-navigation/stack: https://www.npmjs.com/package/@react-navigation/stack
+  
    @types/react-native-sqlite-storage: https://www.npmjs.com/package/@types/react-native-sqlite-storage
+  
    @types/react-native-vector-icons: https://www.npmjs.com/package/@types/react-native-vector-icons
+  
    axios: https://www.npmjs.com/package/axios
+  
    bcrypt: https://www.npmjs.com/package/bcrypt
+  
    bcryptjs: https://www.npmjs.com/package/bcryptjs
+  
    mysql: https://www.npmjs.com/package/mysql
+  
    react: https://www.npmjs.com/package/react
+  
    react-native: https://www.npmjs.com/package/react-native
+  
    react-native-crypto-js: https://www.npmjs.com/package/react-native-crypto-js
+  
    react-native-fs: https://www.npmjs.com/package/react-native-fs
+  
    react-native-gesture-handler: https://www.npmjs.com/package/react-native-gesture-handler
+  
    react-native-image-picker: https://www.npmjs.com/package/react-native-image-picker
+  
    react-native-paper: https://www.npmjs.com/package/react-native-paper
+  
    react-native-safe-area-context: https://www.npmjs.com/package/react-native-safe-area-context
+  
    react-native-screens: https://www.npmjs.com/package/react-native-screens
+  
    react-native-simple-crypto: https://www.npmjs.com/package/react-native-simple-crypto
+  
    react-native-sqlite-storage: https://www.npmjs.com/package/react-native-sqlite-storage
+  
    react-native-vector-icons: https://www.npmjs.com/package/react-native-vector-icons
+  
    sqlite3: https://www.npmjs.com/package/sqlite3
 
