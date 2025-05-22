@@ -109,6 +109,7 @@ Snippet from our Report:
 - Development Process Details
    .Required modules 
    - React Native
+     
       React Native is a popular framework developed by Facebook that enables developers to build mobile applications using JavaScript and React. It allows
       for the development of cross-platform applications with a single codebase, which can run on both iOS and Android devices.
 
@@ -125,6 +126,7 @@ Snippet from our Report:
       and ensuring consistent UI across devices.
 
    - SQLite
+     
       SQLite is a lightweight, self-contained SQL database engine that is widely used for local data storage in mobile applications. It is known for its simplicity
       and ease of integration, making it a popular choice for mobile developers.
 
@@ -135,12 +137,14 @@ Snippet from our Report:
       challenges, this approach allowed us to create a functional database capable of handling data operations effectively.
 
    - Axios
+     
       Axios is a promise-based HTTP client for JavaScript that simplifies the process of making network requests. It is widely used for interacting with APIs and handling 
       asynchronous operations. Axios was chosen to handle HTTP requests, particularly for interacting with APIs like Imgur. As a promise-based library, Axios streamlined
       our process for making network requests and managing asynchronous operations. Integrating Axios into the app was relatively straightforward, but ensuring flexible
       handling of network requests, especially for image uploads, was crucial.
 
    - Imgur API
+     
       Imgur API is a web service provided by Imgur, a popular image-sharing platform, which allows developers to upload, retrieve, and manage images. The Imgur API was integrated
       to facilitate image uploads and storage, which was a key feature of our app.
 
@@ -153,6 +157,7 @@ Snippet from our Report:
       the limitations of static image handling but also provided a scalable and flexible method for managing user-generated content.
 
    - Application Structure
+     
       The /models folder, which contains index.ts, defines the data structures we use across the application. This ensured that our data remains consistent and reliable across
       different pages, which is essential for smooth integration with other parts of the app.
 
@@ -171,6 +176,7 @@ Snippet from our Report:
      [insert image of the app's file structure]
 ...
 - Libraries installed
+  
    @expo/vector-icons: https://www.npmjs.com/package/%40expo/vector-icons
   
    @react-native-picker/picker: https://www.npmjs.com/package/@react-native-picker/picker
