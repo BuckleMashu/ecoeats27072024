@@ -49,6 +49,7 @@ Snippet from our Report:
    time-consuming to complete within the project's timeframe.
 
    ![Screenshot]() #images/screenshot.png
+  
    [Figure 4.7: A snippet of code that required to use GoogleMap API in React-Native]
 
    The differences between initial and final database designs are apparent. The proposal's Entity-Relationship Diagram (ERD) included several unnecessary tables, such as separate 
@@ -56,8 +57,12 @@ Snippet from our Report:
    differentiated by a value in the "type" column within the "User_credentials" table. This simplification aims to reduce complexity while efficiently fulfilling the application's 
    requirements. Overall, a more simple concise design can help the development process in the long term.
 
+   ![Screenshot]() #images/screenshot.png
+  
    [insert the new ERD table]
 
+   ![Screenshot]() #images/screenshot.png
+  
    [insert the proposed ERD table]
 
 ...
@@ -70,7 +75,9 @@ Snippet from our Report:
    The Share page functions as the home page, enabling users to view food or objects others are willing to share or donate. All users, regardless of their login status, can browse
    these posts and tap on them to access the Request page for detailed descriptions and to make a meeting request. 
    Logged-in users have the additional capability to create new sharing posts. The page also features a search bar and a filter system to allow users to filter the displayed posts by category.
-
+  
+   ![Screenshot]() #images/screenshot.png
+  
    [insert image of the Share page]
 
    - Explore Page
@@ -78,12 +85,16 @@ Snippet from our Report:
    The Explore page offers similar functionalities to the Share page but focuses on user recommendations of restaurants and activities across various price ranges. Posts on this
    page include detailed reviews, and users can view the number of likes and comments associated with each post. Only logged-in users can like or comment on these posts.
 
+   ![Screenshot]() #images/screenshot.png
+
    [insert image of the Explore page]
 
    - Deals Page
      
    This page displays discounts and offers from eateries and services that collaborate with the platform. Logged-in users can claim these offers. Like the Share and Explore pages,
    the Deals page includes a search bar and a filter system to narrow down the types of restaurants or activities shown.
+
+   ![Screenshot]() #images/screenshot.png
 
    [insert image of the Deals page]
 
@@ -93,25 +104,68 @@ Snippet from our Report:
    The User page displays all posts made by the user across both the Share and Explore pages. Logged-in users can follow other profiles, share profiles via links, and view posts
    they have liked. Otherwise, not logged-in users will be redirected to the login page if they attempt to view any profiles. A registration page is also available for new users.
 
+   ![Screenshot]() #images/screenshot.png
+
    [insert image of the User page]
 
 ...
 - Design Details
   
    - Share page (Home page)
+     
+   ![Screenshot]() #images/screenshot.png
+     
    - Share page – Post
+
+   ![Screenshot]() #images/screenshot.png
+
    - Share page - Post’s request popups
+
+   ![Screenshot]() #images/screenshot.png
+
    - Share page - Add post
+
+   ![Screenshot]() #images/screenshot.png
+
    - Explore page
+
+   ![Screenshot]() #images/screenshot.png
+
    - Explore page – Post
+
+   ![Screenshot]() #images/screenshot.png
+
    - Explore page - Add post
+
+   ![Screenshot]() #images/screenshot.png
+
    - Deals page
+
+   ![Screenshot]() #images/screenshot.png
+
    - Deals page – Post
+
+   ![Screenshot]() #images/screenshot.png
+
    - Deals page - Add deal
+
+   ![Screenshot]() #images/screenshot.png
+
    - User page
+
+   ![Screenshot]() #images/screenshot.png
+
    - User page - change profile picture and/or name popups
+
+   ![Screenshot]() #images/screenshot.png
+
    - Login page
+
+   ![Screenshot]() #images/screenshot.png
+
    - Register page
+
+   ![Screenshot]() #images/screenshot.png
 
 ...
 - Development Process Details
@@ -181,7 +235,9 @@ Snippet from our Report:
       to the desired page. The App.tsx will then provide the parameter value (userId) which is then used to retrieve the profile details(the queries are stored in the db-service.ts). 
       With all of the necessary information, the profile details are then displayed on the “User” page accordingly.
 
-     [insert image of the app's file structure]
+      ![Screenshot]() #images/screenshot.png
+     
+      [insert image of the app's file structure]
 ...
 - Libraries installed
   
