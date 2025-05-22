@@ -48,7 +48,8 @@ Snippet from our Report:
    We also decided to remove the proposed geolocation service as we realised that setting up a database with the exact coordinates of all restaurants in Singapore would be extremely 
    time-consuming to complete within the project's timeframe.
 
-   [insert google map API code snippet here]
+   ![Screenshot]() #images/screenshot.png
+   [Figure 4.7: A snippet of code that required to use GoogleMap API in React-Native]
 
    The differences between initial and final database designs are apparent. The proposal's Entity-Relationship Diagram (ERD) included several unnecessary tables, such as separate 
    tables for different account types. In contrast, the final database design only utilises two tables: "User" and "User_credentials". Account types in the final design are 
