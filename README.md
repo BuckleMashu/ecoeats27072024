@@ -60,6 +60,7 @@ Snippet from our Report:
 
 ...
 - Product’s core components
+  
    The prototype in the proposal reports consists of the following pages: Share, Request, Explore, Deals, and User, with each serving distinct functions.
 
    - Share Page
@@ -90,6 +91,7 @@ Snippet from our Report:
 
 ...
 - Design Details
+  
    - Share page (Home page)
    - Share page – Post
    - Share page - Post’s request popups
