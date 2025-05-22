@@ -36,6 +36,7 @@ certain advanced features like geolocation and real-time chat were deferred for 
 
 Snippet from our Report:
 - Back-end design
+  
    The most significant changes in our project is the transition from a mobile-friendly website to a mobile application. This shift led to a change in the language we used. Initially,
    the project was to be built using HTML, JavaScript, and CSS. However, moving to mobile app development requires us to use TypeScript, the primary language for React Native development.
    Additionally, since the project is now a mobile application, there is no longer a need to set up Node.js.
@@ -64,6 +65,7 @@ Snippet from our Report:
    The prototype in the proposal reports consists of the following pages: Share, Request, Explore, Deals, and User, with each serving distinct functions.
 
    - Share Page
+     
    The Share page functions as the home page, enabling users to view food or objects others are willing to share or donate. All users, regardless of their login status, can browse
    these posts and tap on them to access the Request page for detailed descriptions and to make a meeting request. 
    Logged-in users have the additional capability to create new sharing posts. The page also features a search bar and a filter system to allow users to filter the displayed posts by category.
@@ -71,18 +73,21 @@ Snippet from our Report:
    [insert image of the Share page]
 
    - Explore Page
+     
    The Explore page offers similar functionalities to the Share page but focuses on user recommendations of restaurants and activities across various price ranges. Posts on this
    page include detailed reviews, and users can view the number of likes and comments associated with each post. Only logged-in users can like or comment on these posts.
 
    [insert image of the Explore page]
 
    - Deals Page
+     
    This page displays discounts and offers from eateries and services that collaborate with the platform. Logged-in users can claim these offers. Like the Share and Explore pages,
    the Deals page includes a search bar and a filter system to narrow down the types of restaurants or activities shown.
 
    [insert image of the Deals page]
 
    - User Page
+     
    Two types of user accounts, normal users and business accounts, are differentiated with the business account having the ability to post new deals. 
    The User page displays all posts made by the user across both the Share and Explore pages. Logged-in users can follow other profiles, share profiles via links, and view posts
    they have liked. Otherwise, not logged-in users will be redirected to the login page if they attempt to view any profiles. A registration page is also available for new users.
